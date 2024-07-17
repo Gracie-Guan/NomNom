@@ -33,12 +33,22 @@ const restaurantSchema = new Schema({
     image: String
 });
 
-const Restaurant = mongoose.model('Restaurant', restaurantSchema);
+const Restaurant = mongoose.model('restaurant', restaurantSchema);
 
 class RestaurantModel {
 
     static async getRestaurantList(){
         return Restaurant.find({}, '_id name price_level cuisine features image')
+    }
+
+    static async getRestaurantById(restaurantId){
+        try {
+            const restaurant = await Restaurant.findById(restaurantId).select('_id name address_obj price_level rating review_rating_count features cuisine latitude longitude phone image');
+            return restaurant;
+        } catch (error) {
+            throw new Error('Restaurant not found');
+        }
+
     }
 
 }

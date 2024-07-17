@@ -10,6 +10,21 @@ class RestaurantController {
             res.status(500).json({message: error.message});
         }
     };
+
+    static async getRestaurantById(req, res) {
+        const restaurantId = req.params.id;
+        try {
+            const restaurant = await RestaurantModel.getRestaurantById(restaurantId);
+            if (restaurant) {
+                res.json(restaurant);
+            } else {
+                res.status(404).json({ message: 'Restaurant not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
 }
 
 module.exports = RestaurantController;

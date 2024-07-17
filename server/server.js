@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('./models/db'); 
+const cors = require('cors');
 
 const app = express();
 const port = 6868;
+app.use(cors());
 
 // Check database connection status
 mongoose.connection.once('open', () => {
