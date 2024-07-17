@@ -6,3 +6,7 @@ client/node_modules/
 
 # Ignore node_modules in the server directory
 server/node_modules/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
