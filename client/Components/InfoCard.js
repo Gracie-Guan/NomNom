@@ -35,7 +35,7 @@ const InfoCard = ({ restaurant }) => {
     <Card style={styles.card}>
       <Card.Cover source={{ uri: 'https://via.placeholder.com/800x400?text=Restaurant+Image' }} />
       <Card.Content>
-        <Title>{restaurant.name}</Title>
+        <Title style={styles.title}>{restaurant.name}</Title>
         <Paragraph>{restaurant.address_obj.address_string}</Paragraph>
         <View style={styles.ratingContainer}>
           <View style={styles.stars}>{renderRating(parseFloat(restaurant.rating))}</View>
@@ -48,8 +48,8 @@ const InfoCard = ({ restaurant }) => {
         </View>
       </Card.Content>
       <Card.Actions>
-        <Button icon="navigation" onPress={handleNavigation}>Navigation</Button>
-        <Button icon="phone" onPress={handleContact}>Contact</Button>
+        <Button icon="navigation" onPress={handleNavigation} style={{fontFamily: 'Ubuntu-Regular'}}>Navigation</Button>
+        <Button icon="phone" onPress={handleContact} style={{fontFamily: 'Ubuntu-Regular'}}>Contact</Button>
       </Card.Actions>
     </Card>
   );
@@ -58,6 +58,7 @@ const InfoCard = ({ restaurant }) => {
 const styles = StyleSheet.create({
   card: {
     margin: 10,
+    fontFamily: 'Ubuntu-Regular',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -72,15 +73,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 5,
+    fontFamily: 'Ubuntu-Regular',
   },
   chip: {
     margin: 2,
   },
-  website: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    marginTop: 5,
+
+  title: {
+    fontFamily: 'Ubuntu-Bold',
   },
+
+  regularText:{
+    fontFamily: 'Ubuntu-Regular',
+  }
 });
 
 export default InfoCard;

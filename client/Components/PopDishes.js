@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     paddingHorizontal: 10,
+    fontFamily: 'Ubuntu-Bold',
   },
   dishContainer: {
     alignItems: 'center',
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     textAlign: 'center',
     fontSize: 14,
+    fontFamily: 'Ubuntu-Regular',
   },
 });
 

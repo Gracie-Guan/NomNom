@@ -23,6 +23,7 @@ export default function MenuDetails({ menuItems }) {
           key={item._id.$oid}
           title={item.name}
           description={item.description}
+          style={{fontFamily: 'Ubuntu-Regular'}}
           right={() => <Text style={styles.price}>€{getPrice(item.price)}</Text>}
         />
       ))}
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Ubuntu-Medium',
     alignSelf: 'center',
   },
 });

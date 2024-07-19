@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
-import TopTabs from '../Components/TopTabs';
+import TopTabs from '../../Components/TopTabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 const RestaurantOverview = ({ navigation }) => {

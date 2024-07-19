@@ -5,9 +5,10 @@ import InfoCard from './InfoCard';
 import PopDishes from './PopDishes';
 import PhotoCard from './PhotoCard';
 import ReviewCard from './ReviewCard';
-import MenuDetails from '../screens/MenuDetails';
-import Photos from '../screens/Photos';
-import Reviews from '../screens/Reviews';
+import MenuDetails from '../screens/Restaurant/MenuDetails';
+import Photos from '../screens/Restaurant/Photos';
+import Reviews from '../screens/Restaurant/Reviews';
+import ImageUpload from './UploadImage';
 
 const menuItemsData = [
   {
@@ -64,7 +65,8 @@ const TopTabs = () => {
         return (
           <ScrollView key={tab.key} style={styles.ScrollView}>
             <InfoCard restaurant={restaurantData}/>
-            <PopDishes />
+            <PopDishes />            
+            <ImageUpload />
             <PhotoCard />
             <ReviewCard />
           </ScrollView>
@@ -93,7 +95,6 @@ const styles= StyleSheet.create({
     container: 
     {
     flexGrow: 1,
-    backgroundColor: '#fff',
     },
     ScrollView: {
       flex: 1,

@@ -6,17 +6,44 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow NOMNOM to use your location."
+        },
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        },
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Ubuntu-Regular.ttf", 
+          "./assets/fonts/Ubuntu-Medium.ttf", 
+          "./assets/fonts/Ubuntu-Bold.ttf"]
+        }
+      ]],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config":{"googleMapsApiKey": "AIzaSyDsWh2HJAqJNqRyv7osfE03jKgOoFqMDm4"},
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to location when open."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+        "config": {
+          "googleMaps":{
+              "apiKey": "AIzaSyDsWh2HJAqJNqRyv7osfE03jKgOoFqMDm4"
+          }
+        },
         "backgroundColor": "#ffffff"
       }
     },

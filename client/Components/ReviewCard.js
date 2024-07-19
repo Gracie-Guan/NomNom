@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    fontFamily: 'Ubuntu-Bold',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   userName: {
-    fontWeight: 'bold',
+    fontFamily: 'Ubuntu-Medium',
   },
   reviewDate: {
     color: '#888',
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 10,
+    fontFamily: 'Ubuntu-Regular',
   },
   tag: {
     marginRight: 5,
@@ -103,6 +105,8 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     marginBottom: 10,
+    fontFamily: 'Ubuntu-Regular',
+    lineHeight:"20%",
   },
 });
 
