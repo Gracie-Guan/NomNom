@@ -25,6 +25,20 @@ class RestaurantController {
         }
     }
 
+    static async getRestaurantByName(req, res) {
+        const name = req.params.name;   
+        try {
+            const restaurant = await RestaurantModel.getRestaurantByName(name);
+            if (restaurant) {
+                res.json(restaurant);
+            } else {
+                res.status(404).json({ message: 'Restaurant not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
 }
 
 module.exports = RestaurantController;

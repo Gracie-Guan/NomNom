@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('./models/db'); 
 const cors = require('cors');
+// const Menu = mongoose.model('menu', restaurantSchema);
+const Menu = require('./models/MenuModel');
+
 
 const app = express();
 const port = 6868;
@@ -21,5 +24,11 @@ app.get('/', (req, res) =>{
 
 const restaurantRouter = require('./routes/Restaurants');
 app.use("/restaurants", restaurantRouter);
+
+const menuRouter = require('./routes/Menus');
+app.use("/menus", menuRouter);
+
+const dishRouter = require('./routes/Dishes');
+app.use("/dishes", dishRouter);
 
 app.listen(port, () => console.log(`APP listening on port ${port}!`));

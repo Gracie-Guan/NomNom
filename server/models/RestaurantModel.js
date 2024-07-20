@@ -51,6 +51,17 @@ class RestaurantModel {
 
     }
 
+    static async getRestaurantByName(rest_name){
+        try {
+            // var query = Restaurant.find({ name: rest_name });
+            const restaurant = await Restaurant.find({ name: rest_name }).select('_id name price_level rating cuisine image');
+            return restaurant;
+        } catch (error) {
+            throw new Error('Restaurant not found');
+        }
+
+    }
+
 }
 
 module.exports = RestaurantModel;
