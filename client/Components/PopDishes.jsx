@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
   },
   dishContainer: {
     alignItems: 'center',
-    marginRight: 15,
+    marginLeft: 9,
+    marginRight: 9,
     width: 150,
   },
   image: {

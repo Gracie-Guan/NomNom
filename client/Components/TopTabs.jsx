@@ -6,6 +6,8 @@ import PopDishes from './PopDishes';
 import PhotoCard from './PhotoCard';
 import ReviewCard from './ReviewCard';
 import MenuDetails from '../screens/MenuDetails';
+import MenuDetailsContainer from './MenuDetailsContainer';
+import MenuInfo from './MenuInfo';
 import Photos from '../screens/Photos';
 import Reviews from '../screens/Reviews';
 
@@ -18,6 +20,10 @@ const menuItemsData = [
   },
   {"_id":{"$oid":"668ee8afc88d544d82f31749"},"menu_id":{"$oid":"668ee8afc88d544d82f31747"},"name":"Gỏi Cuốn Tôm","description":"Prawn Summer Roll","category":"Starters","price":{"$numberDouble":"6.9"},"note":""}
 ];
+
+
+const uniquerestaurantId = "668f19c057dcfe28be26ddd1";
+// const restaurantId="668ee8afc88d544d82f31746";
 
 const photosData = [
   { id: '1', url: 'https://via.placeholder.com/300x300.png?text=Pic+1' },
@@ -63,14 +69,17 @@ const TopTabs = () => {
       case 'info':
         return (
           <ScrollView key={tab.key} style={styles.ScrollView}>
-            <InfoCard restaurantId="668ee8afc88d544d82f31746"/>
+            <InfoCard restaurantId={uniquerestaurantId}/>
             <PopDishes />
             <PhotoCard />
             <ReviewCard />
           </ScrollView>
         );
       case 'menu':
-        return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
+        // return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
+        // return <MenuDetails key={tab.key} menuItems={menuItemsData} restaurantId="668ee8afc88d544d82f31746"/>;
+        return <MenuInfo key={tab.key} menuItems={menuItemsData} restaurantId={uniquerestaurantId} />;
+
       case 'photos':
         return <Photos key={tab.key} photos={photosData}/>;
       case 'reviews':
