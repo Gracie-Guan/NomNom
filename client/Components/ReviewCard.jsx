@@ -54,6 +54,7 @@ const ReviewCard = () => {
 const styles = StyleSheet.create({
   card: {
     margin: 10,
+    marginBottom: 30
   },
   title: {
     fontSize: 20,
