@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Tabs } from '@ant-design/react-native';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import InfoCard from './InfoCard';
@@ -9,7 +9,9 @@ import MenuDetails from '../screens/MenuDetails';
 import MenuDetailsContainer from './MenuDetailsContainer';
 import MenuInfo from './MenuInfo';
 import Photos from '../screens/Photos';
-import Reviews from '../screens/Reviews';
+// import Reviews from '../screens/Reviews';
+// import { RestaurantContext } from '../App';
+import SearchBar from '../screens/SearchBar';
 
 const menuItemsData = [
   {
@@ -21,7 +23,7 @@ const menuItemsData = [
   {"_id":{"$oid":"668ee8afc88d544d82f31749"},"menu_id":{"$oid":"668ee8afc88d544d82f31747"},"name":"Gỏi Cuốn Tôm","description":"Prawn Summer Roll","category":"Starters","price":{"$numberDouble":"6.9"},"note":""}
 ];
 
-
+// const uniquerestaurantId = "6691307ca764a2b064e517f5"
 const uniquerestaurantId = "668f19c057dcfe28be26ddd1";
 // const restaurantId="668ee8afc88d544d82f31746";
 
@@ -57,11 +59,19 @@ const photosData = [
 // };
 
 const TopTabs = () => {
+
+  // const { restaurant } = useContext(RestaurantContext);
+
+  // console.log("restaurant info: ", restaurant);
+
+  // const uniquerestaurantId = restaurant._id;
+
   const tabs = [    
     { key:'info', title: 'Info' },
     { key:'menu',title: 'Menu' },
     { key:'photos',title: 'Photos' },
-    { key:'reviews', title: 'Reviews' },
+    // { key:'reviews', title: 'Reviews' },
+    { key:'search', title: 'Search' },
   ];
 
   const renderTabContent = (tab) => {
@@ -78,12 +88,12 @@ const TopTabs = () => {
       case 'menu':
         // return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
         // return <MenuDetails key={tab.key} menuItems={menuItemsData} restaurantId="668ee8afc88d544d82f31746"/>;
-        return <MenuInfo key={tab.key} menuItems={menuItemsData} restaurantId={uniquerestaurantId} />;
+        return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
 
       case 'photos':
         return <Photos key={tab.key} photos={photosData}/>;
-      case 'reviews':
-        return <Reviews key={tab.key} />;
+      case 'search':
+        return <SearchBar key={tab.key} restaurantId={uniquerestaurantId}/>;
       default:
         return null;
     }

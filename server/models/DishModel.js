@@ -17,12 +17,12 @@ const Dish = mongoose.model('dish', dishSchema);
 class DishModel {
 
     static async getDishList(){
-        return Dish.find({}, '_id menu_id name description price note')
+        return Dish.find({}, '_id menu_id name description category price note ')
     }
 
     static async getDishById(dishId){
         try {
-            const dish = await Dish.findById(dishId).select('_id menu_id name description price note');
+            const dish = await Dish.findById(dishId).select('_id menu_id name description category price note');
             return dish;
         } catch (error) {
             throw new Error('Dish not found');
@@ -32,7 +32,7 @@ class DishModel {
 
     static async getDishesByMenu(menuId){
         try {
-            const dishes = await Dish.find({menu_id: menuId}).select('name description price note');
+            const dishes = await Dish.find({menu_id: menuId}).select('name description category price note');
             return dishes;
         } catch (error) {
             throw new Error('Dish not found');
