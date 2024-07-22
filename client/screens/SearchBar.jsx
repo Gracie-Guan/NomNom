@@ -50,7 +50,7 @@ function SearchBar({ restaurantId }) {
   )};
 
   const contains = (dishInfo, query) => {
-    if (dishInfo.name.toLowerCase().includes(query)) {
+    if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query)) {
       return true;
     }
     return false;

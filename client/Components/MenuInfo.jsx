@@ -23,7 +23,7 @@ const MenuInfo = ({ restaurantId }) => {
         const menuId = menus[0].menu_id;
         const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
 
-        // setMenu(response.data);
+        // console.log(second_response.data);
         setMenu(second_response.data);
       } catch (error) {
         setError('Error fetching restaurant data');
