@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
-import Profile from '../screens/Profile';
+import Profile from '../screens/User/Profile';
 import Likes from '../screens/Likes';
 import Home from '../screens/Home';
 import Map from '../screens/Map';
