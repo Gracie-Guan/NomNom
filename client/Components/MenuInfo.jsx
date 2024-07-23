@@ -36,6 +36,18 @@ const MenuInfo = ({ restaurantId }) => {
     fetchMenu();
   }, [restaurantId]);
 
+  // console.log(menuItems);
+
+  // if (menuItems == "[]") {
+  //   return (
+  //     <View>
+  //       <Text style={styles.uploadText}>
+  //         Be the first to upload a menu!
+  //       </Text>
+  //     </View>
+  //   ); 
+  // } 
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
     color: 'blue',
     textDecorationLine: 'underline',
     marginTop: 5,
-  },
+  }
 });
 
 export default MenuInfo;

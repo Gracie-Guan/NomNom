@@ -25,7 +25,7 @@ const menuItemsData = [
 ];
 
 // const uniquerestaurantId = "6691307ca764a2b064e517f5"
-const uniquerestaurantId = "668ee8afc88d544d82f31746";
+const uniquerestaurantId = "669eddceb619f1ad6b948dba";
 // const restaurantId="668ee8afc88d544d82f31746";
 
 const photosData = [
@@ -82,7 +82,6 @@ const TopTabs = () => {
           <ScrollView key={tab.key} style={styles.ScrollView}>
             <InfoCard restaurantId={uniquerestaurantId}/>
             <PopDishes />
-            <ImageUpload />
             <PhotoCard />
             <ReviewCard />
           </ScrollView>
@@ -118,6 +117,7 @@ const styles= StyleSheet.create({
     },
     ScrollView: {
       flex: 1,
+      marginBottom: 15
     },
     sectionContainer: {
       flexGrow: 1,

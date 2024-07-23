@@ -121,7 +121,12 @@ function SearchBar({ restaurantId }) {
   return (
     <View style={styles.resultContainer}>
       <Text style={styles.searchTitle}>Dish Search</Text>
-      <FlatList
+      { data.length === 0 ? (
+        <View style={styles.textContainer}>
+          <Text style={styles.noData}>Currently there's no menu data available..</Text>
+          
+        </View>
+      ) : (<FlatList
         ListHeaderComponent={renderHeader}
         data={data}
         keyExtractor={(item) => item._id}
@@ -134,12 +139,20 @@ function SearchBar({ restaurantId }) {
             <Text style={styles.price}>{item.price}</Text>
           </View>
         )}
-      />
+      />)}
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  noData: {
+    fontSize: 14,
+    // fontWeight: 'bold',
+    color: '#666',
+    textAlign: "center"
+  },
+
   textContainer: {
     flex: 1, // Take up remaining space
     flexDirection: 'column', // Column layout for the text within the item
