@@ -5,7 +5,6 @@ import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 
-
 const MenuInfo = ({ restaurantId }) => {
   const [menuItems, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
