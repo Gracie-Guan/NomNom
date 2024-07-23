@@ -5,13 +5,14 @@ import InfoCard from './InfoCard';
 import PopDishes from './PopDishes';
 import PhotoCard from './PhotoCard';
 import ReviewCard from './ReviewCard';
-import MenuDetails from '../screens/MenuDetails';
-import MenuDetailsContainer from './MenuDetailsContainer';
+// import MenuDetails from '../screens/Restaurant/MenuDetails';
+// import MenuDetailsContainer from './MenuDetailsContainer';
 import MenuInfo from './MenuInfo';
-import Photos from '../screens/Photos';
+import Photos from '../screens/Restaurant/Photos';
 // import Reviews from '../screens/Reviews';
 // import { RestaurantContext } from '../App';
-import SearchBar from '../screens/SearchBar';
+import SearchBar from '../screens/Restaurant/SearchBar';
+import ImageUpload from './UploadImage';
 
 const menuItemsData = [
   {
@@ -81,6 +82,7 @@ const TopTabs = () => {
           <ScrollView key={tab.key} style={styles.ScrollView}>
             <InfoCard restaurantId={uniquerestaurantId}/>
             <PopDishes />
+            <ImageUpload />
             <PhotoCard />
             <ReviewCard />
           </ScrollView>

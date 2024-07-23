@@ -3,7 +3,7 @@ import axios from 'axios';
 import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native';
 import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MenuDetails from '../screens/MenuDetails';
+import MenuDetails from '../screens/Restaurant/MenuDetails';
 
 
 const MenuInfo = ({ restaurantId }) => {
