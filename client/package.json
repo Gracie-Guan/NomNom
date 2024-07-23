@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.4.0",
     "@rneui/themed": "^4.0.0-rc.8",
+    "aws-sdk": "^2.1661.0",
     "axios": "^1.7.2",
     "expo": "~51.0.20",
     "expo-image-picker": "~15.0.7",

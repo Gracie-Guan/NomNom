@@ -1,7 +1,27 @@
 import { useState } from 'react';
-import {  Image, View, StyleSheet, Modal, TouchableOpacity, Text } from 'react-native';
+import {  Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
+import AWS from "aws-sdk";
+
+AWS.config.update({
+  accessKeyId: "AKIA6ODU2WFB5LY5KCVI",
+  secretAccessKey: "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",
+  region: "eu-west-1",
+});
+
+const s3 = new AWS.S3();
+
+const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
+  const params = {
+    Bucket: bucketName,
+    Key: fileKey,
+    Body: filePath
+  };
+
+  return s3.upload(params).promise();
+
+}
 
 export default function ImagePickerExample() {
   const [image, setImage] = useState(null);
@@ -11,17 +31,37 @@ export default function ImagePickerExample() {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
+      // allowsMultipleSelection: true,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      // selectionLimit: 5
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+     // what is this snippet doing?
+
+    const bucketName = "nom.bucket";
+    const folderName = "menus";
+
+      const filePath = result.assets[0].uri.replace("file://", "");
+      const fileName = "test.jpg"
+      const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
+
+      try {
+        const fileData = await fetch(filePath).then(response => 
+          response.blob(),
+        );
+        await uploadFiletoS3(bucketName, fileKey, fileData);
+        console.log("File upload:", fileKey);
+        setModalVisible(true);
+      } catch (uploadError) {
+        console.error("Error uploading file:", uploadError);
+        Alert.alert('Error', "File upload failed");
+      }
     }
-    setModalVisible(true);
+    // setModalVisible(true); // correct located?
   };
 
   const closeModal = () => {
