@@ -35,7 +35,7 @@ function SearchBar({ restaurantId }) {
       <TextInput
         autoCapitalize="none"
         autoCorrect={false}
-        // clearButtonMode="always"
+        clearButtonMode="always"
         value={query}
         onChangeText={queryText => setQuery(queryText)}
         onEndEditing={queryText => setQuery(queryText)}
@@ -127,7 +127,10 @@ function SearchBar({ restaurantId }) {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.listItem}>
-            <Text style={styles.name}>{item.name}</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
             <Text style={styles.price}>{item.price}</Text>
           </View>
         )}
@@ -137,6 +140,17 @@ function SearchBar({ restaurantId }) {
 }
 
 const styles = StyleSheet.create({
+  textContainer: {
+    flex: 1, // Take up remaining space
+    flexDirection: 'column', // Column layout for the text within the item
+    justifyContent: 'center',
+  },
+
+  description: {
+    fontSize: 14,
+    color: '#888',
+  },
+  
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
