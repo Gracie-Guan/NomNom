@@ -7,6 +7,7 @@ function RatingCard(){
     const tasteRating = 4.2
     const authRating = 4.8
     const ambiRating = 3.8
+    const rating = 4
     return(
         <View style={styles.ratingContainer}>
             <View style={styles.ratingTitle}>
@@ -18,11 +19,15 @@ function RatingCard(){
                 </View>
                 <View style={styles.numberRight}>
                     <View style={styles.star}>
-                        <MaterialIcons name="star" size={20} color="#FFB300" style={styles.starIcon}/>
-                        <MaterialIcons name="star" size={20} color="#FFB300" style={styles.starIcon}/>
-                        <MaterialIcons name="star" size={20} color="#FFB300" style={styles.starIcon}/>
-                        <MaterialIcons name="star" size={20} color="#FFB300" style={styles.starIcon}/>
-                        <MaterialIcons name="star" size={20} color="#EEEEEE"style={styles.starIcon}/>
+                    {Array.from({ length: 5 }, (_, index) => (
+                       <MaterialIcons
+                           key={index}
+                           name="star"
+                           size={20}
+                           color={index < rating ? "#FFB300" : "#EEEEEE"}
+                           style={styles.starIcon}
+                       />
+                   ))}
                     </View>
                     <View style={styles.rightText}>
                         <Text style={styles.underStarText}>Based on 21 ratings</Text>

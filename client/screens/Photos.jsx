@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Image, FlatList, StyleSheet, Dimensions } from 'react-native';
 
-const numColumns = 3; // Number of columns in the grid
+const numColumns = 3;
 const screenWidth = Dimensions.get('window').width;
-const itemWidth = (screenWidth - (numColumns + 1) * 10) / numColumns; // Calculate item width based on screen size
+const itemWidth = (screenWidth - (numColumns + 1) * 10) / numColumns;
 
 const Photos = ({ photos }) => {
   const renderItem = ({ item }) => (
@@ -16,7 +16,7 @@ const Photos = ({ photos }) => {
     <FlatList
       data={photos}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.id.toString()}
       numColumns={numColumns}
       contentContainerStyle={styles.container}
     />
