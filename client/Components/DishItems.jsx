@@ -4,13 +4,34 @@ import {Text} from 'react-native-paper'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 
 const DishItem = ({name, price, description, rate = "4.8"}) => {
-    const [isDescriptionVisible, setDescriptionVisible] = useState(false);
+    const [ratingVisible, setRatingVisible] = useState(false);
+    const [selectedRating, setSelectedRating] = useState(null);
 
-    const toggleDescription = () => {
-        setDescriptionVisible(!isDescriptionVisible);
+    const toggleRatingVisibility = () => {
+        setRatingVisible(!ratingVisible);
+    };
+
+    const selectRating = (rating) => {
+        setSelectedRating(rating);
+    };
+
+    const renderStars = () => {
+        let stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <TouchableOpacity key={i} onPress={() => selectRating(i)}>
+                    <MaterialIcons
+                        name="star"
+                        size={30}
+                        color={i <= selectedRating ? "#FFB300" : "#9E9E9E"}
+                    />
+                </TouchableOpacity>
+            );
+        }
+        return <View style={styles.starsContainer}>{stars}</View>;
     };
     return (
-    <TouchableOpacity onPress={toggleDescription}>
+    <TouchableOpacity onPress={toggleRatingVisibility}>
     <View style={styles.dishContainer}>
         <View style={styles.dishTop}>
             <View style={styles.dishName}>
@@ -23,12 +44,12 @@ const DishItem = ({name, price, description, rate = "4.8"}) => {
                 <Text style={styles.dishPriceText}>€ {price}</Text>
             </View>
         </View>
-        <View style={styles.dishBottom}>
+        <View style={styles.dishMiddle}>
             <View style={styles.descriptionContainer}>
-                {isDescriptionVisible && (
-                    <Text style={styles.descriptionText}>{description}</Text>
-                )}
+                <Text style={styles.descriptionText}>{description}</Text>
             </View>
+        </View>
+        <View style={styles.dishBottom}>
             <View style={styles.dishRate}>
                 <MaterialIcons name="star" size={15} color="#FFB300" />
                 <Text style={styles.dishRateText}>{rate}</Text>
@@ -36,6 +57,7 @@ const DishItem = ({name, price, description, rate = "4.8"}) => {
             </View>
         </View>
     </View>
+    {ratingVisible && renderStars()}
     </TouchableOpacity>
     )
 }
@@ -58,50 +80,53 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 4,
         marginBottom: 10
-      },
-      dishTop:{
+    },
+    dishTop:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 5
-      },
-      dishName:{
+    },
+    dishName:{
         flexDirection: 'row',
-      },
-      dishNameText:{
+    },
+    dishNameText:{
         fontSize: 14,
         fontWeight: 'bold',
         paddingRight: 10
-      },
-      heartIcon:{
+    },
+    heartIcon:{
         paddingTop: 1
-      },
-      dishPriceText: {
+    },
+    dishPriceText: {
         fontSize: 14,
         fontWeight: 'bold',
         paddingRight: 5
       },
-      dishBottom: {
+    dishMiddle: {
+        width: '80%'
+      },
+    descriptionText: {
+        fontSize: 14,
+        color: 'grey',
+    },
+    dishBottom: {
        flexDirection: 'row',
-       justifyContent:'space-between',
-       paddingTop: 3
-      },
-      dishRate: {
+       justifyContent: 'flex-end',
+    },
+    dishRate: {
         flexDirection: 'row'
-      },
-      dishRateText: {
+    },
+    dishRateText: {
         fontSize: 11,
         color:'#9E9E9E',
         fontWeight: 'bold',
         paddingLeft: 2,
         paddingRight: 3
-      },
-      descriptionContainer: {
-        flexDirection: 'column',
     },
-    descriptionText: {
-        fontSize: 14,
-        color: 'grey',
-    },
+    starsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingBottom: 10,
+    }
 })
 
 export default DishItem

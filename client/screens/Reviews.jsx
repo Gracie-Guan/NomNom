@@ -1,49 +1,57 @@
 import { View, Text ,StyleSheet} from 'react-native'
 import RatingCard from '../Components/RatingCard'
 import ReviewBlock from '../Components/ReviewBlockk'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 
 function Reviews() {
   return (
-    <View style={styles.reviewContainer}>
-        <RatingCard />
-        <View style={styles.reviewTitle}>
-                <Text style={styles.reviewTexLeft}>Reviews</Text>
+    <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+            <RatingCard />
+            <View style={styles.reviewTitle}>
+                <Text style={styles.reviewTextLeft}>Reviews</Text>
                 <Text style={styles.reviewTextRight}>Latest</Text>
-        </View>
-        <View style={styles.commentContainer}>
-            <ReviewBlock />
-            <TouchableOpacity style={styles.leaveButton}>
-                <Text style={styles.buttonText}>Leave a Review</Text>
-            </TouchableOpacity>
-        </View>
+            </View>
+            <View style={styles.commentContainer}>
+                <ReviewBlock />
+            </View>
+        </ScrollView>
+        <TouchableOpacity style={styles.leaveButton}>
+            <Text style={styles.buttonText}>Leave a Review</Text>
+        </TouchableOpacity>
     </View>
   )
 };
 
 const styles = StyleSheet.create({
-  reviewContainer: {
+container: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 15,
     backgroundColor: '#FAFAFA'
   },
-  reviewTitle: {
+scrollContent: {
+    paddingTop: 12,
+    paddingHorizontal: 15,
+    paddingBottom: 100,
+  },
+reviewTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
-  reviewTexLeft: {
+reviewTextLeft: {
     fontSize: 16,
     fontWeight: '700'
   },
 commentContainer: {
     flex: 1,
     marginTop: 10,
-    marginBottom: 40
 },
 leaveButton: {
+    position: 'absolute',
+    bottom: 30,
+    left: 20,
+    right: 20,
     backgroundColor: '#FFB300',
     marginBottom: 40,
     paddingVertical: 10,

@@ -1,41 +1,29 @@
 import React from 'react';
-import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
-import TopTabs from '../Components/TopTabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity} from 'react-native';
+import {MaterialIcons, Feather} from '@expo/vector-icons'
+import InfoCard from '../Components/InfoCard';
+import PopDishes from '../Components/PopDishes';
+import PhotoCard from '../Components/PhotoCard';
+import ReviewCard from '../Components/ReviewCard';
 
 const RestaurantOverview = ({ navigation }) => {
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Restaurant</Text>
-        <Text>4.8 (156 reviews)</Text>
-        <Text>Location of the Restaurant, exactly where</Text>
-        <Text>2.4 km away | €40-€60 for two</Text>
-        <Text>French Cuisine</Text>
-        <Text>Open | 9am - 6pm</Text>
-      </View>
-      
-      <NavigationContainer>
-      <View style={styles.buttonGroup}>
-          <TopTabs />
-      </View>
-      </NavigationContainer>
-
-      <View style={styles.card}>
-        <Text style={styles.title}>Menu</Text>
-        <Text>Popular Dishes</Text>
-        {/* Add image placeholders here */}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.title}>Photos</Text>
-        {/* Add image placeholders here */}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.title}>Reviews</Text>
-        {/* Add review content here */}
-      </View>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <View style={styles.imageContainer}>
+            <Image source={{uri:'https://www.telegraph.co.uk/multimedia/archive/02999/restaurant_2999753b.jpg'}} style={styles.topImage}/>
+            <TouchableOpacity style={styles.heartContainer}>
+                <Feather name="heart" size={20} color="#fff" style={styles.heartIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.uploadContainer}>
+                <Feather name="upload" size={20} color="#fff" style={styles.uploadIcon} />
+            </TouchableOpacity>
+            <InfoCard />
+        </View>
+        <View style={styles.threeSection}>
+            <PopDishes />
+            <PhotoCard />
+            <ReviewCard />
+        </View>
     </ScrollView>
   );
 }
@@ -43,29 +31,36 @@ const RestaurantOverview = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
   },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
+  topImage: {
+    width: '100%',
+    height: 260
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  imageContainer: {
+    position: 'relative'
   },
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+  heartContainer : {
+    position: 'absolute',
+    top: 15,
+    right: 10,
+    backgroundColor: 'black',
+    borderRadius: 15,
+    padding: 5
   },
+  uploadContainer:{
+    position: 'absolute',
+    top: 15,
+    right: 50,
+    backgroundColor: 'black',
+    borderRadius: 15,
+    padding: 5
+  },
+  threeSection: {
+    marginTop: 140,
+    marginBottom: 60,
+    marginHorizontal: 12,
+  },
+
 });
 
 export default RestaurantOverview;

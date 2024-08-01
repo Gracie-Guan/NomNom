@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15,
     marginLeft: 15,
-    color: '#FFB300'
+    color: '#000'
   },
 });
 

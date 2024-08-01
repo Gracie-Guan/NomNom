@@ -1,133 +1,181 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native';
-import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity} from 'react-native';
+import {MaterialIcons, Feather} from '@expo/vector-icons'
+import PopDishes from './PopDishes';
+import PhotoCard from './PhotoCard';
 
-const InfoCard = ({ restaurantId }) => {
-  const [restaurant, setRestaurant] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchRestaurant = async () => {
-      try {
-        const response = await axios.get(`http://localhost:6868/restaurants/${restaurantId}`);
-        setRestaurant(response.data);
-      } catch (error) {
-        setError('Error fetching restaurant data');
-        console.error('Error fetching restaurant:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRestaurant();
-  }, [restaurantId]);
-
-  const renderRating = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Icon
-          key={i}
-          name={i <= Math.floor(rating) ? 'star' : 'star-outline'}
-          size={20}
-          color={i <= Math.floor(rating) ? '#FFD700' : '#C0C0C0'}
-        />
-      );
-    }
-    return stars;
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
-
-  if (!restaurant) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text>No data available</Text>
-      </View>
-    );
-  }
-
-
-  const totalReviews = Object.values(restaurant.review_rating_count)
-    .reduce((sum, count) => sum + parseInt(count), 0);
-
-  const handleNavigation = () => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}`;
-    Linking.openURL(url);
-  };
-
-  const handleContact = () => {
-    Linking.openURL(`tel:${restaurant.phone}`);
-  };
-
-  return (
-    <Card style={styles.card}>
-      <Card.Cover source={{ uri: restaurant.image }} />
-      <Card.Content>
-        <Title>{restaurant.name}</Title>
-        <Paragraph>{restaurant.address_obj.address_string}</Paragraph>
-        <View style={styles.ratingContainer}>
-          <View style={styles.stars}>{renderRating(parseFloat(restaurant.rating))}</View>
-          <Text>{`(${totalReviews} reviews)`}</Text>
+const InfoCard = () => {
+  return(
+<View style={styles.detailsContainer}>
+    <Text style={styles.detailsText}>SOLE Seafood and Grill</Text>
+    <View style={styles.ratingContainer}>
+        <View style={styles.rating}>
+            <MaterialIcons name='star' color={'#FFA900'} size={20}/>
+            <Text style={styles.ratingText}>4.8</Text>
         </View>
-        <Paragraph>{restaurant.price_level}</Paragraph>
-        <View style={styles.cuisineContainer}>
-          {restaurant.cuisine.map((cuisine, index) => (
-            <Chip key={index} style={styles.chip}>{cuisine.localized_name}</Chip>
-          ))}
+        <View  style={styles.reviewNumber}>
+            <Text style={styles.reviewNumberText}>156</Text>
+            <Text style={styles.reviewNumberText}>reviews</Text>
         </View>
-      </Card.Content>
-      <Card.Actions>
-        <Button icon="navigation" onPress={handleNavigation}>Navigation</Button>
-        <Button icon="phone" onPress={handleContact}>Contact</Button>
-      </Card.Actions>
-    </Card>
-  );
-};
+    </View>
+    <View style={styles.addressContainer}>
+        <View style={styles.address}>
+            <Text style={styles.addressText}>28 Bridge St., Carlow, County Kerry</Text>
+        </View>
+        <View style={styles.distance}>
+            <Text style={styles.distanceText}>2.4km away|</Text>
+            <Text style={styles.priceText}>€50 avg</Text>
+        </View>
+        <View style={styles.type}>
+            <Text style={styles.typeText}>Seafood</Text>
+            <View style={styles.openButton}>
+                <Text style={styles.openType}>open</Text>
+            </View>
+        </View>
+        <View style={styles.twoButton}>
+            <TouchableOpacity style={styles.map}>
+                <Feather name='compass' color={'#FFA900'} size={20}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.phone}>
+                <Feather name='phone-call' color={'#FFA900'} size={20}/>
+            </TouchableOpacity>
+        </View>
+    </View>
+</View>
+  )
+}
 
 const styles = StyleSheet.create({
-  card: {
+  detailsContainer: {
+    position:'absolute',
+    top: 230,
+    left:0,
+    right: 0,
+    zIndex: 1,
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 12,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
+  },
+  detailsText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  ratingContainer:{
+    position:'absolute',
+    top: -50,
+    right: 10,
     margin: 10,
+    backgroundColor: 'white',
+    width: 80,
+    height: 80,
+    borderRadius: 20
   },
-  ratingContainer: {
-    flexDirection: 'row',
+  rating: {
+   height: 40,
+   backgroundColor: 'white',
+   borderTopLeftRadius: 20,
+   borderTopRightRadius: 20,
+   flexDirection: 'row',
+   justifyContent:'center',
+   alignItems: 'center',
+   paddingTop: 10,
+   paddingRight: 5
+  },
+  ratingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  reviewNumber: {
+    height: 40,
+    backgroundColor: '#FFA900',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    justifyContent:'center',
     alignItems: 'center',
-    marginVertical: 5,
-  },
-  stars: {
+    paddingBottom: 5
+   },
+   reviewNumberText:{
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold'
+   },
+   addressContainer: {
+    marginTop: 20,
+    backgroundColor: 'white'
+   },
+   addressText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color:'#9E9E9E'
+   },
+   distance: {
     flexDirection: 'row',
-    marginRight: 5,
-  },
-  cuisineContainer: {
+    marginTop: 5
+   },
+   distanceText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color:'#9E9E9E'
+   },
+   priceText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color:'#000'
+   },
+   type: {
+     flexDirection: 'row',
+     marginTop: 5
+   },
+   typeText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color:'#9E9E9E'
+   },
+   openType: {
+    fontSize: 14,
+    fontWeight: '500',
+    color:'#000'
+   },
+   openButton: {
+    marginLeft: 10,
+    backgroundColor: '#7DEF37',
+    paddingHorizontal: 10,
+    borderRadius: 10
+   },
+   twoButton: {
+    marginTop: 15,
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 5,
-  },
-  chip: {
-    margin: 2,
-  },
-  website: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    marginTop: 5,
-  },
+    justifyContent: 'space-between',
+   },
+   map: {
+    backgroundColor: 'white',
+    paddingVertical: 5,
+    paddingHorizontal: 75,
+    borderRadius: 15,
+    borderRadius: 15,
+    shadowColor: 'rgb(100, 100, 100)',
+    shadowOffset : {
+        width: 1,
+        height: 1
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+   },
+   phone: {
+    backgroundColor: 'white',
+    paddingVertical: 5,
+    paddingHorizontal: 75,
+    borderRadius: 15,
+    shadowColor: 'rgb(100, 100, 100)',
+    shadowOffset : {
+        width: 1,
+        height: 1
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+   },
 });
 
-export default InfoCard;
+export default InfoCard

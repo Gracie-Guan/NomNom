@@ -1,9 +1,8 @@
 import { View, Text ,StyleSheet,Image,  ScrollView} from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
-import ReviewBlockTwo from './ReviewBlockTwo'
 
-function ReviewBlock(){
+function ReviewBlock({filterId}){
     const reviewData = [
         {
             id: '1',
@@ -35,11 +34,25 @@ function ReviewBlock(){
             ],
             like: 12
         },
-
+        {
+            id: '3',
+            userName: 'Brian K',
+            userDate: '21 days ago',
+            rating: 4,
+            avatar: 'https://cdn3.iconfinder.com/data/icons/avatar-set/512/Avatar01-512.png',
+            tags: [],
+            comment: 'The Irish stel reminds me of my mom cooking, cannot have it enough.',
+            photos: [
+            ],
+            like: 13
+        },
     ]
+
+    const filteredData = filterId ? reviewData.filter(review => review.id === filterId) : reviewData;
+
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-    {reviewData.map((review)=>(
+    {filteredData.map((review)=>(
            <View key={review.id} style={styles.reviewCard}>
            <View style={styles.avatar}>
                <Image source={{uri:review.avatar}} style={styles.avatarImage} />
@@ -82,7 +95,6 @@ function ReviewBlock(){
            </View>
        </View>
     ))}
-        <ReviewBlockTwo />
     </ScrollView>
     )
 }
@@ -99,8 +111,9 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.2,
       shadowRadius: 3,
-      elevation: 4,
-      marginBottom: 10
+      elevation: 6,
+      marginBottom: 10,
+      marginHorizontal:5
   },
   avatar:{
       flexDirection: 'row',
