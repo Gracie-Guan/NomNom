@@ -1,22 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import * as Location from 'expo-location';
 import { createStackNavigator } from '@react-navigation/stack';
+import TopTabs from './Components/TopTabs';
+import axios from 'axios';
+import * as Location from 'expo-location';
 import TabNav from './Navigations/TabNav';
 import { UserLocation } from './Context/UserLocation';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 export default function App() {
-    const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [loaded, error] = useFonts({
-      'Ubuntu-Regular': require('./assets/fonts/Ubuntu-Regular.ttf'),
-      'Ubuntu-Medium': require('./assets/fonts/Ubuntu-Medium.ttf'),
-      'Ubuntu-Bold': require('./assets/fonts/Ubuntu-Bold.ttf'),
-    });
-  
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [loaded, error] = useFonts({
+    'Ubuntu-Regular': require('./assets/fonts/Ubuntu-Regular.ttf'),
+    'Ubuntu-Medium': require('./assets/fonts/Ubuntu-Medium.ttf'),
+    'Ubuntu-Bold': require('./assets/fonts/Ubuntu-Bold.ttf'),
+  });
+
   useEffect(() => {
     (async () => {
       
@@ -40,7 +42,6 @@ export default function App() {
         </NavigationContainer>        
       </UserLocation.Provider>  
     </View>
-
   );
 }
 
@@ -50,6 +51,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   text: {
-    fontFamily: 'Ubuntu',
+    fontFamily: 'Ubuntu-Regular',
   },
 })
