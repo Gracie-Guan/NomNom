@@ -130,11 +130,11 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
                 <Text style={styles.dishName}>{name}</Text>
                 <View style={styles.ratingContainer}>
                    <Ionicons name="star" size={18} color="#FFB300" />
-                  <Text style={styles.ratingText}>{rating}</Text>
+                  <Text style={styles.mediumText}>{rating}</Text>
                 </View>
               </View>
 
-              <Text style={styles.mediumText}>{distance} · &euro;{price}</Text>
+              <Text style={[styles.mediumText, {marginBottom:10}]}>{distance} · &euro;{price}</Text>
 
               <View style={styles.smallContainer}>
                 <MaterialCommunityIcons name="storefront-outline" size={18} color="#FFB300" />
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   homeInfo: {
     position: 'absolute', 
     backgroundColor:'#fff',
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
     height: 100,
     bottom:0,
     left:0,
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     width:'100%',
     height:'50%',
     resizeMode:'cover',
-    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
   surpriseContent: {
@@ -387,6 +387,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'flex-end',
+    gap:2,
    },
 
    ratingText:{
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
    mediumText:{
     fontSize: 16,
     fontFamily: 'Ubuntu-Regular',
-    marginBottom: 10,
+    color: '#6e6e6e'
    },
 
    smallText:{

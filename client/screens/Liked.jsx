@@ -22,12 +22,10 @@ const Liked = () => {
           <View>
             <RestaurantCard layout="default" />
           </View>
-
-        ) : (
+          ) : (
           <View>
             <DishCard layout="default" />
           </View>
-
         )}
       </ScrollView>
     </SafeAreaView>
