@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Button, ScrollView, SafeAreaView, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from '@react-navigation/native';
-import { shadow } from 'react-native-paper';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
@@ -75,6 +73,7 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
             </View>
           </View>
         );
+        
       // for search result list 
       case 'list':
         return (
