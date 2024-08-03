@@ -191,6 +191,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width:'100%',
     height:'100%',
+
+    ...Platform.select({
+      ios: {
+        shadowColor: '#221C19',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
 
   flexRow:{
@@ -353,19 +365,17 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff',
     borderRadius:20,
     overflow:'hidden',
-    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.10)',
   },
   
   surpriseImage: {
     width:'100%',
-    height:'50%',
+    height:'55%',
     resizeMode:'cover',
     borderBottomLeftRadius: 20,
   },
 
   surpriseContent: {
    padding: 30,
-   height: '50%',
    justifyContent:'center',
    },
 
@@ -393,7 +403,8 @@ const styles = StyleSheet.create({
    mediumText:{
     fontSize: 16,
     fontFamily: 'Ubuntu-Regular',
-    marginBottom: 10,
+    color: '#6e6e6e',
+    marginBottom:10,
    },
 
    smallText:{

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
@@ -50,6 +50,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#DADADA',
     borderRadius: 25,
+    
+    ...Platform.select({
+      ios: {
+        shadowColor: '#221C19',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   toggleOption: {
     flexDirection: 'row',

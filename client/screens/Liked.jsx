@@ -33,7 +33,11 @@ const Liked = ({ navigation }) => {
       </View>
       <ScrollView contentContainerStyle={styles.cardContainer}>
         {showRestaurants ? (
-          <RestaurantCard layout="default" />
+          <View>
+            <RestaurantCard layout="default" />
+            {/* <RestaurantCard layout='list'/> */}
+          </View>
+
         ) : (
           <DishCard layout="default" />
         )}
