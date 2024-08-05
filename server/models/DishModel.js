@@ -27,7 +27,6 @@ class DishModel {
         } catch (error) {
             throw new Error('Dish not found');
         }
-
     }
 
     static async getDishesByMenu(menuId){
@@ -40,6 +39,11 @@ class DishModel {
 
     }
 
+    static async addDishes(dishes){
+        console.log("File DishModel - dishes: ", dishes);
+        return Dish.insert(dishes);
+    }
+    
 }
 
 module.exports = DishModel;

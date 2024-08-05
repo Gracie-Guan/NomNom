@@ -63,7 +63,7 @@ function SearchBar({ restaurantId }) {
     const fetchDishName = async () => {
       try {
         setIsLoading(true);
-
+        console.log("AAA - restaurant ID: ", restaurantId);
         const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
         const menus = first_response.data;
 
@@ -72,6 +72,7 @@ function SearchBar({ restaurantId }) {
         }
 
         const menuId = menus[0].menu_id;
+        console.log("BBB - menu ID: ", menuId);
         const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
 
         setData(second_response.data);

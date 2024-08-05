@@ -3,7 +3,7 @@ import {  Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from '
 import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
 import AWS from "aws-sdk";
-import CreateMenu from '../screens/Restaurant/CreateMenu';
+// import CreateMenu from '../screens/Restaurant/CreateMenu';
 
 AWS.config.update({
   accessKeyId: "AKIA6ODU2WFB5LY5KCVI",
@@ -31,7 +31,7 @@ export default function ImagePickerExample() {
   const bucketName = "nom.bucket";
   const folderName = "menus";
 
-  const fileName = "test.jpg"
+  const fileName = "test_01.jpg"
   const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
 
   const imagePath = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
@@ -93,7 +93,6 @@ export default function ImagePickerExample() {
           </View>
         </View>
       </Modal>
-      <CreateMenu imagePath={imagePath}/>
     </View>
   );
 }

@@ -13,6 +13,7 @@ import Photos from '../screens/Restaurant/Photos';
 // import { RestaurantContext } from '../App';
 import SearchBar from '../screens/Restaurant/SearchBar';
 import ImageUpload from './UploadImage';
+import CreateMenu from '../screens/Restaurant/CreateMenu';
 
 const menuItemsData = [
   {
@@ -27,6 +28,14 @@ const menuItemsData = [
 // const uniquerestaurantId = "6691307ca764a2b064e517f5"
 const uniquerestaurantId = "669eddceb619f1ad6b948dba";
 // const restaurantId="668ee8afc88d544d82f31746";
+
+const bucketName = "nom.bucket";
+const folderName = "menus";
+
+const fileName = "test.jpg"
+const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
+
+const imageUri = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 
 const photosData = [
   { id: '1', url: 'https://via.placeholder.com/300x300.png?text=Pic+1' },
@@ -89,7 +98,8 @@ const TopTabs = () => {
       case 'menu':
         // return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
         // return <MenuDetails key={tab.key} menuItems={menuItemsData} restaurantId="668ee8afc88d544d82f31746"/>;
-        return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
+        // return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
+        return <CreateMenu key={tab.key} imagePath={imageUri} restaurantId={uniquerestaurantId}/>;
 
       case 'photos':
         return <Photos key={tab.key} photos={photosData}/>;
