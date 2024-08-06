@@ -48,15 +48,6 @@ function RestaurantDetails() {
 }
 
 export default function Home() {
-  // return (
-  //     <Stack.Navigator>
-  //       <Stack.Screen 
-  //         name="RestaurantDetails" 
-  //         component={RestaurantDetails} 
-  //         options={{ title: 'Restaurant Name' }} 
-  //       />
-  //     </Stack.Navigator>
-  // )
   return (
     <RestaurantProvider>
       <RestaurantContext.Consumer>

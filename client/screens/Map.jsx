@@ -1,36 +1,61 @@
+import axios from 'axios';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Platform, Linking } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { UserLocation } from '../Context/UserLocation';
 import RestaurantCard from '../Components/RestroCards';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
-const restaurants = [
-// should be all the database restaurants, let's use fake data first
-
-  { id: 1, name: "Joe's Diner", latitude: 53.349805, longitude: -6.260310 },
-  { id: 2, name: "Pizza Place", latitude: 53.348005, longitude: -6.263320 },
-  
-];
+import { calculateDistance, addDistanceToRestaurants } from '../utils/distance';
 
 export default function GoogleMapsView() {
   const [mapRegion, setMapRegion] = useState(null);
   const { location } = useContext(UserLocation);
   const [selectedRestro, setSelectedRestro] = useState(null);
   const mapRef = useRef(null);
-  
+  const [restaurants,setRestaurants] = useState([]);
+  const [loading,setLoading] = useState(true);
+  const [error,setError] = useState(null);
+
   useEffect(() => {
     if (location) {
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
+        latitudeDelta: 0.04,
+        longitudeDelta: 0.04,
       });
     }
   }, [location]);
 
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await axios.get('http://localhost:6868/restaurants');
+        const restaurantsWithDistance = addDistanceToRestaurants(response.data, location);
+        // console.log('Fetched restaurants:', response.data);
+        setRestaurants(restaurantsWithDistance);
+
+        const processedRestaurants = response.data.map(restaurant => {
+          // console.log('Processing restaurant:', restaurant.name);
+          // console.log('Latitude:',restaurant.latitude, 'Longitude', restaurant.longitude);
+          return {
+            ...restaurant,
+            latitude: restaurant.latitude || 53.3498,
+            longitude: restaurant.longitude || -6.2603,
+          }
+        })
+      } catch (error) {
+        setError('Error fetching restaurant data');
+        console.error('Error fetching restaurants:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRestaurants();
+  }, [location]);
+
   const handleMarkerPress = (restaurant) => {
+    // console.log('Selected restaurant rating:', restaurant.name, restaurant.rating);
     setSelectedRestro(restaurant);
   };
 
@@ -45,8 +70,12 @@ export default function GoogleMapsView() {
     }
   };
 
+  if (loading){
+    return <View style={styles.container}><Text>Loading Restaurants...</Text></View>
+  }
+
   const navToRestaurant = () => {
-    if (selectedRestro && location) {
+    if (selectedRestro) {
       const scheme = Platform.select({ios: 'maps:0,0?q=', android:'geo:0,0?q='});
       const latLng = `${selectedRestro.latitude},${selectedRestro.longitude}`;
       const label = selectedRestro.name;
@@ -54,8 +83,8 @@ export default function GoogleMapsView() {
         ios:`${scheme}${label}@${latLng}`,
         android: `${scheme}${latLng}(${label})`
       });
-
-      Linking.openURL(url).catch((err)=>console.log('An erro occurred', err));
+  
+      Linking.openURL(url).catch((err) => console.error('An error occurred', err));
     }
   };
 
@@ -67,10 +96,13 @@ export default function GoogleMapsView() {
           showsUserLocation={true}
           region={mapRegion}
         >
-       {restaurants.map((restaurant) => (
+        {restaurants.map((restaurant) => (
           <Marker
-            key={restaurant.id}
-            coordinate={{latitude: restaurant.latitude, longitude: restaurant.longitude}}
+            key={restaurant._id}
+            coordinate={{
+              latitude: restaurant.latitude,
+              longitude: restaurant.longitude
+            }}
             onPress={() => handleMarkerPress(restaurant)}
           >
             <Callout>
@@ -90,7 +122,9 @@ export default function GoogleMapsView() {
 
         {selectedRestro && (
           <View style={styles.card}>
-            <RestaurantCard layout='list' restaurant={selectedRestro} />
+            <RestaurantCard 
+              layout='list' 
+              restaurant={selectedRestro} />
           </View>
         )}
 
