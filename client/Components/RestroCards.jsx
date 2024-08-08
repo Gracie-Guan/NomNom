@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Button, ScrollView, SafeAreaView, Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { RestaurantContext } from '../Context/RestaurantContext';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
@@ -24,6 +26,18 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
 
 
   const [isPressed, setIsPressed] = useState(false);
+
+  const navigation = useNavigation();
+  const {fetchRestaurant} = useContext(RestaurantContext);
+
+  const handlePressToRestro = useCallback(() => {
+    if (restaurant && restaurant._id) {
+      navigation.navigate('RestaurantDetail', { restaurantId: restaurant._id });
+    } else {
+      console.error('invalid restaurant data')
+    }
+    
+  }, [navigation, restaurant]);
 
   const renderContent = () => {
     switch (layout) {
@@ -106,7 +120,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
               <Text style={styles.tinyText}>{distance} · Avg {price}</Text>
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.detailsButton}>
+                <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
                   <Text style={styles.detailsButtonText}>Details</Text>
                   <Feather name="arrow-up-right" size={20} color="#fff" />
                 </TouchableOpacity>
@@ -149,7 +163,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 <Text style={styles.smallText}>{cuisine}</Text>
               </View>
 
-              <TouchableOpacity style={styles.detailsButton}>
+              <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
                 <Text style={styles.detailsButtonText}>Details</Text>
                 <Feather name="arrow-up-right" size={20} color="#fff" />
               </TouchableOpacity>
@@ -184,13 +198,13 @@ const shadowSubtle = Platform.select({
 });
 
 const styles = StyleSheet.create({
-// general 
+// default 
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width:'100%',
-    height:'100%',
+    // width:'100%',
+    // height:'100%',
 
     ...Platform.select({
       ios: {

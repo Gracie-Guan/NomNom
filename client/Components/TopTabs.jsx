@@ -1,128 +1,98 @@
-import React, {useContext} from 'react';
-import { Tabs } from '@ant-design/react-native';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import InfoCard from './InfoCard';
-import PopDishes from './PopDishes';
-import PhotoCard from './PhotoCard';
-import ReviewCard from './ReviewCard';
-// import MenuDetails from '../screens/Restaurant/MenuDetails';
-// import MenuDetailsContainer from './MenuDetailsContainer';
+import React, { useState } from 'react';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import MenuInfo from './MenuInfo';
 import Photos from '../screens/Restaurant/Photos';
-// import Reviews from '../screens/Reviews';
-// import { RestaurantContext } from '../App';
-import SearchBar from '../screens/Restaurant/SearchBar';
-import ImageUpload from './UploadImage';
+import Reviews from '../screens/Restaurant/Reviews';
+import RestaurantOverview from '../screens/Restaurant/RestaurantOverview';
 
-const menuItemsData = [
-  {
-    "_id": {"$oid": "668ee8afc88d544d82f31748"},
-    "name": "Nem Rán",
-    "description": "Pork & Prawn Spring Rolls",
-    "price": {"$numberDouble": 6.9},
-  },
-  {"_id":{"$oid":"668ee8afc88d544d82f31749"},"menu_id":{"$oid":"668ee8afc88d544d82f31747"},"name":"Gỏi Cuốn Tôm","description":"Prawn Summer Roll","category":"Starters","price":{"$numberDouble":"6.9"},"note":""}
-];
-
-// const uniquerestaurantId = "6691307ca764a2b064e517f5"
-const uniquerestaurantId = "669eddceb619f1ad6b948dba";
-// const restaurantId="668ee8afc88d544d82f31746";
+const uniquerestaurantId = "668ee8afc88d544d82f31746";
 
 const photosData = [
-  { id: '1', url: 'https://via.placeholder.com/300x300.png?text=Pic+1' },
-  { id: '2', url: 'https://via.placeholder.com/300x300.png?text=Pic+2' },
-  { id: '3', url: 'https://via.placeholder.com/300x300.png?text=Pic+3' },
-  { id: '4', url: 'https://via.placeholder.com/300x300.png?text=Pic+4' },
+  { id: '1', url: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg' },
+  { id: '2', url: 'https://images.immediate.co.uk/production/volatile/sites/30/2024/01/Fried-bread-408ec8e.jpg?quality=90&resize=556,505' },
+  { id: '3', url: 'https://food-images.files.bbci.co.uk/food/recipes/chicken_and_seafood_62744_16x9.jpg' },
+  { id: '4', url: 'https://www.allrecipes.com/thmb/ympIQl1YNYWFMvwKLMLx8EnG-to=/0x512/filters:no_upscale():max_bytes(150000):strip_icc()/79543-fried-rice-restaurant-style-DDMFS-4x3-b79a6ea27e0344399257ca1df67ca1cd.jpg' },
+  { id: '5', url: 'https://www.noracooks.com/wp-content/uploads/2023/03/ChickpeaCurry-2189-2.jpg' },
+  { id: '6', url: 'https://static.toiimg.com/photo/88489342.cms' },
+  { id: '7', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8-3wl39eAmxReyrbQrXo4pRW9YgFDOFNGCg&s'},
+  { id: '8', url: 'https://img.traveltriangle.com/blog/wp-content/uploads/2018/05/Korean-Food-Cover.jpg' },
+  { id: '9', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlVp2r878UcchwHQAWMliwWB9u0ugrX7jjkQ&s' },
+  { id: '10', url: 'https://media.cnn.com/api/v1/images/stellar/prod/181115105819-korean-food149201306006k-gimbap.jpg?q=w_1600,h_900,x_0,y_0,c_fill' },
+  { id: '11', url: 'https://media.timeout.com/images/106018241/750/562/image.jpg' },
+  { id: '12', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqwyQDzcROno1-o6dfOWGC05CAMAXE2UlnFw&s' },
   //...
 ];
 
-// const restaurantData = {
-//   "_id": {"$oid":"668ee8afc88d544d82f31746"},
-//   "name": "Hanoi Hanoi Restaurant",
-//   "address_obj": {
-//     "address_string": "101 Capel Street Dublin 1, Dublin D01 H2X5 Ireland"
-//   },
-//   "latitude": "53.345966",
-//   "longitude": "-6.25341",
-//   "phone": "+353 1 538 8418",
-//   "website": "http://hanoihanoi.restaurant",
-//   "rating": "4.0",
-//   "review_rating_count": {"1":"6","2":"2","3":"1","4":"1","5":"19"},
-//   "price_level": "€€ - €€€",
-//   "cuisine": [
-//     {"name":"vietnamese","localized_name":"Vietnamese"},
-//     {"name":"bar","localized_name":"Bar"},
-//     {"name":"seafood","localized_name":"Seafood"},
-//     {"name":"barbecue","localized_name":"Barbecue"},
-//     {"name":"asian","localized_name":"Asian"},
-//     {"name":"pub","localized_name":"Pub"}
-//   ]
-// };
+const OverviewRoute = () => (
+  <RestaurantOverview restaurantId={uniquerestaurantId} />
+);
+
+const MenuRoute = () => (
+  <MenuInfo restaurantId={uniquerestaurantId} />
+);
+
+const PhotosRoute = () => (
+  <Photos photos={photosData} />
+);
+
+const ReviewsRoute = () => (
+  <Reviews restaurantId={uniquerestaurantId} />
+);
+
+const renderScene = SceneMap({
+  overview: OverviewRoute,
+  menu: MenuRoute,
+  photos: PhotosRoute,
+  review: ReviewsRoute,
+});
 
 const TopTabs = () => {
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'overview', title: 'Overview' },
+    { key: 'menu', title: 'Menu' },
+    { key: 'photos', title: 'Photos' },
+    { key: 'review', title: 'Reviews' },
+  ]);
 
-  // const { restaurant } = useContext(RestaurantContext);
-
-  // console.log("restaurant info: ", restaurant);
-
-  // const uniquerestaurantId = restaurant._id;
-
-  const tabs = [    
-    { key:'info', title: 'Info' },
-    { key:'menu',title: 'Menu' },
-    { key:'photos',title: 'Photos' },
-    // { key:'reviews', title: 'Reviews' },
-    { key:'search', title: 'Search' },
-  ];
-
-  const renderTabContent = (tab) => {
-    switch(tab.key) {
-      case 'info':
-        return (
-          <ScrollView key={tab.key} style={styles.ScrollView}>
-            <InfoCard restaurantId={uniquerestaurantId}/>
-            <PopDishes />
-            <PhotoCard />
-            <ReviewCard />
-          </ScrollView>
-        );
-      case 'menu':
-        // return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
-        // return <MenuDetails key={tab.key} menuItems={menuItemsData} restaurantId="668ee8afc88d544d82f31746"/>;
-        return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
-
-      case 'photos':
-        return <Photos key={tab.key} photos={photosData}/>;
-      case 'search':
-        return <SearchBar key={tab.key} restaurantId={uniquerestaurantId}/>;
-      default:
-        return null;
-    }
-  };
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.indicator}
+      style={styles.tabBar}
+      labelStyle={styles.tabLabel}
+      activeColor="#000000"
+      inactiveColor="#6e6e6e"
+    />
+  );
 
   return (
-    <View style={styles.container}>
-      <Tabs tabs={tabs}>
-        {tabs.map(renderTabContent)}
-      </Tabs>
-    </View>
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{ width: Dimensions.get('window').width }}
+      renderTabBar={renderTabBar}
+    />
   );
 };
 
-const styles= StyleSheet.create({
-    container: 
-    {
-    flexGrow: 1,
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
     backgroundColor: '#fff',
-    },
-    ScrollView: {
-      flex: 1,
-      marginBottom: 15
-    },
-    sectionContainer: {
-      flexGrow: 1,
-      marginVertical: 10,
-    },
+  },
+  tabBar: {
+    backgroundColor: '#fff',
+  },
+  indicator: {
+    backgroundColor: '#000000',
+  },
+  tabLabel: {
+    fontSize: 12,
+    fontFamily:'Ubuntu-Medium',
+  },
 });
 
 export default TopTabs;

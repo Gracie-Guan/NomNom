@@ -1,110 +1,101 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, Avatar, Chip } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, Text,StyleSheet,Image, TouchableOpacity} from 'react-native';
+import {Feather} from '@expo/vector-icons'
+import ReviewBlock from './ReviewBlockk'
+
+const tags = ['Fresh', 'BBQ', 'Date', 'Family', 'Spicy', 'Vibe']
 
 const ReviewCard = () => {
-  const rating = 4.8;
-
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Icon
-          key={i}
-          name={i <= Math.floor(rating) ? 'star' : 'star-outline'}
-          size={20}
-          color={i <= Math.floor(rating) ? '#FFD700' : '#C0C0C0'}
-        />
-      );
-    }
-    return stars;
-  };
-
   return (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Text style={styles.title}>Reviews</Text>
-        <View style={styles.ratingContainer}>
-          <Text style={styles.ratingNumber}>{rating}</Text>
-          <View style={styles.starsContainer}>{renderStars(rating)}</View>
-        </View>
-        <View style={styles.reviewContainer}>
-          <View style={styles.userInfo}>
-            <Avatar.Image size={40} source={{ uri: 'https://via.placeholder.com/40' }} />
-            <View style={styles.userDetails}>
-              <Text style={styles.userName}>Cara Nara</Text>
-              <Text style={styles.reviewDate}>7 days ago</Text>
+    <View style={styles.reviewSection}>
+        <View style={styles.reviewTop}>
+            <View style={styles.reviewTopLeft}>
+                <Feather name='message-circle' color={'#E65100'} size={25}/>
+                <Text style={styles.leftText}>Reivews</Text>
             </View>
-          </View>
-          <View style={styles.tags}>
-            <Chip style={styles.tag}>Vegan</Chip>
-            <Chip style={styles.tag}>Live Music</Chip>
-            <Chip style={styles.tag}>Ambience</Chip>
-          </View>
-          <Text style={styles.reviewText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </Text>
+            <View style={styles.reviewTopRight}>
+                <Text style={styles.rightText}>View All</Text>
+                <Feather name='arrow-right' color={'#9E9E9E'} size={18}/>
+            </View>
         </View>
-      </Card.Content>
-    </Card>
+        <View style={styles.reviewTag}>
+            {tags.map((item,index)=> (
+                <View  key={index} style={styles.tagContainer}>
+                    <Text style={styles.tagText}>{item}</Text>
+                </View>
+            ))}
+        </View>
+        <View Style={styles.reviewsContainer}>
+            <ReviewBlock filterId='1'/>
+        </View>
+        <TouchableOpacity style={styles.leaveButton}>
+            <Text style={styles.buttonText}>Leave a Review</Text>
+        </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    margin: 10,
-    marginBottom: 30
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  ratingNumber: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    marginRight: 10,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-  },
-  reviewContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    paddingTop: 10,
-  },
-  userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  userDetails: {
-    marginLeft: 10,
-  },
-  userName: {
-    fontWeight: 'bold',
-  },
-  reviewDate: {
-    color: '#888',
-  },
-  tags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 10,
-  },
-  tag: {
-    marginRight: 5,
-    marginBottom: 5,
-  },
-  reviewText: {
-    marginBottom: 10,
-  },
+    reviewSection: {
+        marginHorizontal: 5,
+        marginVertical: 10
+    },
+    reviewTop: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    reviewTopLeft: {
+        flexDirection: 'row'
+    },
+       reviewTopRight: {
+        flexDirection: 'row'
+    },
+    leftText: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginLeft: 5,
+        marginTop: 2
+    },
+    rightText: {
+        color: '#9E9E9E',
+        fontsize: 12,
+    },
+    reviewTag:{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginVertical: 15,
+        marginHorizontal: 10,
+    
+    },
+    tagContainer: {
+        backgroundColor:'white',
+        marginRight: 10,
+        marginBottom: 10,
+        paddingHorizontal: 18,
+        paddingVertical: 2,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#9E9E9E',
+    },
+    tagText:{
+        color: '#9E9E9E'
+    },
+    leaveButton: {
+        backgroundColor: 'white',
+        borderWidth: 2,
+        borderColor:'#FFB300',
+        alignItems: 'center',
+        width: 350,
+        height: 30,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignContent: 'center'
+      },
+      buttonText: {
+        fontSize: 16,
+        color: '#FFB300',
+        fontWeight: '500',
+      },
 });
 
 export default ReviewCard;

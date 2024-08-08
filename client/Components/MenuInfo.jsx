@@ -4,6 +4,7 @@ import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native
 import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
+import { RestaurantContext } from '../Context/RestaurantContext';
 
 const MenuInfo = ({ restaurantId }) => {
   const [menuItems, setMenu] = useState(null);

@@ -1,64 +1,80 @@
-import { View } from '@ant-design/react-native';
-import React from 'react';
-import { ScrollView, StyleSheet, Modal } from 'react-native';
-import { Button, List, Text } from 'react-native-paper';
-import ImageUpload from '../../Components/UploadImage';
+import {  ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { List, Text} from 'react-native-paper';
+import React, { useState } from 'react';
+import DishItem from '../../Components/DishItems';
 
 export default function MenuDetails({ menuItems }) {
-  // Helper function to safely get the price
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const getPrice = (priceObj) => {
-    // console.log(priceObj)
-    if (Object.prototype.toString.call(priceObj) === "[object Number]") {
-      // console.log(priceObj);  
-      return parseFloat(priceObj).toFixed(2);
+    if (Object.prototype.toString.call(priceObj) === "[object Number]") {  
+      return parseFloat(priceObj).toFixed(2); 
+    } 
+      if (typeof priceObj === 'object' && priceObj !== null && '$numberDouble' in priceObj) {
+        return parseFloat(priceObj.$numberDouble).toFixed(2);
     }
-
-    // if (typeof priceObj === 'object' && priceObj !== null && '$numberDouble' in priceObj) {
-    if (typeof priceObj === 'object' && priceObj !== null && '$numberDouble' in priceObj) {
-      return parseFloat(priceObj.$numberDouble).toFixed(2);
-    }
-    return '-.--'; // Default value if price is not in expected format
+    return '-.--';
   };
 
   const categoryMap = {};
   menuItems.forEach(dish => {
-    // console.log(dish);
     if (!categoryMap[dish.category]) {
       categoryMap[dish.category] = [];
     }
     categoryMap[dish.category].push(dish);
   });
 
-  // console.log(categoryMap);
+  const categories = Object.keys(categoryMap);
+  const filteredMenuItems = selectedCategory ? categoryMap[selectedCategory] : menuItems;
 
   return (
-    <ScrollView
-      style={styles.container}
-      automaticallyAdjustContentInsets={false}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
-      {menuItems.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>Be the first to upload a menu image!</Text>
-          <ImageUpload />
-          
-        </View>
-      ) : (
-        Object.keys(categoryMap).map((category) => (
-          <View key={category}>
-            <Text style={styles.categoryTitle}>{category}</Text>
-            {categoryMap[category].map((item) => (
-              <List.Item
-                key={item._id}
-                title={item.name}
-                description={item.description}
-                right={() => <Text style={styles.price}>€{getPrice(item.price)}</Text>}
-              />
+    <View style={styles.container}>
+        <View style={styles.categoryTagsContainer}>
+        <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+        >
+            <TouchableOpacity onPress={() => setSelectedCategory(null)} style={[styles.categoryTag, selectedCategory === null && styles.selectedCategoryTag]}>
+                <Text style={[styles.categoryTagText, selectedCategory === null && styles.selectedCategoryTagText]}>All</Text>
+            </TouchableOpacity>
+            {categories.map((category) => (
+                <TouchableOpacity key={category} onPress={() => setSelectedCategory(category)} style={[styles.categoryTag, selectedCategory === category && styles.selectedCategoryTag]}>
+                    <Text style={[styles.categoryTagText, selectedCategory === category && styles.selectedCategoryTagText]}>{category}</Text>
+                </TouchableOpacity>
             ))}
-          </View>
-        ))
-      )}
-    </ScrollView>
+        </ScrollView>
+        </View>
+
+        <ScrollView
+            style={styles.menuContainer}
+            automaticallyAdjustContentInsets={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+        >
+            {selectedCategory === null ? categories.map((category) => (
+                <View key={category}>
+                    <Text style={styles.categoryTitle}>{category}</Text>
+                    {categoryMap[category].map((item) => (
+                        <DishItem
+                            key={item._id}
+                            name={item.name}
+                            price={getPrice(item.price)}
+                            description={item.description}
+                            rate={item.rate}
+                        />
+                    ))}
+                </View>
+            ))
+            : filteredMenuItems.map((item) => (
+                <DishItem
+                    key={item._id}
+                    name={item.name}
+                    price={getPrice(item.price)}
+                    description={item.description}
+                    rate={item.rate}
+                />
+          ))}
+        </ScrollView>
+    </View>
   );
 }
 
@@ -66,31 +82,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f9',
-    marginBottom: 30
   },
-  price: {
+  categoryTagsContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginBottom: 10
+  },
+  categoryTag: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+    marginVertical: 5,
+    borderRadius: 15,
+  },
+  selectedCategoryTag: {
+    backgroundColor: '#ffffff',
+    shadowColor: 'rgb(100, 100, 100)',
+    shadowOffset : {
+        width: 1,
+        height: 1
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+  },
+  categoryTagText: {
+    color: '#707070',
+    fontSize: 12,
+    fontWeight:'700'
+  },
+  selectedCategoryTagText: {
+    color: '#000000',
+  },
+  menuContainer: {
+    flex: 1,
+    marginBottom: 30,
+  },
+  categoryTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    alignSelf: 'center',
+    marginBottom: 15,
+    marginLeft: 15,
+    color: '#000'
   },
-
-  categoryTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    marginLeft: 15
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#666',
-  }
 });
 
 export const title = 'Menu';

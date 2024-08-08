@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Profile from '../screens/User/Profile';
 import Liked from '../screens/Liked';
 import Home from '../screens/Home';
@@ -9,14 +10,54 @@ import Surprise from '../screens/Surprise';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Octicons from '@expo/vector-icons/Octicons';
+import LoginScreen from '../screens/Login';
+import RestaurantDetail from '../screens/Restaurant/RestaurantDetail';
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+// 为每个主要页面创建堆栈导航器
+function HomeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeMain" component={Home} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+    </Stack.Navigator>
+  );
+}
+
+function MapStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MapMain" component={Map} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+    </Stack.Navigator>
+  );
+}
+
+function SurpriseStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SurpriseMain" component={Surprise} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+    </Stack.Navigator>
+  );
+}
+
+function LikedStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="LikedMain" component={Liked} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+    </Stack.Navigator>
+  );
+}
 
 function TabNav() {
   return (
     <Tab.Navigator 
       screenOptions={({ route }) => ({
-        headerShown: false,
+        headerShown: true,
         tabBarStyle: {
           height: 90,
           paddingTop: 10,
@@ -70,11 +111,11 @@ function TabNav() {
         },
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Map" component={Map} />
-      <Tab.Screen name="Surprise" component={Surprise} />
-      <Tab.Screen name="Liked" component={Liked} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Map" component={MapStack} />
+      <Tab.Screen name="Surprise" component={SurpriseStack} />
+      <Tab.Screen name="Liked" component={LikedStack} />
+      <Tab.Screen name="Profile" component={LoginScreen} />
     </Tab.Navigator>
   )
 }

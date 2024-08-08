@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const ToggleButton = ({ style = 'pill', onToggle }) => {

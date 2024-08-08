@@ -2,13 +2,14 @@ import React, { createContext, useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import TopTabs from './Components/TopTabs';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import TabNav from './Navigations/TabNav';
 import { UserLocation } from './Context/UserLocation';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import RestaurantDetails from './screens/Restaurant/RestaurantDetail';
+import { RestaurantProvider } from './Context/RestaurantContext';
 
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -33,14 +34,21 @@ export default function App() {
     })();
   }, []);
 
+  if (!loaded) {
+    return null; 
+  }
+
   return (
     <View style={styles.container}>
-      <UserLocation.Provider 
-      value={{location, setLocation}}>
-        <NavigationContainer>
-          <TabNav />  
-        </NavigationContainer>        
-      </UserLocation.Provider>  
+       <RestaurantProvider>
+          <UserLocation.Provider 
+             value={{location, setLocation}}>
+            <NavigationContainer>
+              <TabNav />  
+            </NavigationContainer>        
+          </UserLocation.Provider>  
+       </RestaurantProvider>
+      
     </View>
   );
 }
