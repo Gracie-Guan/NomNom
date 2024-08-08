@@ -30,7 +30,7 @@ const restaurantSchema = new Schema({
         name: String,
         localized_name: String
     }],
-    image: String
+    image: [String]
 });
 
 const Restaurant = mongoose.model('restaurant', restaurantSchema);

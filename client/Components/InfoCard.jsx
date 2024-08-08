@@ -77,9 +77,11 @@ const InfoCard = ({ restaurantId }) => {
     Linking.openURL(`tel:${restaurant.phone}`);
   };
 
+  console.log("image: ", restaurant.image);
+
   return (
     <Card style={styles.card}>
-      <Card.Cover source={{ uri: restaurant.image }} />
+      <Card.Cover source={{ uri: restaurant.image[0] }} />
       <Card.Content>
         <Title>{restaurant.name}</Title>
         <Paragraph>{restaurant.address_obj.address_string}</Paragraph>

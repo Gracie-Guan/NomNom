@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const dishSchema = new Schema({
-    _id: Schema.Types.ObjectId,
+    // _id: Schema.Types.ObjectId,
     menu_id: Schema.Types.ObjectId,
     name: String,
     description: String,
     category: String,
     price: Number,
-    note: String,
-});
+    note: String
+}, {versionKey: false});
 
 const Dish = mongoose.model('dish', dishSchema);
 
@@ -41,7 +41,8 @@ class DishModel {
 
     static async addDishes(dishes){
         console.log("File DishModel - dishes: ", dishes);
-        return Dish.insert(dishes);
+        // const dish = new Dish(dishes);
+        return Dish.insertMany(dishes);
     }
     
 }

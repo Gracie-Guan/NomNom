@@ -3,8 +3,9 @@ import React from 'react';
 import { ScrollView, StyleSheet, Modal } from 'react-native';
 import { Button, List, Text } from 'react-native-paper';
 import ImageUpload from '../../Components/UploadImage';
+import SearchBar from './SearchBar';
 
-export default function MenuDetails({ menuItems }) {
+export default function MenuDetails({ menuItems, restaurant_id }) {
   // Helper function to safely get the price
   const getPrice = (priceObj) => {
     // console.log(priceObj)
@@ -32,8 +33,9 @@ export default function MenuDetails({ menuItems }) {
   // console.log(categoryMap);
 
   return (
+    <View style={{flex: 1}}>
     <ScrollView
-      style={styles.container}
+      style={styles.scrollView}
       automaticallyAdjustContentInsets={false}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
@@ -59,10 +61,17 @@ export default function MenuDetails({ menuItems }) {
         ))
       )}
     </ScrollView>
+    {/* <View style={styles.searchContainer}>
+    <SearchBar restaurantId={restaurant_id}/>
+    </View> */}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f9',
@@ -90,6 +99,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#666',
+  },
+  searchContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 });
 

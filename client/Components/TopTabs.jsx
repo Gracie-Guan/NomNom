@@ -9,7 +9,7 @@ import ReviewCard from './ReviewCard';
 // import MenuDetailsContainer from './MenuDetailsContainer';
 import MenuInfo from './MenuInfo';
 import Photos from '../screens/Restaurant/Photos';
-// import Reviews from '../screens/Reviews';
+import Reviews from '../screens/Restaurant/Reviews';
 // import { RestaurantContext } from '../App';
 import SearchBar from '../screens/Restaurant/SearchBar';
 import ImageUpload from './UploadImage';
@@ -26,7 +26,12 @@ const menuItemsData = [
 ];
 
 // const uniquerestaurantId = "6691307ca764a2b064e517f5"
-const uniquerestaurantId = "669eddceb619f1ad6b948dba";
+const uniquerestaurantId = "669eddceb619f1ad6b948dba"; // yamamori
+
+// const uniquerestaurantId = "6691378108abb998e1cc6038"; // shaku maku
+
+// const uniquerestaurantId = "6691307ca764a2b064e517f5"; // Doppio
+
 // const restaurantId="668ee8afc88d544d82f31746";
 
 const bucketName = "nom.bucket";
@@ -81,7 +86,7 @@ const TopTabs = () => {
     { key:'menu',title: 'Menu' },
     { key:'photos',title: 'Photos' },
     // { key:'reviews', title: 'Reviews' },
-    { key:'search', title: 'Search' },
+    { key:'review', title: 'Reviews' },
   ];
 
   const renderTabContent = (tab) => {
@@ -98,13 +103,14 @@ const TopTabs = () => {
       case 'menu':
         // return <MenuDetails key={tab.key} menuItems={menuItemsData}/>;
         // return <MenuDetails key={tab.key} menuItems={menuItemsData} restaurantId="668ee8afc88d544d82f31746"/>;
-        // return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
-        return <CreateMenu key={tab.key} imagePath={imageUri} restaurantId={uniquerestaurantId}/>;
+        return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
+        // return <ImageUpload key={tab.key} imagePath={imageUri} restaurantId={uniquerestaurantId}/>;
 
       case 'photos':
         return <Photos key={tab.key} photos={photosData}/>;
-      case 'search':
-        return <SearchBar key={tab.key} restaurantId={uniquerestaurantId}/>;
+      case 'review':
+        // return <SearchBar key={tab.key} restaurantId={uniquerestaurantId}/>;
+        return <Reviews key={tab.key} />;
       default:
         return null;
     }

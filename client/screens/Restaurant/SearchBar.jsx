@@ -14,12 +14,15 @@ import filter from 'lodash.filter';
 function SearchBar({ restaurantId }) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hideResultNumber, setResultNumber] = useState(true);
+
   const [error, setError] = useState(null);
   // const [query, setQuery] = useState('');
   const [fullData, setFullData] = useState([]);
 
   const renderHeader = () => {
     const [query, setQuery] = useState('');
+    const [length, setLength] = useState('');
 
     const handleSearch = () => {
       const formattedQuery = query.toLowerCase();
@@ -28,31 +31,42 @@ function SearchBar({ restaurantId }) {
         return contains(dish, formattedQuery);
       });
       setData(filteredData);
+      setLength(filteredData.length);
     };
 
     return (
-    <View style={styles.searchContainer}>
-      <TextInput
-        autoCapitalize="none"
-        autoCorrect={false}
-        clearButtonMode="always"
-        value={query}
-        onChangeText={queryText => setQuery(queryText)}
-        onEndEditing={queryText => setQuery(queryText)}
-        // value={query}
-        placeholder="Search"
-        style={styles.searchInput}
-        onFocus={handleFocus}
+      <View style={styles.searchContainer}>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="always"
+          value={query}
+          onChangeText={queryText => setQuery(queryText)}
+          onEndEditing={queryText => setQuery(queryText)}
+          // value={query}
+          placeholder="Search"
+          style={styles.searchInput}
+          onFocus={handleFocus}
         // onBlur={handleBlur}
-      />
-      <Button title="Search" onPress={handleSearch} />
-    </View>
-  )};
+        />
+        <Button title="Search" onPress={handleSearch} />
+      </View>
+    )
+  };
 
   const contains = (dishInfo, query) => {
-    if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query)) {
+
+    if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query) || dishInfo.category.toLowerCase().includes(query)) {
+      console.log("search result: ", dishInfo.name);
+      if (query === "") {
+        setResultNumber(true);
+      } else {
+        setResultNumber(false);
+      }
+      
       return true;
     }
+    // setResultNumber(false);
     return false;
   };
 
@@ -74,9 +88,11 @@ function SearchBar({ restaurantId }) {
         const menuId = menus[0].menu_id;
         console.log("BBB - menu ID: ", menuId);
         const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
+        // console.log("second_response.data: ", second_response.data);
 
         setData(second_response.data);
         setFullData(second_response.data);
+        console.log("data.length: ", data.length, second_response.data)
       } catch (error) {
         setError('Error fetching restaurant data');
         console.error('Error fetching restaurant:', error);
@@ -119,17 +135,28 @@ function SearchBar({ restaurantId }) {
     );
   }
 
+  console.log("hide result number: ", hideResultNumber);
+
   return (
     <View style={styles.resultContainer}>
       <Text style={styles.searchTitle}>Dish Search</Text>
-      { data.length === 0 ? (
-        <View style={styles.textContainer}>
-          <Text style={styles.noData}>Currently there's no menu data available..</Text>
-          
-        </View>
-      ) : (<FlatList
-        ListHeaderComponent={renderHeader}
-        data={data}
+      <FlatList
+        ListHeaderComponent={() => (
+          // <View>
+          //   {renderHeader()}
+          //   {
+          //     <Text style={{textAlign: "end"}}>{data.length} results</Text>
+          //   }
+          // </View>
+          <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+            {renderHeader()}
+            { hideResultNumber === true ? (
+            <Text style={{ alignSelf: "flex-end", marginRight: "3%" }}>All dishes</Text>
+            ) : ( <Text style={{ alignSelf: "flex-end", marginRight: "3%" }}>{data.length} results</Text>
+            )
+            }
+          </View>
+        )} data={data}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.listItem}>
@@ -139,9 +166,7 @@ function SearchBar({ restaurantId }) {
             </View>
             <Text style={styles.price}>{item.price}</Text>
           </View>
-        )}
-      />)}
-
+        )} />
     </View>
   );
 }
@@ -164,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#888',
   },
-  
+
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',

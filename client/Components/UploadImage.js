@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import {  Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import {  Image, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import { View } from '@ant-design/react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
 import AWS from "aws-sdk";
@@ -27,6 +28,7 @@ const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
 export default function ImagePickerExample() {
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [menu_info, setRestaurantInfo] = useState(null);
 
   const bucketName = "nom.bucket";
   const folderName = "menus";
@@ -72,9 +74,105 @@ export default function ImagePickerExample() {
     setModalVisible(false);
   };
 
+  const addItem = async (data, menuId) => {
+    // Insert dishes and update their menu_id references
+    console.log("data:", data);
+    // console.log("addItem function ---- data: ", JSON.stringify(JSON.parse(data)));
+
+    json_data = JSON.parse(JSON.stringify(JSON.parse(data)));
+
+    // console.log("json_data.restaurants: ", json_data.restaurants[0].menu.categories);
+
+    const dishPromises = json_data.restaurants[0].menu.categories.flatMap(category => {
+      return category.dishes.map(dish => ({
+        menu_id: menuId,
+        name: dish.name,
+        description: dish.description,
+        category: category.name,
+        price: dish.price,
+        note: dish.note
+      }));
+    });
+
+    console.log("dishes", dishPromises)
+
+    try {
+      const response = await axios.post('http://localhost:6868/dishes/add-menu', dishPromises
+      // { 
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // }
+    );
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
+  };
+
+  const fetchRestaurantInfo = async (restaurantId) => {
+    try {
+      // const restaurant_info = await axios.get(`http://localhost:6868/restaurants/${restaurantId}`);
+
+      // const restaurantsData = JSON.parse(restaurant_info).restaurants;
+
+      // console.log("restaurantsData: ", restaurant_info.data)
+
+      const menu_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
+
+      const menus = menu_response.data;
+
+      // Access the restaurant_id of the first (and only) menu
+      const menuId = menus[0].menu_id;
+
+      console.log("menuId: ", menuId)
+      console.log("Menu ID available!");
+      setRestaurantInfo(menuId);
+    } catch (error) {
+      console.error("Error fetching restaurant data from server:", error);
+    }
+  }
+
+  const fetchImageFromServer = async (imageUri) => {
+    // Extract the filename from the URI
+    console.log("image uri", imageUri);
+
+    const filename = imageUri.split('/').pop();
+
+    try {
+      console.log("Reaching (skipping) Flask...");
+      const response = await axios.get(`http://127.0.0.1:5000/fetch-image`, {
+        params: {
+          bucket_name: 'nom.bucket',
+          image_key: "menus/" + filename
+        },
+        // responseType: 'blob' // old code - don't use
+        // public_uri: imageUri // old code - don't use
+      });
+      console.log("Flask request done!");
+
+      console.log("Setting image from server...");
+      // setImageFromServer(response.data);
+      fetchRestaurantInfo(restaurantId);
+      console.log("Setting done!");
+      // console.log("response: ", response.request._response)
+      // const testData = [{ category: "SASHIMI 刺身", description: "(Lean bluefin tuna)", menu_id: "1A", name: "Akami - 4 pieces", note: "", price: 19.95 }, { category: "SASHIMI 刺身", description: "(Bluefin tuna belly)", menu_id: "2B", name: "Otoro - 3 pieces", note: "", price: 14.5 }]
+      // const menuId = menuResult.insertedId;
+      const oneDish = { category: "SASHIMI 刺身", description: "(Lean bluefin tuna)", menu_id: menu_info, name: "Akami - 4 pieces", note: "", price: 19.95 };
+      addItem(response.request._response, menu_info);
+      // addItem(oneDish);
+      //   const imageBlob = response.data;
+      //   console.log("imageBlob: ", imageBlob);
+      //   const imageObjectURL = URL.createObjectURL(imageBlob);
+      //   setImageFromServer(imageObjectURL);
+    } catch (error) {
+      console.error("Error fetching image from server:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Button mode='outlined' onPress={pickImage} style={{width: '90%'}}>Upload Menu</Button>
+      <Button mode='outlined' onPress={() => { fetchImageFromServer(imagePath) }} style={{ width: '90%' }}>Fetch menu</Button>
       <Modal
         animationType="fade"
         transparent={true}

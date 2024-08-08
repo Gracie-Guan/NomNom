@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native';
+import { View, StyleSheet, Linking, ActivityIndicator, Text, Switch, TouchableOpacity, Image } from 'react-native';
 import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
+import SearchBar from '../screens/Restaurant/SearchBar';
 
 const MenuInfo = ({ restaurantId }) => {
   const [menuItems, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -63,11 +67,53 @@ const MenuInfo = ({ restaurantId }) => {
     );
   }
 
-  return <MenuDetails menuItems={menuItems} />;
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text>{isEnabled ? 'Search ' : 'Menu '}</Text>
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </View>
+
+      {isEnabled ?
+        (<SearchBar restaurantId={restaurantId} />) : (<MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />)
+      }
+      <View style={styles.floatingButton}>
+
+        <TouchableOpacity activeOpacity={0.5} style={styles.TouchableOpacityStyle} >
+
+          <Image source={{ uri: 'http://lh3.googleusercontent.com/TI8o079rVoxaQ5ZeDcLfQRlS7MQrwNbpGh4-WdOYC2lYIZk1jAhABtABLU_kl2aReCSl=w300' }}
+
+            style={styles.FloatingButtonStyle} />
+
+        </TouchableOpacity>
+      </View>
+    </View>);
 
 };
 
 const styles = StyleSheet.create({
+  FloatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 50,
+    height: 50,
+  },
+
+  TouchableOpacityStyle: {
+    // flex: 1,
+    // flexDirection: "row",
+    // position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    // right: 30,
+    // bottom: 30
+    // borderRadius: 100,
+  },
   card: {
     margin: 10,
   },
@@ -92,7 +138,33 @@ const styles = StyleSheet.create({
     color: 'blue',
     textDecorationLine: 'underline',
     marginTop: 5,
-  }
+  },
+  container: {
+    flex: 0,
+    // position: "absolute",
+    flexDirection: 'row', // Arrange children horizontally
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: "3%", // Optional padding
+  },
+  floatingButton: {
+    flex: 1,
+    position: "absolute",
+    // flexDirection: 'row', // Arrange children horizontally
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-end',
+    marginBottom: "4%",
+    marginRight: "-3%",
+    // padding: "3%", // Optional padding
+    right: 30,
+    bottom: 30
+  },
+  // container: {
+  //   // flex: 1,
+  //   justifyContent: 'flex-end', // Align children to the right
+  //   alignItems: 'center', // Center items vertically
+  //   padding: 16, // Optional padding
+  // }
 });
 
 export default MenuInfo;
