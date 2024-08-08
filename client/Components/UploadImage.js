@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import {  Image, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {  Image, StyleSheet, Modal, TouchableOpacity, Text, Alert, ActivityIndicator } from 'react-native';
 import { View } from '@ant-design/react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
 import AWS from "aws-sdk";
+import axios from 'axios';
+
 // import CreateMenu from '../screens/Restaurant/CreateMenu';
 
 AWS.config.update({
@@ -25,10 +27,18 @@ const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
 
 }
 
-export default function ImagePickerExample() {
+export default function ImagePickerExample({restaurantId, onPress}) {
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [menu_info, setRestaurantInfo] = useState(null);
+  const [showAction, setShowAction] = useState(false);
+  const [menuItems, setMenu] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const toggleAction = () => {
+    setShowAction(!showAction);
+  };
 
   const bucketName = "nom.bucket";
   const folderName = "menus";
@@ -37,6 +47,58 @@ export default function ImagePickerExample() {
   const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
 
   const imagePath = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
+
+  // const fetchMenu = async () => {
+  //   try {
+  //     const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
+
+  //     // response.data is an array of menus
+  //     const menus = first_response.data;
+
+  //     // Access the restaurant_id of the first (and only) menu
+  //     const menuId = menus[0].menu_id;
+  //     const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
+
+  //     // console.log(second_response.data);
+  //     setMenu(second_response.data);
+  //   } catch (error) {
+  //     setError('Error fetching restaurant data');
+  //     console.error('Error fetching restaurant:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchMenu = async () => {
+    // setLoading(true); // Set loading to true at the start
+  
+    // Simulate a delay before starting the fetch
+    // setTimeout(async () => {
+      try {
+        const timestamp = new Date().getTime();
+        console.log(timestamp);
+        const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}?timestamp=${new Date().getTime()}`);
+  
+        // response.data is an array of menus
+        const menus = first_response.data;
+  
+        // Access the restaurant_id of the first (and only) menu
+        const menuId = menus[0].menu_id;
+        const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}?timestamp=${new Date().getTime()}`);
+  
+        setMenu(second_response.data);
+      } catch (error) {
+        setError('Error fetching restaurant data');
+        console.error('Error fetching restaurant:', error);
+      } finally {
+        setLoading(false); // Set loading to false when the operation is complete
+      }
+    // }, 1000); // Delay of 1 second
+  };  
+
+  useEffect(() => {
+    fetchMenu();
+  }, [restaurantId]);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -155,9 +217,7 @@ export default function ImagePickerExample() {
       fetchRestaurantInfo(restaurantId);
       console.log("Setting done!");
       // console.log("response: ", response.request._response)
-      // const testData = [{ category: "SASHIMI 刺身", description: "(Lean bluefin tuna)", menu_id: "1A", name: "Akami - 4 pieces", note: "", price: 19.95 }, { category: "SASHIMI 刺身", description: "(Bluefin tuna belly)", menu_id: "2B", name: "Otoro - 3 pieces", note: "", price: 14.5 }]
       // const menuId = menuResult.insertedId;
-      const oneDish = { category: "SASHIMI 刺身", description: "(Lean bluefin tuna)", menu_id: menu_info, name: "Akami - 4 pieces", note: "", price: 19.95 };
       addItem(response.request._response, menu_info);
       // addItem(oneDish);
       //   const imageBlob = response.data;
@@ -169,10 +229,41 @@ export default function ImagePickerExample() {
     }
   };
 
+  if (loading) {
+    console.log("loading data... #1");
+    return (
+      <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
+        <ActivityIndicator size="large" color="#FFC93C" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Button mode='outlined' onPress={pickImage} style={{width: '90%'}}>Upload Menu</Button>
-      <Button mode='outlined' onPress={() => { fetchImageFromServer(imagePath) }} style={{ width: '90%' }}>Fetch menu</Button>
+      {/* <Button mode='outlined' onPress={pickImage} style={{width: '90%'}}>Upload Menu</Button> */}
+      {/* <Button mode='outlined' onPress={() => { fetchImageFromServer(imagePath) }} style={{ width: '90%' }}>Fetch menu</Button> */}
+      <View style={styles.floatingButton}>
+        {(showAction && 
+        <View>
+        <TouchableOpacity activeOpacity={0.5} style={styles.UploadButtonContainer} onPress={pickImage}>
+          <Text style={styles.UploadButtonText}>Upload menu</Text>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} style={styles.UploadButtonContainer} onPress={() => { fetchImageFromServer(imagePath) }}>
+          <Text style={styles.UploadButtonText}>Check new data</Text>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} style={styles.UploadButtonContainer} onPress={() => { onPress() } }>
+          <Text style={styles.UploadButtonText}>Fetch menu</Text>
+        </TouchableOpacity>
+        </View>
+        )}
+
+        <TouchableOpacity activeOpacity={0.5} style={styles.ActionButton} onPress={toggleAction}>
+          {/* <Image source={{ uri: 'http://lh3.googleusercontent.com/TI8o079rVoxaQ5ZeDcLfQRlS7MQrwNbpGh4-WdOYC2lYIZk1jAhABtABLU_kl2aReCSl=w300' }}
+            style={styles.FloatingButtonStyle} /> */}
+            {!showAction ? 
+              (<Text style={styles.ActionButtonText}>+</Text>) : (<Text style={styles.ActionButtonText}>×</Text>)}
+        </TouchableOpacity>
+      </View>
       <Modal
         animationType="fade"
         transparent={true}
@@ -196,12 +287,85 @@ export default function ImagePickerExample() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  UploadButtonContainer: {
+    backgroundColor: "#FFC93C",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    // marginBottom: "1%"
+  },
+  UploadButtonText: {
+    // color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  UploadButtonStyle: {
+    color: "white",
+    // flex: 0,
+    // backgroundColor: "#FFC93C",
+    // resizeMode: 'contain',
+    // width: "fitContent",
+    width: 100,
+    height: 50,
+  },
+  FloatingButtonStyle: {
+    resizeMode: 'contain',
+    // backgroundColor: "pink",
+
+    width: 50,
+    height: 50,
+  },
+  floatingButton: {
     flex: 1,
+    position: "absolute",
+    // flexDirection: 'row', // Arrange children horizontally
+    // justifyContent: 'flex-end',
+    // backgroundColor: "green",
+    alignItems: 'flex-end',
+    marginBottom: "4%",
+    marginRight: "-3%",
+    // padding: "3%", // Optional padding
+    right: 30,
+    bottom: 35
+  },
+  TouchableOpacityStyle: {
+    // flex: 1,
+    // flexDirection: "row",
+    // position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: "orange",
+
+    // right: 30,
+    // bottom: 30
+    // borderRadius: 100,
+  },
+  ActionButton: {
+    // color: "white",
+    backgroundColor: '#FFC93C', // Yellow background color
+    width: 60, // Width of the button (adjust as needed)
+    height: 60, // Height of the button (adjust as needed)
+    borderRadius: 30, // Half of width/height to make it a perfect circle
+    justifyContent: 'center', // Center the "+" vertically
+    alignItems: 'center', // Center the "+" horizontally
+    // position: 'absolute', // Position it absolutely if needed
+    // right: 30, // Position from the right (adjust as needed)
+    // bottom: 30, // Position from the bottom (adjust as needed)
+  },
+  ActionButtonText: {
+    color: 'white', // Color of the "+"
+    fontSize: 30, // Font size of the "+"
+    fontWeight: 'bold', // Make the "+" bold
+  },
+  container: {
+    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    fontFamily: 'Ubuntu-Medium',
+    marginBottom: 20,
+    // fontFamily: 'Ubuntu-Medium',
+    backgroundColor: "purple",
+
   },
   image: {
     width: 200,

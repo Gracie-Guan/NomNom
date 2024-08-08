@@ -139,7 +139,7 @@ function SearchBar({ restaurantId }) {
 
   return (
     <View style={styles.resultContainer}>
-      <Text style={styles.searchTitle}>Dish Search</Text>
+      {/* <Text style={styles.searchTitle}>Dish Search</Text> */}
       <FlatList
         ListHeaderComponent={() => (
           // <View>
