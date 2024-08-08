@@ -1,9 +1,8 @@
 import { View } from '@ant-design/react-native';
 import React from 'react';
 import { ScrollView, StyleSheet, Modal } from 'react-native';
-import { Button, List, Text } from 'react-native-paper';
+import { List, Text } from 'react-native-paper';
 import ImageUpload from '../../Components/UploadImage';
-import SearchBar from './SearchBar';
 
 export default function MenuDetails({ menuItems, restaurant_id }) {
   // Helper function to safely get the price
@@ -61,9 +60,6 @@ export default function MenuDetails({ menuItems, restaurant_id }) {
         ))
       )}
     </ScrollView>
-    {/* <View style={styles.searchContainer}>
-    <SearchBar restaurantId={restaurant_id}/>
-    </View> */}
     </View>
   );
 }

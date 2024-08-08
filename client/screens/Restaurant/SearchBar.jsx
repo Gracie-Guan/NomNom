@@ -139,15 +139,8 @@ function SearchBar({ restaurantId }) {
 
   return (
     <View style={styles.resultContainer}>
-      {/* <Text style={styles.searchTitle}>Dish Search</Text> */}
       <FlatList
         ListHeaderComponent={() => (
-          // <View>
-          //   {renderHeader()}
-          //   {
-          //     <Text style={{textAlign: "end"}}>{data.length} results</Text>
-          //   }
-          // </View>
           <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
             {renderHeader()}
             { hideResultNumber === true ? (
@@ -195,12 +188,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     alignItems: 'center',
   },
-  // text: {
-  //   fontSize: 20,
-  //   color: '#101010',
-  //   marginTop: 60,
-  //   fontWeight: '700',
-  // },
   listItem: {
     marginTop: 10,
     paddingVertical: 20,
@@ -226,13 +213,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
-
   resultContainer: {
     flex: 1,
     backgroundColor: '#f5f5f9',
     marginBottom: 30
   },
-
   name: {
     fontSize: 18,
     width: '70%', // Adjust this width as needed
@@ -242,7 +227,6 @@ const styles = StyleSheet.create({
     width: '30%', // Adjust this width as needed
     textAlign: 'right', // Aligns the text to the right
   },
-
   searchTitle: {
     fontSize: 18,
     fontWeight: 'bold',

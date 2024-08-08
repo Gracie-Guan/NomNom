@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const { description } = require('../../client/screens/MenuDetails');
 const { Schema } = mongoose;
 
 const dishSchema = new Schema({
@@ -36,7 +35,6 @@ class DishModel {
         } catch (error) {
             throw new Error('Dish not found');
         }
-
     }
 
     static async addDishes(dishes){
@@ -44,7 +42,6 @@ class DishModel {
         // const dish = new Dish(dishes);
         return Dish.insertMany(dishes);
     }
-    
 }
 
 module.exports = DishModel;

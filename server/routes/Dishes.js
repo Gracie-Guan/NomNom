@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const DishController = require('../controllers/DishController');
-// const { addDishes } = require('../controllers/DishController');
 
 router.get("/menuId/:menu_id", DishController.getDishesByMenu);
 router.get("/:id", DishController.getDishById);

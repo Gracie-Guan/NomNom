@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {  Image, StyleSheet, Modal, TouchableOpacity, Text, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Modal, TouchableOpacity, Text, Alert, ActivityIndicator } from 'react-native';
 import { View } from '@ant-design/react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Button } from 'react-native-paper';
 import AWS from "aws-sdk";
 import axios from 'axios';
-
-// import CreateMenu from '../screens/Restaurant/CreateMenu';
 
 AWS.config.update({
   accessKeyId: "AKIA6ODU2WFB5LY5KCVI",
@@ -22,9 +19,7 @@ const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
     Key: fileKey,
     Body: filePath
   };
-
   return s3.upload(params).promise();
-
 }
 
 export default function ImagePickerExample({restaurantId, onPress}) {
@@ -48,32 +43,7 @@ export default function ImagePickerExample({restaurantId, onPress}) {
 
   const imagePath = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 
-  // const fetchMenu = async () => {
-  //   try {
-  //     const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
-
-  //     // response.data is an array of menus
-  //     const menus = first_response.data;
-
-  //     // Access the restaurant_id of the first (and only) menu
-  //     const menuId = menus[0].menu_id;
-  //     const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
-
-  //     // console.log(second_response.data);
-  //     setMenu(second_response.data);
-  //   } catch (error) {
-  //     setError('Error fetching restaurant data');
-  //     console.error('Error fetching restaurant:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchMenu = async () => {
-    // setLoading(true); // Set loading to true at the start
-  
-    // Simulate a delay before starting the fetch
-    // setTimeout(async () => {
       try {
         const timestamp = new Date().getTime();
         console.log(timestamp);
@@ -93,7 +63,6 @@ export default function ImagePickerExample({restaurantId, onPress}) {
       } finally {
         setLoading(false); // Set loading to false when the operation is complete
       }
-    // }, 1000); // Delay of 1 second
   };  
 
   useEffect(() => {
@@ -114,8 +83,6 @@ export default function ImagePickerExample({restaurantId, onPress}) {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       const filePath = result.assets[0].uri.replace("file://", "");
-
-     // what is this snippet doing?
 
       try {
         const fileData = await fetch(filePath).then(response => 
@@ -138,7 +105,7 @@ export default function ImagePickerExample({restaurantId, onPress}) {
 
   const addItem = async (data, menuId) => {
     // Insert dishes and update their menu_id references
-    console.log("data:", data);
+    // console.log("data:", data);
     // console.log("addItem function ---- data: ", JSON.stringify(JSON.parse(data)));
 
     json_data = JSON.parse(JSON.stringify(JSON.parse(data)));
@@ -207,23 +174,14 @@ export default function ImagePickerExample({restaurantId, onPress}) {
           bucket_name: 'nom.bucket',
           image_key: "menus/" + filename
         },
-        // responseType: 'blob' // old code - don't use
-        // public_uri: imageUri // old code - don't use
       });
       console.log("Flask request done!");
 
       console.log("Setting image from server...");
-      // setImageFromServer(response.data);
       fetchRestaurantInfo(restaurantId);
       console.log("Setting done!");
       // console.log("response: ", response.request._response)
-      // const menuId = menuResult.insertedId;
       addItem(response.request._response, menu_info);
-      // addItem(oneDish);
-      //   const imageBlob = response.data;
-      //   console.log("imageBlob: ", imageBlob);
-      //   const imageObjectURL = URL.createObjectURL(imageBlob);
-      //   setImageFromServer(imageObjectURL);
     } catch (error) {
       console.error("Error fetching image from server:", error);
     }
@@ -240,8 +198,6 @@ export default function ImagePickerExample({restaurantId, onPress}) {
 
   return (
     <View style={styles.container}>
-      {/* <Button mode='outlined' onPress={pickImage} style={{width: '90%'}}>Upload Menu</Button> */}
-      {/* <Button mode='outlined' onPress={() => { fetchImageFromServer(imagePath) }} style={{ width: '90%' }}>Fetch menu</Button> */}
       <View style={styles.floatingButton}>
         {(showAction && 
         <View>
@@ -258,8 +214,6 @@ export default function ImagePickerExample({restaurantId, onPress}) {
         )}
 
         <TouchableOpacity activeOpacity={0.5} style={styles.ActionButton} onPress={toggleAction}>
-          {/* <Image source={{ uri: 'http://lh3.googleusercontent.com/TI8o079rVoxaQ5ZeDcLfQRlS7MQrwNbpGh4-WdOYC2lYIZk1jAhABtABLU_kl2aReCSl=w300' }}
-            style={styles.FloatingButtonStyle} /> */}
             {!showAction ? 
               (<Text style={styles.ActionButtonText}>+</Text>) : (<Text style={styles.ActionButtonText}>×</Text>)}
         </TouchableOpacity>
@@ -293,10 +247,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    // marginBottom: "1%"
   },
   UploadButtonText: {
-    // color: "white",
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -305,7 +258,6 @@ const styles = StyleSheet.create({
     // flex: 0,
     // backgroundColor: "#FFC93C",
     // resizeMode: 'contain',
-    // width: "fitContent",
     width: 100,
     height: 50,
   },
@@ -325,7 +277,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: "4%",
     marginRight: "-3%",
-    // padding: "3%", // Optional padding
     right: 30,
     bottom: 35
   },
@@ -336,10 +287,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // backgroundColor: "orange",
-
     // right: 30,
     // bottom: 30
-    // borderRadius: 100,
   },
   ActionButton: {
     // color: "white",

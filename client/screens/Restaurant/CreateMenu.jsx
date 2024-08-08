@@ -1,25 +1,9 @@
 import { View } from '@ant-design/react-native';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Modal } from 'react-native';
-import { Button, List, Text } from 'react-native-paper';
-import ImageUpload from '../../Components/UploadImage';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 import axios from 'axios';
 
-const sampleData = {
-  restaurants: [
-    {
-      name: "Test Restaurant",
-      cuisine: "Greek",
-      tags: [
-        "casual",
-        "family-friendly"
-      ],
-      menu: {
-        categories: []
-      }
-    }
-  ]
-};
 export default function CreateMenu({ imagePath, restaurantId }) {
   // Helper function to safely get the price
 

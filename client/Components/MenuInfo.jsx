@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { View, StyleSheet, Linking, ActivityIndicator, Text, Switch, TouchableOpacity, Image } from 'react-native';
-import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, StyleSheet, ActivityIndicator, Text, Switch } from 'react-native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 import SearchBar from '../screens/Restaurant/SearchBar';
 import ImageUpload from './UploadImage';
@@ -12,20 +10,8 @@ const MenuInfo = ({ restaurantId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
-  // const [showComponent, setShowComponent] = useState(true);
-  // const [showAction, setShowAction] = useState(false);
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  // const toggleAction = () => {
-  //   setShowAction(!showAction);
-  // };
-
-  // const reloadComponent = () => {
-  //   setShowComponent(false); // Unmount the component
-  //   setTimeout(() => {
-  //     setShowComponent(true); // Remount the component after a brief delay
-  //   }, 0);
-  // };
 
   // useEffect(() => {
     const fetchMenu = async () => {
@@ -52,34 +38,11 @@ const MenuInfo = ({ restaurantId }) => {
         setLoading(false);
       }
     }, 500); // Delay of 1 second
-  };  
-
-  //   fetchMenu();
-  // }, [restaurantId]);
+  };
 
   useEffect(() => {
     fetchMenu();},
     [restaurantId]);
-
-  // console.log(menuItems);
-
-  // if (menuItems == "[]") {
-  //   return (
-  //     <View>
-  //       <Text style={styles.uploadText}>
-  //         Be the first to upload a menu!
-  //       </Text>
-  //     </View>
-  //   ); 
-  // } 
-
-  // if (loading) {
-  //   return (
-  //     <View style={styles.loadingContainer}>
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //     </View>
-  //   );
-  // }
 
   if (loading) {
     console.log("--- loading data... #2");
@@ -111,21 +74,10 @@ const MenuInfo = ({ restaurantId }) => {
         />
       </View>
 
-      
       {isEnabled ?
         (<SearchBar restaurantId={restaurantId} />) : (<MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />)
       }
 
-      {/* <View style={styles.floatingButton}>
-        {(showAction && <TouchableOpacity activeOpacity={0.5} style={styles.UploadButtonContainer}>
-          <Text style={styles.UploadButtonText}>Upload menu</Text>
-        </TouchableOpacity>)}
-
-        <TouchableOpacity activeOpacity={0.5} style={styles.TouchableOpacityStyle} onPress={toggleAction}>
-          <Image source={{ uri: 'http://lh3.googleusercontent.com/TI8o079rVoxaQ5ZeDcLfQRlS7MQrwNbpGh4-WdOYC2lYIZk1jAhABtABLU_kl2aReCSl=w300' }}
-            style={styles.FloatingButtonStyle} />
-        </TouchableOpacity>
-      </View> */}
       <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/>
     </View>);
 
@@ -155,7 +107,6 @@ const styles = StyleSheet.create({
     // flex: 0,
     backgroundColor: "#FFC93C",
     // resizeMode: 'contain',
-    // width: "fitContent",
     width: 100,
     height: 50,
   },
@@ -166,9 +117,6 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     alignItems: "center",
     justifyContent: "center",
-    // right: 30,
-    // bottom: 30
-    // borderRadius: 100,
   },
   card: {
     margin: 10,
@@ -211,7 +159,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: "4%",
     marginRight: "-3%",
-    // padding: "3%", // Optional padding
     right: 30,
     bottom: 30
   },
