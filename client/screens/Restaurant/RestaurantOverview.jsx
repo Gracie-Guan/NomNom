@@ -9,6 +9,8 @@ import { RestaurantContext } from '../../Context/RestaurantContext';
 const RestaurantOverview = () => {
   const { restaurant, loading, error } = useContext(RestaurantContext);
 
+  console.log("restaurant: ", restaurant);
+
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
@@ -25,7 +27,7 @@ const RestaurantOverview = () => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <InfoCard restaurant={restaurant} />
       <View style={styles.threeSection}>
-        <PopDishes restaurant={restaurant} />
+        <PopDishes restaurantId={restaurant._id}/>
         <PhotoCard restaurant={restaurant} />
         <ReviewCard restaurant={restaurant} />
       </View>
@@ -36,6 +38,7 @@ const RestaurantOverview = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: "purple"
   },
   threeSection: {
     marginTop: 140,

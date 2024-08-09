@@ -11,9 +11,14 @@ const MenuInfo = ({ restaurantId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  // useEffect(() => {
     const fetchMenu = async () => {
+      setLoading(true);
+
+      setTimeout(async () => {
+
       try {
+        
         const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
 
         // response.data is an array of menus
@@ -29,10 +34,12 @@ const MenuInfo = ({ restaurantId }) => {
         setError('Error fetching restaurant data');
         console.error('Error fetching restaurant:', error);
       } finally {
-        setLoading('false');
+        setLoading(false);
       }
-    };
+    }, 500);
+}
 
+useEffect(()=> {
     fetchMenu();
   }, [restaurantId]);
 
@@ -50,8 +57,8 @@ const MenuInfo = ({ restaurantId }) => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
+        <ActivityIndicator size="large" color="#FFC93C" />
       </View>
     );
   }

@@ -35,6 +35,8 @@ const PopDishes = ({ restaurantId }) => {
     useEffect(() => {
       const fetchDishes = async () => {
         try {
+          console.log("restaurantId: ", restaurantId);
+
           const menuResponse = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
           const menus = menuResponse.data;
           
@@ -44,8 +46,11 @@ const PopDishes = ({ restaurantId }) => {
           
           const menuId = menus[0].menu_id;
   
+          console.log("menuId: ", menuId);
           // Fetch the dishes using the menuId
           const dishesResponse = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
+          console.log("menuId: ", menuId);
+
           const dishes = dishesResponse.data.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating)).slice(0, 4);
           setDishesData(dishes);
         } catch (err) {
@@ -94,10 +99,11 @@ const PopDishes = ({ restaurantId }) => {
 
 const styles = StyleSheet.create({
   popularDishes: {
-    marginTop: 20
+    marginTop: 50
    },
    dishTop: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    // backgroundColor: "pink"
    },
    popularTitle: {
     color: '#221C19',

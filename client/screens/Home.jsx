@@ -75,11 +75,11 @@ const Home = () => {
                 >
                     {showRestaurant ? 
                         restaurantData.map((restaurant) => (
-                            <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} />
+                            <RestaurantCard key={restaurant.id} layout="default" restaurant={restaurant} />
                         )) 
                         : 
                         dishData.map((dish) => (
-                            <DishCard key={dish._id} layout="default" dish={dish} />
+                            <DishCard key={dish.id} layout="default" dish={dish} />
                         ))
                     }
                 </ScrollView>

@@ -11,7 +11,7 @@ const ReviewCard = () => {
         <View style={styles.reviewTop}>
             <View style={styles.reviewTopLeft}>
                 <Feather name='message-circle' color={'#E65100'} size={25}/>
-                <Text style={styles.leftText}>Reivews</Text>
+                <Text style={styles.leftText}>Reviews</Text>
             </View>
             <View style={styles.reviewTopRight}>
                 <Text style={styles.rightText}>View All</Text>
@@ -37,8 +37,11 @@ const ReviewCard = () => {
 
 const styles = StyleSheet.create({
     reviewSection: {
+        flex: 1,
         marginHorizontal: 5,
-        marginVertical: 10
+        marginVertical: 10,
+        justifyContent: 'center',
+        alignContent: 'center'
     },
     reviewTop: {
         flexDirection: 'row',
@@ -89,7 +92,8 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 20,
         justifyContent: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        alignSelf: 'center'
       },
       buttonText: {
         fontSize: 16,
