@@ -37,9 +37,10 @@ class DishModel {
         }
     }
 
-    static async addDishes(dishes){
+    static async addDishes(menu_id, dishes){
         console.log("File DishModel - dishes: ", dishes);
         // const dish = new Dish(dishes);
+        const result = await Dish.deleteMany({ menu_id: menu_id });
         return Dish.insertMany(dishes);
     }
 }

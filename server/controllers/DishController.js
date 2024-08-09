@@ -47,7 +47,9 @@ class DishController {
             // const oneDish = { category: "SASHIMI 刺身", description: "(Lean bluefin tuna)", menu_id: "1A", name: "Akami - 4 pieces", note: "", price: 19.95 };
             // console.log("body: ", req.body);
             // console.log("File DishController - dishes: ", oneDish);
-            const result = await DishModel.addDishes(req.body);
+            const { menu_id, dishes } = req.body;
+            const result = await DishModel.addDishes(menu_id, dishes);
+            console.log("Successfully added items!");
             res.status(200).json({message: 'Dishes uploaded successfully'});
         } catch (error) {
             console.error('Error uploading dishes: ', error);

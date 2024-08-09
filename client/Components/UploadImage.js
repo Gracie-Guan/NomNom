@@ -126,13 +126,18 @@ export default function ImagePickerExample({restaurantId, onPress}) {
     console.log("dishes", dishPromises)
 
     try {
-      const response = await axios.post('http://localhost:6868/dishes/add-menu', dishPromises
+      const requestBody = {
+        menu_id: menu_info,
+        dishes: dishPromises
+    };
+      const response = await axios.post('http://localhost:6868/dishes/add-menu', requestBody
       // { 
       //   headers: {
       //     'Content-Type': 'application/json'
       //   }
       // }
     );
+
     } catch (error) {
       console.error('Error adding item:', error);
     }
@@ -161,6 +166,8 @@ export default function ImagePickerExample({restaurantId, onPress}) {
     }
   }
 
+  fetchRestaurantInfo(restaurantId);
+
   const fetchImageFromServer = async (imageUri) => {
     // Extract the filename from the URI
     console.log("image uri", imageUri);
@@ -176,11 +183,11 @@ export default function ImagePickerExample({restaurantId, onPress}) {
         },
       });
       console.log("Flask request done!");
-
+      // fetchRestaurantInfo(restaurantId);
       console.log("Setting image from server...");
-      fetchRestaurantInfo(restaurantId);
       console.log("Setting done!");
-      // console.log("response: ", response.request._response)
+      console.log("response: ", response.request._response)
+      console.log("This is the menu id: ", menu_info)
       addItem(response.request._response, menu_info);
     } catch (error) {
       console.error("Error fetching image from server:", error);
