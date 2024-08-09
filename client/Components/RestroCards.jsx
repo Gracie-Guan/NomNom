@@ -69,7 +69,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 <Text style={styles.restaurantName}>{name}</Text>
                 <TouchableOpacity style={styles.menuButton}>
                   <Feather name="pocket" size={16} color="#fff" />
-                  <Text style={styles.menuButtonText}>Menu</Text>
+                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
                 </TouchableOpacity>
               </View>
 
@@ -125,7 +125,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                   <Feather name="arrow-up-right" size={20} color="#fff" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuButton}>
-                  <Text style={styles.menuButtonText}>Menu</Text>
+                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
                   <Feather name="pocket" size={16} color="#fff" />
                 </TouchableOpacity>
               </View>
