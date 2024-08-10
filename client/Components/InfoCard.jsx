@@ -9,6 +9,7 @@ const InfoCard = ({ restaurantId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // fetch restaurant info
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
@@ -40,13 +41,22 @@ const InfoCard = ({ restaurantId }) => {
     return stars;
   };
 
+  // if (loading) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //     </View>
+  //   );
+  // }
+
   if (loading) {
+    // console.log("--- loading data... #2");
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
+        <ActivityIndicator size="large" color="#FFC93C" />
       </View>
     );
-  }
+  }  
 
   if (error) {
     return (

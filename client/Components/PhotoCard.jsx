@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 
 const PhotoCard = () => {
-
+  //n sample data
   const Images = [
     { url: 'https://via.placeholder.com/300x300.png?text=Food+1' },
     { url: 'https://via.placeholder.com/300x300.png?text=Food+2' },

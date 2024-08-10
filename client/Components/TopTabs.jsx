@@ -29,13 +29,15 @@ const uniquerestaurantId = "669eddceb619f1ad6b948dba"; // yamamori
 
 // const restaurantId="668ee8afc88d544d82f31746";
 
-const bucketName = "nom.bucket";
+// AWS setup
+
+// const bucketName = "nom.bucket";
 const folderName = "menus";
 
-const fileName = "test.jpg"
+const fileName = "test.jpg"  // Every uploaded image will have the same filename for now, TODO: allow new path for new restaurants and replace old with new menus 
 const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
 
-const imageUri = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
+// const imageUri = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 
 const photosData = [
   { id: '1', url: 'https://via.placeholder.com/300x300.png?text=Pic+1' },
@@ -63,6 +65,10 @@ const TopTabs = () => {
   const renderTabContent = (tab) => {
     switch(tab.key) {
       case 'info':
+        // InfoCard: Component
+        // PopDishes: Component
+        // ReviewCard: Component
+        // PhotoCard: Component
         return (
           <ScrollView key={tab.key} style={styles.ScrollView}>
             <InfoCard restaurantId={uniquerestaurantId}/>
@@ -71,11 +77,13 @@ const TopTabs = () => {
             <ReviewCard />
           </ScrollView>
         );
+        // Component
       case 'menu':
         return <MenuInfo key={tab.key} restaurantId={uniquerestaurantId} />;
-
+        // screens
       case 'photos':
         return <Photos key={tab.key} photos={photosData}/>;
+        // screens
       case 'review':
         return <Reviews key={tab.key} />;
       default:
@@ -83,6 +91,7 @@ const TopTabs = () => {
     }
   };
 
+  // rendering of tabs
   return (
     <View style={styles.container}>
       <Tabs tabs={tabs}>

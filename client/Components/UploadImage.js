@@ -5,6 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import AWS from "aws-sdk";
 import axios from 'axios';
 
+// AWS Config
+
 AWS.config.update({
   accessKeyId: "AKIA6ODU2WFB5LY5KCVI",
   secretAccessKey: "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",
@@ -23,7 +25,7 @@ const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
 }
 
 export default function ImagePickerExample({restaurantId, onPress}) {
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [menu_info, setRestaurantInfo] = useState(null);
   const [showAction, setShowAction] = useState(false);
@@ -195,7 +197,7 @@ export default function ImagePickerExample({restaurantId, onPress}) {
   };
 
   if (loading) {
-    console.log("loading data... #1");
+    // console.log("loading data... #1");
     return (
       <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
         <ActivityIndicator size="large" color="#FFC93C" />

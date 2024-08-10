@@ -120,7 +120,7 @@ function SearchBar({ restaurantId }) {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#5500dc" />
+        <ActivityIndicator size="large" color="#FFC93C" />
       </View>
     );
   }
