@@ -61,7 +61,7 @@ leaveButton: {
 buttonText:{
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: '700'
+     fontFamily:'Ubuntu-Bold'
 }
 })
 export default Reviews;

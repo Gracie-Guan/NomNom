@@ -8,10 +8,11 @@ import Map from '../screens/Map';
 import Surprise from '../screens/Surprise';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import Octicons from '@expo/vector-icons/Octicons';
 import LoginScreen from '../screens/Login';
 import RestaurantDetail from '../screens/Restaurant/RestaurantDetail';
-import ProfileScreen from '../screens/User/ProfileScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import SignUpScreen from '../screens/Signup';
 
 const Stack = createStackNavigator();
@@ -66,9 +67,14 @@ function ProfileStack(){
 function TabNav() {
   return (
     <Tab.Navigator 
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarStyle: {
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarStyle: ((route) => {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+        if (routeName === 'RestaurantDetail') {
+          return { display: 'none' };
+        }
+        return {
           height: 90,
           paddingTop: 10,
           elevation: 8,  
@@ -78,9 +84,10 @@ function TabNav() {
           },
           shadowOpacity: 0.15,
           shadowRadius: 4,
-        },
-        tabBarActiveTintColor: '#FF9400',  
-        tabBarInactiveTintColor: '#9E9E9E',
+        };
+      })(route),
+      tabBarActiveTintColor: '#FF9400',  
+      tabBarInactiveTintColor: '#9E9E9E',
         tabBarIcon: ({ focused, color, size }) => {
           let IconComponent;
           let iconName;
@@ -125,7 +132,7 @@ function TabNav() {
       <Tab.Screen name="Map" component={MapStack} />
       <Tab.Screen name="Surprise" component={SurpriseStack} />
       <Tab.Screen name="Liked" component={LikedStack} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   )
 }

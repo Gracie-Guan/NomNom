@@ -1,19 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
-import { useFonts, Ubuntu_300Light, Ubuntu_400Regular, Ubuntu_500Medium, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-
 
 const Badges = () => {
-    let [fontsLoaded] = useFonts({
-        Ubuntu_300Light,
-        Ubuntu_400Regular,
-        Ubuntu_500Medium,
-        Ubuntu_700Bold,
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
-
     const badges = [
         { id: 1, name: "Food Critic", image: require('../assets/Polygon 7.jpg') },
         { id: 2, name: "Sushi Expert", image: require('../assets/Polygon 11.jpg') },
@@ -52,7 +39,7 @@ const styles = StyleSheet.create({
         shadowRadius:3
     },
     title:{
-        fontFamily: 'Ubuntu_500Medium',
+        fontFamily: 'Ubuntu-Medium',
         fontSize: 16,
         textAlign: 'center',
         paddingTop: 15,
@@ -70,7 +57,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     badgeText:{
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         fontSize: 12,
         textAlign:'center',
         paddingTop: 5

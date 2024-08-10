@@ -1,20 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
-import { useFonts, Ubuntu_300Light, Ubuntu_400Regular, Ubuntu_500Medium, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 
-
-const CouponList = () => {
-    let [fontsLoaded] = useFonts({
-        Ubuntu_300Light,
-        Ubuntu_400Regular,
-        Ubuntu_500Medium,
-        Ubuntu_700Bold,
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
-
+const Coupon = () => {
     return (
             <View style={styles.couponContainer}>
                 <Text style={styles.couponTitle}>Redeem Your Coupons</Text>
@@ -61,7 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     couponTitle: {
-        fontFamily: 'Ubuntu_500Medium',
+         fontFamily:'Ubuntu-Medium',
         fontSize: 16,
         textAlign: 'center',
         marginVertical: 25
@@ -88,12 +75,12 @@ const styles = StyleSheet.create({
     },
     one:{
         fontSize: 20,
-        fontFamily: 'Ubuntu_400Regular'
+        fontFamily: 'Ubuntu-Regular'
     },
     two: {
         color: '#E65100',
         fontSize: 14,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         marginTop: 5
     },
     three:{
@@ -104,7 +91,7 @@ const styles = StyleSheet.create({
     },
     four:{
         fontSize: 12,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         color: '#9E9E9E',
         marginTop: 10,
         width: 200,
@@ -119,7 +106,7 @@ const styles = StyleSheet.create({
     },
     five:{
         fontSize: 12,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         color: '#9E9E9E',
     },
     right:{
@@ -132,15 +119,15 @@ const styles = StyleSheet.create({
     },
     six: {
         fontSize: 11,
-        fontFamily: 'Ubuntu_700Bold',
+        fontFamily: 'Ubuntu-Bold',
         color: 'white'
     },
     seven: {
         fontSize: 24,
-        fontFamily: 'Ubuntu_700Bold',
+        fontFamily: 'Ubuntu-Bold',
         color: 'white',
     }
 
 })
 
-export default CouponList
+export default Coupon

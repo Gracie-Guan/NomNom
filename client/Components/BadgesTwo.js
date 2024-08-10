@@ -1,18 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
-import { useFonts, Ubuntu_300Light, Ubuntu_400Regular, Ubuntu_500Medium, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { useEffect, useState} from "react";
+import { Feather, MaterialIcons } from "@expo/vector-icons"
 
-
-const Badges = () => {
-    let [fontsLoaded] = useFonts({
-        Ubuntu_300Light,
-        Ubuntu_400Regular,
-        Ubuntu_500Medium,
-        Ubuntu_700Bold,
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
+const BadgesTwo = () => {
+    const [showAll, setShowAll] = useState(false);
 
     const badges = [
         { id: 1, name: "Food Critic", image: require('../assets/Polygon 7.jpg') },
@@ -23,17 +14,22 @@ const Badges = () => {
         { id: 6, name: "You're on Fire", image: require('../assets/Polygon 12.jpg') },
     ];
 
+    const visibleBadges = showAll ? badges : badges.slice(0, 3);
+
     return (
             <View style={styles.badgesContainer}>
                 <Text style={styles.title}>Badges</Text>
                 <View  style={styles.polygonContainer}>
-                {badges.map(badge => (
+                {visibleBadges.map(badge => (
                     <View key={badge.id} style={styles.eachBadges}>
                         <Image source={badge.image} style={styles.polygonImage} />
                         <Text style={styles.badgeText}>{badge.name}</Text>
                     </View>
                 ))}
                 </View>
+                <TouchableOpacity onPress={() => setShowAll(!showAll)} style={styles.toggleButton}>
+                    <Feather name={showAll ? "chevron-up" : "chevron-down"} size={24} color="black" />
+                </TouchableOpacity>
             </View>  
     )
 }
@@ -52,14 +48,13 @@ const styles = StyleSheet.create({
         shadowRadius:3
     },
     title:{
-        fontFamily: 'Ubuntu_500Medium',
+        fontFamily: 'Ubuntu-Medium',
         fontSize: 16,
         textAlign: 'center',
         paddingTop: 15,
     },
     polygonContainer:{
         marginHorizontal: 20,
-        marginBottom: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
         flexWrap:'wrap',
@@ -70,14 +65,18 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     badgeText:{
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         fontSize: 12,
         textAlign:'center',
         paddingTop: 5
+    },
+    toggleButton: {
+        alignItems: 'center',
+        paddingVertical: 10,
     },
     eachBadges: {
         alignItems: 'center',
     }
 })
 
-export default Badges
+export default BadgesTwo;

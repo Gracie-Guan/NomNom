@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     },
     selectedTagText: {
         color: 'black',
-        fontWeight: '500'
+        fontFamily:'Ubuntu-Medium',
     },
 })
 
