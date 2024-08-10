@@ -11,7 +11,7 @@ const PopDishes = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Top Rated Dishes</Text>
+      <Text style={styles.title}>Top rated dishes</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {popularDishes.map((dish) => (
           <View key={dish.id} style={styles.dishContainer}>
