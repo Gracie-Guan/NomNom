@@ -2,7 +2,6 @@ import React from 'react';
 import {Text} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import Profile from '../screens/User/Profile';
 import Liked from '../screens/Liked';
 import Home from '../screens/Home';
 import Map from '../screens/Map';
@@ -12,11 +11,12 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Octicons from '@expo/vector-icons/Octicons';
 import LoginScreen from '../screens/Login';
 import RestaurantDetail from '../screens/Restaurant/RestaurantDetail';
+import ProfileScreen from '../screens/User/ProfileScreen';
+import SignUpScreen from '../screens/Signup';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// 为每个主要页面创建堆栈导航器
 function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -53,11 +53,21 @@ function LikedStack() {
   );
 }
 
+function ProfileStack(){
+  return(
+    <Stack.Navigator screenOptions={ {headerShown: false } }>
+      <Stack.Screen name='ProfileMain' component={ProfileScreen}  />
+      <Stack.Screen name='Login' component={LoginScreen} />
+      <Stack.Screen name='signup' component={SignUpScreen} />
+    </Stack.Navigator>
+  )
+}
+
 function TabNav() {
   return (
     <Tab.Navigator 
       screenOptions={({ route }) => ({
-        headerShown: true,
+        headerShown: false,
         tabBarStyle: {
           height: 90,
           paddingTop: 10,
@@ -115,7 +125,7 @@ function TabNav() {
       <Tab.Screen name="Map" component={MapStack} />
       <Tab.Screen name="Surprise" component={SurpriseStack} />
       <Tab.Screen name="Liked" component={LikedStack} />
-      <Tab.Screen name="Profile" component={LoginScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   )
 }

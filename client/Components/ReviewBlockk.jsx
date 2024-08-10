@@ -163,6 +163,8 @@ const styles = StyleSheet.create({
     },
     tagText: {
       fontSize: 12,
+      fontFamily: 'Ubuntu-Regular',
+      color:'#6e6e6e'
     },
   comment: {
       paddingHorizontal: 18,

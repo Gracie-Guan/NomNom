@@ -1,71 +1,92 @@
-import React, { useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
-import InfoCard from '../../Components/InfoCard';
-import PopDishes from '../../Components/PopDishes';
-import PhotoCard from '../../Components/PhotoCard';
-import ReviewCard from '../../Components/ReviewCard';
-import { RestaurantContext } from '../../Context/RestaurantContext';
+import React from 'react';
+import { View, Text,StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {Feather} from '@expo/vector-icons'
+import ReviewBlock from './ReviewBlockk'
 
-const RestaurantOverview = () => {
-  const { restaurant, loading, error } = useContext(RestaurantContext);
+const tags = ['Fresh', 'BBQ', 'Date', 'Family', 'Spicy', 'Vibe']
 
-  console.log("restaurant: ", restaurant);
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
-  if (error) {
-    return <Text>Error loading restaurant data: {error}</Text>;
-  }
-
-  if (!restaurant) {
-    return <Text>No restaurant data available</Text>;
-  }
-
+const ReviewCard = () => {
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <InfoCard restaurant={restaurant} />
-      <View style={styles.threeSection}>
-        <PopDishes restaurantId={restaurant._id}/>
-        <PhotoCard restaurant={restaurant} />
-        <ReviewCard restaurant={restaurant} />
-        <TouchableOpacity style={styles.leaveButton}>
-            <Text style={styles.buttonText}>Leave a Review</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    <View style={styles.reviewSection}>
+        <View style={styles.reviewTop}>
+            <View style={styles.reviewTopLeft}>
+                <Feather name='message-circle' color={'#E65100'} size={25}/>
+                <Text style={styles.leftText}>Reviews</Text>
+            </View>
+            <View style={styles.reviewTopRight}>
+                <Text style={styles.rightText}>View All</Text>
+                <Feather name='arrow-right' color={'#9E9E9E'} size={18}/>
+            </View>
+        </View>
+        <View style={styles.reviewTag}>
+            {tags.map((item,index)=> (
+                <View  key={index} style={styles.tagContainer}>
+                    <Text style={styles.tagText}>{item}</Text>
+                </View>
+            ))}
+        </View>
+        <View Style={styles.reviewsContainer}>
+            <ReviewBlock filterId='1'/>
+        </View>
+
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+    reviewSection: {
+        flex: 1,
+        marginHorizontal: 5,
+        marginVertical: 10,
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    reviewTop: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    reviewTopLeft: {
+        flexDirection: 'row'
+    },
 
-  },
-  threeSection: {
-    marginTop: 140,
-    marginBottom: 60,
-    marginHorizontal: 12,
-  },
+    reviewTopRight: {
+        flexDirection: 'row'
+    },
 
-  leaveButton: {
-    backgroundColor: 'white',
-    borderWidth: 2,
-    borderColor:'#FFB300',
-    alignItems: 'center',
-    width: 350,
-    height: 30,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignSelf: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#FFB300',
-    fontWeight: '500',
-  },
+    leftText: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginLeft: 5,
+        marginTop: 2
+    },
+
+    rightText: {
+        color: '#9E9E9E',
+        fontsize: 12,
+    },
+
+    reviewTag:{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginVertical: 15,
+        marginHorizontal: 10,
+    },
+
+    tagContainer: {
+        backgroundColor:'white',
+        marginRight: 10,
+        marginBottom: 10,
+        paddingHorizontal: 18,
+        paddingVertical: 2,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#6e6e6e',
+    },
+    
+    tagText:{
+        color: '#6e6e6e'
+    },
+
 });
 
-export default RestaurantOverview;
+export default ReviewCard;
