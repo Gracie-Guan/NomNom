@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, SafeAreaView } from 'react-native';
 import TopTabs from '../../Components/TopTabs';
 import { RestaurantContext } from '../../Context/RestaurantContext';
 import { Feather } from '@expo/vector-icons';
@@ -26,25 +26,35 @@ const RestaurantDetails = ({ route, navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Feather name="arrow-left" size={24} color="#221C19" />
+            <Feather name="arrow-left" size={24} color="#9e9e9e" />
             <Text style={styles.normalText}>Back</Text>
       </TouchableOpacity>
       <TopTabs />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff', 
   },
 
   backButton:{
     flexDirection: 'row',
     alignItems: 'center',
-    left: 10,
+    backgroundColor:'white',
+    paddingHorizontal:16,
+    paddingVertical:6,
+    gap:5,
+  },
+
+  normalText: {
+    fontSize: 16,
+    fontFamily: 'Ubuntu-Medium',
+    color: '#9e9e9e',
   },
 });
 

@@ -11,7 +11,6 @@ Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 const RestaurantCard = ({ restaurant, layout = 'default' }) => {
-  // Use provided data or placeholders
   const id = restaurant?._id || " ";
   const name = restaurant?.name || "Fiction Bistro";
   const rating = restaurant?.rating || "4.99";

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text,StyleSheet,Image, TouchableOpacity} from 'react-native';
+import { View, Text,StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Feather} from '@expo/vector-icons'
 import ReviewBlock from './ReviewBlockk'
 
@@ -11,7 +11,7 @@ const ReviewCard = () => {
         <View style={styles.reviewTop}>
             <View style={styles.reviewTopLeft}>
                 <Feather name='message-circle' color={'#E65100'} size={25}/>
-                <Text style={styles.leftText}>Reivews</Text>
+                <Text style={styles.leftText}>Reviews</Text>
             </View>
             <View style={styles.reviewTopRight}>
                 <Text style={styles.rightText}>View All</Text>
@@ -28,17 +28,18 @@ const ReviewCard = () => {
         <View Style={styles.reviewsContainer}>
             <ReviewBlock filterId='1'/>
         </View>
-        <TouchableOpacity style={styles.leaveButton}>
-            <Text style={styles.buttonText}>Leave a Review</Text>
-        </TouchableOpacity>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
     reviewSection: {
+        flex: 1,
         marginHorizontal: 5,
-        marginVertical: 10
+        marginVertical: 10,
+        justifyContent: 'center',
+        alignContent: 'center'
     },
     reviewTop: {
         flexDirection: 'row',
@@ -47,26 +48,30 @@ const styles = StyleSheet.create({
     reviewTopLeft: {
         flexDirection: 'row'
     },
-       reviewTopRight: {
+
+    reviewTopRight: {
         flexDirection: 'row'
     },
+
     leftText: {
         fontSize: 16,
         fontWeight: '600',
         marginLeft: 5,
         marginTop: 2
     },
+
     rightText: {
         color: '#9E9E9E',
         fontsize: 12,
     },
+
     reviewTag:{
         flexDirection: 'row',
         flexWrap: 'wrap',
         marginVertical: 15,
         marginHorizontal: 10,
-    
     },
+
     tagContainer: {
         backgroundColor:'white',
         marginRight: 10,
@@ -75,27 +80,13 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#9E9E9E',
+        borderColor: '#6e6e6e',
     },
+    
     tagText:{
-        color: '#9E9E9E'
+        color: '#6e6e6e'
     },
-    leaveButton: {
-        backgroundColor: 'white',
-        borderWidth: 2,
-        borderColor:'#FFB300',
-        alignItems: 'center',
-        width: 350,
-        height: 30,
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignContent: 'center'
-      },
-      buttonText: {
-        fontSize: 16,
-        color: '#FFB300',
-        fontWeight: '500',
-      },
+
 });
 
 export default ReviewCard;

@@ -4,18 +4,17 @@ import { useState } from "react";
 
 const FilterBar =() => {
     const [selectedTags, setSelectedTags] = useState([]);
-    const tagsData = ['Open Now', 'Nearest', 'Offers', 'Vegan', 'Fine Dining', 'Rating 4.5'];
+    const tagsData = ['Open Now', 'Budget Meal', 'Vegan', 'Offers', 'Fine Dining', 'Rating 4.5'];
  
     const toggleTag = (tag) => {
       if (selectedTags.includes(tag)) {
         setSelectedTags(selectedTags.filter(t => t !== tag));
       } else {
         setSelectedTags([...selectedTags, tag]);
-
       }
     };
     return (
-    <View style={styles.tagTop}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tagTop}>
         <TouchableOpacity style={[styles.filterTag]}>
             <Text style={[styles.tagText]}>
                 Filter
@@ -39,7 +38,7 @@ const FilterBar =() => {
                 </Text>
             </TouchableOpacity>
         ))}
-    </View>
+    </ScrollView>
     )
 }
 
