@@ -29,13 +29,15 @@ const uniquerestaurantId = "669eddceb619f1ad6b948dba"; // yamamori
 
 // const restaurantId="668ee8afc88d544d82f31746";
 
+
+
 // AWS setup
 
 // const bucketName = "nom.bucket";
 const folderName = "menus";
 
 const fileName = "test.jpg"  // Every uploaded image will have the same filename for now, TODO: allow new path for new restaurants and replace old with new menus 
-const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
+// const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
 
 // const imageUri = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 

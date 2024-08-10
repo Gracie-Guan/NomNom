@@ -112,7 +112,7 @@ def extract_text(source, filename):
 
     response = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]} }]}'
 
-    print(response)
+    # print(response)
 
     # response.resolve()
 

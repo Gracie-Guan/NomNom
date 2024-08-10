@@ -25,7 +25,7 @@ const uploadFiletoS3 = (bucketName, fileKey, filePath) => {
 }
 
 export default function ImagePickerExample({restaurantId, onPress}) {
-  // const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [menu_info, setRestaurantInfo] = useState(null);
   const [showAction, setShowAction] = useState(false);
@@ -48,7 +48,7 @@ export default function ImagePickerExample({restaurantId, onPress}) {
   const fetchMenu = async () => {
       try {
         const timestamp = new Date().getTime();
-        console.log(timestamp);
+        // console.log(timestamp);
         const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}?timestamp=${new Date().getTime()}`);
   
         // response.data is an array of menus

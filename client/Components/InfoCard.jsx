@@ -87,7 +87,7 @@ const InfoCard = ({ restaurantId }) => {
     Linking.openURL(`tel:${restaurant.phone}`);
   };
 
-  console.log("image: ", restaurant.image);
+  // console.log("image: ", restaurant.image);
 
   return (
     <Card style={styles.card}>

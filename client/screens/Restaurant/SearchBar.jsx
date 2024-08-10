@@ -55,6 +55,7 @@ function SearchBar({ restaurantId }) {
   };
 
   const contains = (dishInfo, query) => {
+    console.log()
 
     if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query) || dishInfo.category.toLowerCase().includes(query)) {
       console.log("search result: ", dishInfo.name);
