@@ -47,14 +47,19 @@ def fetch_image():
         # return jsonify({'text': text})
         return text
     except NoCredentialsError:
-        return abort(403, description="Credentials not available")
+        print("condition 1")
+        return abort(403, description=f"Credentials not available {str(NoCredentialsError)}")
     except PartialCredentialsError:
+        print("condition 2")
         return abort(403, description="Incomplete credentials")
     except s3.exceptions.NoSuchKey:
+        print("condition 3")
         return abort(404, description="Image not found")
     except s3.exceptions.BucketNotFound:
+        print("condition 4")
         return abort(404, description="Bucket not found")
     except Exception as e:
+        print("condition 5")
         return abort(500, description=f"An error occurred: {str(e)}")
 
 # def extract_information_from_image(directory):
@@ -77,10 +82,10 @@ def fetch_image():
 
             response.resolve()
 
-            print(response.text)
+            # print(response.text)
 
-            with open("/Users/kieutrangnguyenvu/Downloads/ocr/menu-json/" + filename.split(".")[0] + "_02.json", "w") as fw:
-                fw.write(response.text.strip("```json\n").strip("```"))
+            # with open("/Users/kieutrangnguyenvu/Downloads/ocr/menu-json/" + filename.split(".")[0] + "_02.json", "w") as fw:
+            #     fw.write(response.text.strip("```json\n").strip("```"))
 
             counter += 1
 
