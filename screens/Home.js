@@ -56,7 +56,7 @@ const Home = () => {
                     </Text>
                 </View>
                 <View style={styles.RatedCard}>
-                    {showRestaurant? <RestaurantCard /> : <Dishsection></Dishsection>}
+                    {showRestaurant? <RestaurantCard /> : <Dishsection />}
                 </View>
             </View>
             <View style={styles.middleSectionTwo}>

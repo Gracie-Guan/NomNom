@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet , TextInput,TouchableOpacity, Text} from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { InputItem } from '@ant-design/react-native';
 
 const SearchTop = ({ search, onChangeText, onVoicePress}) => {
     return (
