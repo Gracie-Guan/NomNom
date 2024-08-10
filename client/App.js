@@ -7,8 +7,6 @@ import * as Location from 'expo-location';
 import TabNav from './Navigations/TabNav';
 import { UserLocation } from './Context/UserLocation';
 import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import RestaurantDetails from './screens/Restaurant/RestaurantDetail';
 import { RestaurantProvider } from './Context/RestaurantContext';
 
 export default function App() {

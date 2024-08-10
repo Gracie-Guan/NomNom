@@ -1,54 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import axios from 'axios';
-import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native';
-import { Card, Title, Paragraph, Button, Chip } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRoute } from '@react-navigation/native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 import { RestaurantContext } from '../Context/RestaurantContext';
 
-const MenuInfo = ({ restaurantId }) => {
+const MenuInfo = () => {
+  const route = useRoute();
+  const { restaurantId } = route.params;
+  const { restaurant, loading: restaurantLoading, error: restaurantError, fetchRestaurant } = useContext(RestaurantContext);
+  
   const [menuItems, setMenu] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [menuLoading, setMenuLoading] = useState(true);
+  const [menuError, setMenuError] = useState(null);
+
+  useEffect(() => {
+    if (restaurantId && !restaurant) {
+      fetchRestaurant(restaurantId);
+    }
+  }, [restaurantId, fetchRestaurant, restaurant]);
 
   useEffect(() => {
     const fetchMenu = async () => {
+      if (!restaurant || !restaurant._id) return;
+      
       try {
-        const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
+        setMenuLoading(true);
+        const menus_response = await axios.get(`http://localhost:6868/menus/restaurant/${restaurant._id}`);
+        const menus = menus_response.data;
 
-        // response.data is an array of menus
-        const menus = first_response.data;
-
-        // Access the restaurant_id of the first (and only) menu
-        const menuId = menus[0].menu_id;
-        const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
-
-        // console.log(second_response.data);
-        setMenu(second_response.data);
+        if (menus.length > 0) {
+          const menuId = menus[0].menu_id;
+          const dishes_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
+          setMenu(dishes_response.data);
+        } else {
+          setMenu([]);
+        }
       } catch (error) {
-        setError('Error fetching restaurant data');
-        console.error('Error fetching restaurant:', error);
+        console.error('Error fetching menu:', error);
+        if (error.response && error.response.status === 404) {
+          setMenuError('No menu found for this restaurant');
+        } else {
+          setMenuError('Error fetching menu data');
+        }
       } finally {
-        setLoading('false');
+        setMenuLoading(false);
       }
     };
 
-    fetchMenu();
-  }, [restaurantId]);
+    if (restaurant && !menuItems && !menuError) {
+      fetchMenu();
+    }
+  }, [restaurant, menuItems, menuError]);
 
-  // console.log(menuItems);
-
-  // if (menuItems == "[]") {
-  //   return (
-  //     <View>
-  //       <Text style={styles.uploadText}>
-  //         Be the first to upload a menu!
-  //       </Text>
-  //     </View>
-  //   ); 
-  // } 
-
-  if (loading) {
+  if (restaurantLoading || menuLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -56,43 +61,58 @@ const MenuInfo = ({ restaurantId }) => {
     );
   }
 
-  if (error) {
+  if (restaurantError) {
     return (
       <View style={styles.errorContainer}>
-        <Text>{error}</Text>
+        <Text>Error loading restaurant: {restaurantError}</Text>
       </View>
     );
   }
 
-  return <MenuDetails menuItems={menuItems} />;
+  if (menuError) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text>{menuError}</Text>
+      </View>
+    );
+  }
 
+  if (!restaurant) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text>No restaurant data available</Text>
+      </View>
+    );
+  }
+
+  if (menuItems && menuItems.length === 0) {
+    return (
+      <View>
+        <Text style={styles.uploadText}>
+          No menu items available for this restaurant.
+        </Text>
+      </View>
+    );
+  }
+
+  return menuItems ? <MenuDetails menuItems={menuItems} /> : null;
 };
 
 const styles = StyleSheet.create({
-  card: {
-    margin: 10,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 5,
   },
-  stars: {
-    flexDirection: 'row',
-    marginRight: 5,
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  cuisineContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 5,
-  },
-  chip: {
-    margin: 2,
-  },
-  website: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    marginTop: 5,
+  uploadText: {
+    textAlign: 'center',
+    fontSize: 16,
+    margin: 20,
   }
 });
 

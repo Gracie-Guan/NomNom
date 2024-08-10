@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useState } from "react";
 import FilterBar from "../Components/FilterBar";
-// import RestaurantCard from "../Components/RestaurantCard";
 import CuisineBar from "../Components/CuisineBar";
 import VibeCard from "../Components/VibeCard";
 import ToggleButton from "../Components/ToggleButton";
@@ -27,15 +26,15 @@ const Home = () => {
       };
 
       const restaurantData = [
-        { id: 1, name: 'Restaurant A', rating: 4.5 },
-        { id: 2, name: 'Restaurant B', rating: 4.7 },
-        { id: 3, name: 'Restaurant C', rating: 4.6 },
+        { _id: 1, name: 'Restaurant A', rating: 4.5 },
+        { _id: 2, name: 'Restaurant B', rating: 4.7 },
+        { _id: 3, name: 'Restaurant C', rating: 4.6 },
     ];
 
     const dishData = [
-        { id: 1, name: 'Dish A', rating: 4.8 },
-        { id: 2, name: 'Dish B', rating: 4.9 },
-        { id: 3, name: 'Dish C', rating: 4.7 },
+        { _id: 1, name: 'Dish A', rating: 4.8 },
+        { _id: 2, name: 'Dish B', rating: 4.9 },
+        { _id: 3, name: 'Dish C', rating: 4.7 },
     ];
 
     return (
@@ -75,11 +74,15 @@ const Home = () => {
                 >
                     {showRestaurant ? 
                         restaurantData.map((restaurant) => (
+                        <View key={restaurant._id}>
                             <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} />
+                        </View>
                         )) 
                         : 
                         dishData.map((dish) => (
+                        <View key={dish._id}>
                             <DishCard key={dish._id} layout="default" dish={dish} />
+                        </View>
                         ))
                     }
                 </ScrollView>
