@@ -30,7 +30,9 @@ const styles = StyleSheet.create({
         borderColor: '#FFC5A5',
         padding: 5,
         borderRadius: 20,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        backgroundColor: '#fff',
+        
     },
     search: {
         flexDirection: 'row'

@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     marginHorizontal: 12,
   },
+
+
 });
 
 export default RestaurantOverview;

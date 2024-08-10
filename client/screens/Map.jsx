@@ -6,6 +6,9 @@ import { UserLocation } from '../Context/UserLocation';
 import RestaurantCard from '../Components/RestroCards';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { calculateDistance, addDistanceToRestaurants } from '../utils/distance';
+import { SearchBar } from 'react-native-screens';
+import SearchTop from '../Components/SearchTop';
+import FilterBar from '../Components/FilterBar';
 
 export default function GoogleMapsView() {
   const [mapRegion, setMapRegion] = useState(null);
@@ -90,6 +93,9 @@ export default function GoogleMapsView() {
 
   return (
     <View style={styles.container}>
+
+        <SearchTop  />
+        <FilterBar  />
       
         <MapView 
           style={styles.map} 
