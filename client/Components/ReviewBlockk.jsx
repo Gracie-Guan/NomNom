@@ -2,7 +2,7 @@ import { View, Text ,StyleSheet,Image,  ScrollView} from 'react-native'
 import React from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 
-function ReviewBlock({filterId}){
+function ReviewBlock({filterId, filterName}){
     const reviewData = [
         {
             id: '1',
@@ -41,7 +41,7 @@ function ReviewBlock({filterId}){
             rating: 4,
             avatar: 'https://cdn3.iconfinder.com/data/icons/avatar-set/512/Avatar01-512.png',
             tags: [],
-            comment: 'The Irish stel reminds me of my mom cooking, cannot have it enough.',
+            comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
             photos: [
             ],
             like: 13
@@ -75,8 +75,17 @@ function ReviewBlock({filterId}){
         },
     ]
 
-    const filteredData = filterId ? reviewData.filter(review => review.id === filterId) : reviewData;
+    if(filterId) {
+        filteredData = reviewData.filter(review => review.id === filterId)
+    }else {
+        filteredData = reviewData
+    }
 
+    if(filterName) {
+        filteredData = reviewData.filter(review => review.userName.toLowerCase().includes(filterName.toLowerCase()))
+    }else{
+        filteredData = reviewData
+    }
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
     {filteredData.map((review)=>(
@@ -158,12 +167,12 @@ const styles = StyleSheet.create({
       paddingTop: 5
   },
   userName:{
-      fontWeight: '700',
+      fontFamily:'Ubuntu-Medium',
       fontSize: 16
   },
   userDate: {
       color: '#9E9E9E',
-      fontWeight:'500'
+      fontFamily:'Ubuntu-Medium',
   },
   commentStar: {
       flexDirection: 'row',
@@ -216,8 +225,8 @@ const styles = StyleSheet.create({
   },
   like: {
       flexDirection: 'row',
-      left:'95%',
-    marginVertical:10,
+      paddingLeft:290,
+      marginVertical:15,
   },
   likeNumber: {
       paddingLeft: 5,

@@ -1,19 +1,37 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image} from "react-native"
 import { Feather } from "@expo/vector-icons"
+import { useState } from "react"
 
 const ProfileCard = () => {
     const tagsData = [
     'Brunch', 'Cheese', 'Date'
     ]   
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const toggleDropdown = () => {
+        setDropdownVisible(!dropdownVisible);
+    };
 
     return(
     <View style={styles.profileTopContainer}>
         <View style={styles.userName}>
             <Text style={styles.userNameText}>Cara</Text>
-            <TouchableOpacity style={styles.settingIcon}>
+            <TouchableOpacity style={styles.settingIcon} onPress={toggleDropdown}>
                 <Feather name="settings" size={15} color={'white'}/>
             </TouchableOpacity>
         </View>
+        {dropdownVisible && (
+            <View style={styles.dropdownContainer}>
+                <TouchableOpacity style={styles.dropdownItem}>
+                    <Text style={styles.dropdownText}>Log In</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownItem}>
+                    <Text style={styles.dropdownText}>Sign Up</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.dropdownItem}>
+                    <Text style={styles.dropdownText}>Log Out</Text>
+                </TouchableOpacity>
+            </View>
+        )}
         <View style={styles.profileBottomContainer}>
             <View>
                 <Image source={{uri:'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}} 
@@ -149,7 +167,32 @@ const styles = StyleSheet.create({
         fontFamily: 'Ubuntu-Regular',
         // marginHorizontal: 16,
         color: '#9E9E9E'
-    }
+    },
+
+    dropdownContainer: {
+        position: 'absolute',
+        right: 10,
+        top: 40,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        shadowColor: 'rgba(0, 0, 0, 0.1)',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        zIndex: 1000,
+    },
+    dropdownItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgb(200,200,200)',
+    },
+    dropdownText: {
+        fontFamily: 'Ubuntu_400Regular',
+        fontSize: 15,
+    },
 })
 
 export default ProfileCard

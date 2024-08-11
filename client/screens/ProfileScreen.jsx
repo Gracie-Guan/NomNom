@@ -6,6 +6,9 @@ import Achievements from "../Components/Achievements";
 import UserReview from "../Components/UserReviews";
 import ReviewBlock from "../Components/ReviewBlockk";
 
+
+
+
 const tabs = [
     {key: 'achievements', title: 'Achievements'},
     {key:'reviews', title: 'Reviews'}
