@@ -24,14 +24,12 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const RestaurantStack = createStackNavigator();
 
-function RestaurantDetailScreen() {
-  return <TopTabs />;
-}
-
 function RestaurantDetailStack() {
   return (
     <RestaurantStack.Navigator screenOptions={{ headerShown: false }}>
-      <RestaurantStack.Screen name="RestaurantTabs" component={RestaurantDetailScreen} />
+      <RestaurantStack.Screen name="RestaurantTabs" component={RestaurantDetail} options={({ route }) => ({
+          restaurantId: route.params?.restaurantId,
+        })}/>
       <RestaurantStack.Screen name="leaveReview" component={CommentsPage} />
       <RestaurantStack.Screen name="UserProfile" component={ProfileScreen} />
     </RestaurantStack.Navigator>
@@ -52,7 +50,7 @@ function MapStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MapMain" component={Map} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -61,7 +59,7 @@ function SurpriseStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SurpriseMain" component={Surprise} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -70,7 +68,7 @@ function LikedStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="LikedMain" component={Liked} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -83,6 +81,7 @@ function ProfileStack(){
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='Signup' component={SignUpScreen} />
       <Stack.Screen name='Logout' component={LogoutPage} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   )
 }

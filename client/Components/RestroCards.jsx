@@ -31,9 +31,25 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
 
   const handlePressToRestro = useCallback(() => {
     if (restaurant && restaurant._id) {
-      navigation.navigate('RestaurantDetail', { restaurantId: restaurant._id });
+      navigation.navigate('RestaurantDetail', {
+        restaurantId: restaurant._id,
+        screen: 'RestaurantTabs',
+        params: { screen: 'overview' }
+      });
     } else {
-      console.error('invalid restaurant data')
+      console.error('Invalid restaurant data');
+    }
+  }, [navigation, restaurant]);
+
+  const handleToMenu = useCallback(() => {
+    if (restaurant && restaurant._id) {
+      navigation.navigate('RestaurantDetail', {
+        restaurantId: restaurant._id,
+        screen: 'RestaurantTabs',
+        params: { screen: 'menu' }
+      });
+    } else {
+      console.error('Invalid restaurant data');
     }
   }, [navigation, restaurant]);
 
@@ -65,9 +81,9 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
             <View style={styles.homeInfo}>
               <View style={styles.homeKeyInfo}>              
                 <Text style={styles.restaurantName}>{name}</Text>
-                <TouchableOpacity style={styles.menuButton}>
+                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
                   <Feather name="pocket" size={16} color="#fff" />
-                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
+                  <Text style={styles.menuButtonText}>Menu</Text>
                 </TouchableOpacity>
               </View>
 
@@ -122,8 +138,9 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                   <Text style={styles.detailsButtonText}>Details</Text>
                   <Feather name="arrow-up-right" size={20} color="#fff" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuButton}>
-                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
+                
+                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
+                  <Text style={styles.menuButtonText}>Menu</Text>
                   <Feather name="pocket" size={16} color="#fff" />
                 </TouchableOpacity>
               </View>
