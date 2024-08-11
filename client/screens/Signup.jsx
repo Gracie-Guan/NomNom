@@ -70,7 +70,7 @@ const SignUpScreen = ({ navigation }) => {
     { label: 'German', value: 'german' },
     { label: 'Indian', value: 'indian' },
     { label: 'Irish', value: 'irish' },
-    { label: 'Japanese', value: 'janpanese' },
+    { label: 'Japanese', value: 'japanese' },
   ];
 
   const [value, setValue] = useState(null);
@@ -86,7 +86,7 @@ const SignUpScreen = ({ navigation }) => {
   ];
 
   const [selectedTags, setSelectedTags] = useState([]);
-  const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-fridendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
+  const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-friendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
   const MAX_TAGS = 5;
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -183,7 +183,7 @@ const SignUpScreen = ({ navigation }) => {
                                         maxHeight={210}
                                         labelField="label"
                                         valueField="value"
-                                        placeholder={!isFocus ? 'Select your restraction' : '...'}
+                                        placeholder={!isFocus ? 'Select your restriction' : '...'}
                                         searchPlaceholder="Search..."
                                         value={value}
                                         onFocus={() => setIsFocus(true)}

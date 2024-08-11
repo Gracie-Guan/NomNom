@@ -5,11 +5,15 @@ import PopDishes from '../../Components/PopDishes';
 import PhotoCard from '../../Components/PhotoCard';
 import ReviewCard from '../../Components/ReviewCard';
 import { RestaurantContext } from '../../Context/RestaurantContext';
+import { useNavigation } from '@react-navigation/native';
 
 const RestaurantOverview = () => {
   const { restaurant, loading, error } = useContext(RestaurantContext);
-
   console.log("restaurant: ", restaurant);
+  const navigation = useNavigation();
+  const goToMenu = () => {
+    navigation.jumpTo('menu');
+  }
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -28,6 +32,11 @@ const RestaurantOverview = () => {
       <InfoCard restaurant={restaurant} />
       <View style={styles.threeSection}>
         <PopDishes restaurantId={restaurant._id}/>
+          <View style={styles.dishbottom}>
+            <TouchableOpacity style={styles.menuButton} onPress={goToMenu}>
+                <Text style={styles.buttonText}>Explore Full Menu</Text>
+            </TouchableOpacity>
+          </View>
         <PhotoCard restaurant={restaurant} />
         <ReviewCard restaurant={restaurant} />
         <TouchableOpacity style={styles.leaveButton}>

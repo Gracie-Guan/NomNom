@@ -1,20 +1,16 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ScrollView} from "react-native"
 import { useEffect, useState} from "react";
-
 import ProfileCard from "../Components/ProfileCard";
 import Achievements from "../Components/Achievements";
 import UserReview from "../Components/UserReviews";
 import ReviewBlock from "../Components/ReviewBlockk";
-
-
-
 
 const tabs = [
     {key: 'achievements', title: 'Achievements'},
     {key:'reviews', title: 'Reviews'}
 ]
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
 
     const [activeTab, setActiveTab] = useState(tabs[0].key); 
 
@@ -32,7 +28,7 @@ const ProfileScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-            <ProfileCard />
+            <ProfileCard navigation={navigation}/>
             <View style={styles.tabsContainer}>
                 {tabs.map((tab)=>(
                     <TouchableOpacity

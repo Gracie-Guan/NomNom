@@ -12,7 +12,7 @@ import RestaurantCard from "../Components/RestroCards";
 
 const Stack = createStackNavigator();
 
-const Home = () => {
+const Home = ({navigation}) => {
     const [search, setSearch] = useState('');
     const onChangeText = (searchText) => {
       setSearch(searchText);
@@ -96,7 +96,7 @@ const Home = () => {
                         </Text>
                 </View>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <CuisineBar />
+                    <CuisineBar navigation={navigation} />
                 </ScrollView>
             </View>
             <View style={styles.bottomSection}>
@@ -105,7 +105,7 @@ const Home = () => {
                         NAME, WHAT'S ON YOUR MIND?
                     </Text>
                 </View>
-                <VibeCard />
+                <VibeCard navigation={navigation}/>
             </View>
             </ScrollView>
         </SafeAreaView>

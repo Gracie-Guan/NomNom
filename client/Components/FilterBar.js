@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image} from "react-native"
 import { useState } from "react";
 
-
 const FilterBar =() => {
     const [selectedTags, setSelectedTags] = useState([]);
     const tagsData = ['Open Now', 'Budget Meal', 'Vegan', 'Offers', 'Fine Dining', 'Rating 4.5'];
@@ -14,7 +13,9 @@ const FilterBar =() => {
       }
     };
     return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tagTop}>
+        <View style={styles.tagTop}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+
         <TouchableOpacity style={[styles.filterTag]}>
             <Text style={[styles.tagText]}>
                 Filter
@@ -38,7 +39,9 @@ const FilterBar =() => {
                 </Text>
             </TouchableOpacity>
         ))}
+
     </ScrollView>
+    </View>
     )
 }
 

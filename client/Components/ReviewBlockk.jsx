@@ -75,17 +75,15 @@ function ReviewBlock({filterId, filterName}){
         },
     ]
 
-    if(filterId) {
-        filteredData = reviewData.filter(review => review.id === filterId)
-    }else {
-        filteredData = reviewData
+    let filteredData = reviewData;
+    if (filterId) {
+        filteredData = filteredData.filter(review => review.id === filterId);
     }
-
-    if(filterName) {
-        filteredData = reviewData.filter(review => review.userName.toLowerCase().includes(filterName.toLowerCase()))
-    }else{
-        filteredData = reviewData
+    
+    if (filterName) {
+        filteredData = filteredData.filter(review => review.userName.toLowerCase().includes(filterName.toLowerCase()));
     }
+    
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
     {filteredData.map((review)=>(
