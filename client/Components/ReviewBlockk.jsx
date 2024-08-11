@@ -216,9 +216,8 @@ const styles = StyleSheet.create({
   },
   like: {
       flexDirection: 'row',
-      paddingLeft: 310,
-      paddingBottom: 15,
-      paddingTop: 10
+      left:'95%',
+    marginVertical:10,
   },
   likeNumber: {
       paddingLeft: 5,

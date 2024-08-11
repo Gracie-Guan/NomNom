@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   goToUser:{
     position:'absolute',
     right:16,
-    top:'60%',
+    bottom:'35%',
     padding: 10,
     borderRadius:30,
     elevation:5,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   navToRestro:{
     position:'absolute',
     right:16,
-    top:'68%',
+    bottom:'27%',
     padding: 10,
     borderRadius:30,
     elevation:5,

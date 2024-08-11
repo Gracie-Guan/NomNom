@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   indicator: {
-    backgroundColor: '#000000',
+    backgroundColor: '#FFB300',
   },
   tabLabel: {
     fontSize: 12,

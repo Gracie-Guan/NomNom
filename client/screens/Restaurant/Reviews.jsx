@@ -1,4 +1,4 @@
-import { View, Text ,StyleSheet} from 'react-native';
+import { View, Text ,StyleSheet, Alert} from 'react-native';
 import RatingCard from '../../Components/RatingCard';
 import ReviewBlock from '../../Components/ReviewBlockk';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -16,7 +16,7 @@ function Reviews() {
                 <ReviewBlock />
             </View>
         </ScrollView>
-        <TouchableOpacity style={styles.leaveButton}>
+        <TouchableOpacity style={styles.leaveButton} onPress={()=>Alert.alert('link to leave review screen')}>
             <Text style={styles.buttonText}>Leave a Review</Text>
         </TouchableOpacity>
     </View>
@@ -36,12 +36,12 @@ scrollContent: {
 reviewTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    marginHorizontal: 16,
+    marginVertical: 10,
   },
 reviewTextLeft: {
     fontSize: 16,
-    fontWeight: '700'
+    fontFamily:'Ubuntu-Medium',
   },
 commentContainer: {
     flex: 1,

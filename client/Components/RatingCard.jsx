@@ -2,6 +2,7 @@ import { View, Text ,StyleSheet} from 'react-native'
 import React from 'react'
 import {MaterialIcons} from '@expo/vector-icons'
 import RatingBar from './RatingBar'
+import { LinearGradient } from 'expo-linear-gradient';
 
 function RatingCard(){
     const tasteRating = 4.2
@@ -29,7 +30,7 @@ function RatingCard(){
                        />
                    ))}
                     </View>
-                    <View style={styles.rightText}>
+                    <View style={{fontFamily:'Ubuntu-Regular'}}>
                         <Text style={styles.underStarText}>Based on 21 ratings</Text>
                     </View>
                 </View>
@@ -38,13 +39,19 @@ function RatingCard(){
                 <View style={styles.separator} />
                 <View style={styles.rateBar}>
                     <View style={styles.bar}>
-                        <RatingBar rating={tasteRating} category="Taste" fillColor="#536DFE"/>
+                        <RatingBar rating={tasteRating} category="Taste" 
+                        startColor="#B9C4FF" 
+                        endColor="#536DFE"/>
                     </View>
                     <View style={styles.bar}>
-                        <RatingBar rating={authRating} category="Authenticity" fillColor="#FFB300" />
+                        <RatingBar rating={authRating} category="Authenticity" 
+                                      startColor="#FFEDD1" 
+                                      endColor="#FFB300" />
                     </View>
                     <View style={styles.bar}>
-                        <RatingBar rating={ambiRating} category="Ambience" fillColor="#E65100"/>
+                        <RatingBar rating={ambiRating} category="Ambience" 
+                        startColor="#FFCDB1" 
+                        endColor="#E65100"/>
                     </View>
                 </View>
             </View>
@@ -54,7 +61,7 @@ function RatingCard(){
 
 const styles = StyleSheet.create({
     ratingContainer: {
-      height: 250,
+      height: 260,
       borderRadius: 15,
       backgroundColor: '#fff',
       shadowColor: '#000',
@@ -62,19 +69,20 @@ const styles = StyleSheet.create({
         width: 0,
         height: 2,
       },
-      shadowOpacity: 0.2,
+      shadowOpacity: 0.15,
       shadowRadius: 3,
       elevation: 4,
-      marginBottom: 10
+      marginVertical: 15,
     },
     ratingTitle: {
       height: 40,
       paddingVertical: 10,
-      paddingHorizontal: 15
+      paddingHorizontal: 15,
+      
     },
     ratingText:{
       fontSize: 16,
-      fontWeight: 'bold'
+      fontFamily:'Ubuntu-Bold'
     },
     ratingNumber: {
       height: 55,
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
     },
     leftText: {
       fontSize: 40,
-      fontWeight: '700'
+      fontFamily:'Ubuntu-Bold'
     },
     numberRight: {
       marginLeft: 25,
@@ -100,7 +108,7 @@ const styles = StyleSheet.create({
     },
     underStarText: {
       fontSize: 12,
-      fontWeight:'500',
+      fontFamily:'Ubuntu-Regular',
       color: '#9E9E9E',
       paddingTop: 5,
       paddingLeft: 4
@@ -115,8 +123,11 @@ const styles = StyleSheet.create({
       alignSelf: 'center'
     },
     bar:{
-      marginTop: 10
-    }
+      marginTop: 10,
+      marginHorizontal:16,
+    },
+
+
   })
 
 export default RatingCard

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     tabText: {
         fontSize: 16,
-         fontFamily:'Ubuntu-Medium',
+        fontFamily:'Ubuntu-Medium',
         color: '#9E9E9E',
     },
     activeTabText: {
