@@ -28,7 +28,7 @@ const RestaurantDetails = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Feather name="arrow-left" size={24} color="#9e9e9e" />
+            <Feather name="arrow-left" size={24} color="#221C19" />
             <Text style={styles.normalText}>Back</Text>
       </TouchableOpacity>
       <TopTabs />

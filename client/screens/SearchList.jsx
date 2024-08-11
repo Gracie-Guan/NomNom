@@ -4,7 +4,7 @@ import SearchTop from '../Components/SearchTop'
 import FilterBar from '../Components/FilterBar'
 import RestaurantCard from '../Components/RestroCards'
 import Feather from '@expo/vector-icons/Feather';
-import { ScrollView } from 'react-native-gesture-handler'
+import { ScrollView } from 'react-native-gesture-handler';
 
 function SearchList({navigation}) {
   const handleBack = () => {

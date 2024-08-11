@@ -20,7 +20,7 @@ const CommentsPage = () => {
             stars.push(
                 <TouchableOpacity key={i} onPress={() => selectRating(i)}>
                     {i <= selectedRating ? 
-                        <MaterialIcons                                 
+                    <MaterialIcons                                 
                         name="star"
                         size={45}
                         color={"#FFB300" }/>

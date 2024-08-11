@@ -1,10 +1,12 @@
 import { View, Text ,StyleSheet, Alert, ScrollView, TouchableOpacity} from 'react-native';
 import RatingCard from '../../Components/RatingCard';
 import ReviewBlock from '../../Components/ReviewBlockk';
+import { useNavigation } from '@react-navigation/native';
 
 function Reviews() {
-  const handlePress = () => {
-    Alert.alert('Link to leave review screen');
+  const navigation = useNavigation();
+  const handleLeaveReview = () => {
+    navigation.navigate('CommentsPage', {restaurantId: restaurantId });
   };
 
   return (
@@ -19,7 +21,7 @@ function Reviews() {
           <ReviewBlock />
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.leaveButton} onPress={handlePress}>
+      <TouchableOpacity style={styles.leaveButton} onPress={handleLeaveReview}>
         <Text style={styles.buttonText}>Leave a Review</Text>
       </TouchableOpacity>
     </View>

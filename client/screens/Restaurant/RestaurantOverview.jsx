@@ -7,13 +7,29 @@ import ReviewCard from '../../Components/ReviewCard';
 import { RestaurantContext } from '../../Context/RestaurantContext';
 import { useNavigation } from '@react-navigation/native';
 
-const RestaurantOverview = () => {
+const RestaurantOverview = ({restaurantId, onTabChange}) => {
   const { restaurant, loading, error } = useContext(RestaurantContext);
   console.log("restaurant: ", restaurant);
   const navigation = useNavigation();
+  
   const goToMenu = () => {
-    navigation.jumpTo('menu');
+    if (onTabChange) {
+      onTabChange('menu');
+    }
   }
+
+  const goToPhotos = () => {
+    if (onTabChange) {
+      onTabChange('photos');
+    }
+  }
+
+  const goToReviews = () => {
+    if (onTabChange) {
+      onTabChange('review');
+    }
+  }
+  
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -32,15 +48,22 @@ const RestaurantOverview = () => {
       <InfoCard restaurant={restaurant} />
       <View style={styles.threeSection}>
         <PopDishes restaurantId={restaurant._id}/>
-          <View style={styles.dishbottom}>
+          <View style={styles.dishBottom}>
             <TouchableOpacity style={styles.menuButton} onPress={goToMenu}>
-                <Text style={styles.buttonText}>Explore Full Menu</Text>
+                <Text style={styles.buttonText1}>Explore Full Menu</Text>
             </TouchableOpacity>
           </View>
-        <PhotoCard restaurant={restaurant} />
-        <ReviewCard restaurant={restaurant} />
-        <TouchableOpacity style={styles.leaveButton}>
-            <Text style={styles.buttonText}>Leave a Review</Text>
+        <TouchableOpacity onPress={goToPhotos}>
+            <PhotoCard restaurant={restaurant} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={goToReviews}>
+            <ReviewCard restaurant={restaurant} />
+        </TouchableOpacity>
+          
+
+        <TouchableOpacity style={styles.leaveButton} onPress>
+            <Text style={styles.buttonText2}>Leave a Review</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -70,11 +93,31 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
   },
-  buttonText: {
+  buttonText2: {
     fontSize: 16,
     color: '#FFB300',
-    fontWeight: '500',
+    fontFamily:'Ubuntu-Medium'
   },
+
+  dishBottom: {
+    justifyContent: 'center',
+    alignItems: 'center'
+   },
+  
+  menuButton: {
+    width: 350,
+    height: 30,
+    backgroundColor: '#FF9400',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+   },
+  
+   buttonText1: {
+    color: 'white',
+    fontFamily:'Ubuntu-Medium',
+    fontSize: 16,
+   },
 });
 
 export default RestaurantOverview;
