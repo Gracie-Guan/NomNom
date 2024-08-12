@@ -6,6 +6,8 @@ import RatingThree from "../Components/RatingThree";
 import TagsCard from "../Components/TagsCard";
 import ImagePicker from "../Components/ImagePicker";
 import InputComments from "../Components/InputComments";
+import BackButton from "../Components/BackButton";
+
 
 const CommentsPage = () => {
     const navigation = useNavigation(); 
@@ -45,8 +47,9 @@ const CommentsPage = () => {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 keyboardVerticalOffset={50}
             >
+            <BackButton  />
             <ScrollView>
-            <View style={styles.TopRatingContianer}>
+            <View style={styles.TopRatingContainer}>
                 <Text style={styles.TopRatingText}>Rate your overall experience</Text>
                 {renderStars()}
             </View>
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     inner:{
         flex: 1
     },
-    TopRatingContianer:{
+    TopRatingContainer:{
         marginTop: 30,
         marginBottom: 10,
         justifyContent: 'center',
