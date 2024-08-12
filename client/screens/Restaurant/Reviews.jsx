@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 function Reviews() {
   const navigation = useNavigation();
   const handleLeaveReview = () => {
-    navigation.navigate('CommentsPage', {restaurantId: restaurantId });
+    navigation.navigate('LeaveReview', {restaurantId: restaurantId });
   };
 
   return (
