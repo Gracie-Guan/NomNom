@@ -7,7 +7,7 @@ import ReviewCard from '../../Components/ReviewCard';
 import { RestaurantContext } from '../../Context/RestaurantContext';
 import { useNavigation } from '@react-navigation/native';
 
-const RestaurantOverview = ({restaurantId, onTabChange}) => {
+const RestaurantOverview = ({ onTabChange}) => {
   const { restaurant, loading, error } = useContext(RestaurantContext);
   console.log("restaurant: ", restaurant);
   const navigation = useNavigation();
@@ -29,6 +29,10 @@ const RestaurantOverview = ({restaurantId, onTabChange}) => {
       onTabChange('review');
     }
   }
+
+  const handleLeaveReview = () =>{
+    navigation.navigate('leaveReview', {restaurantId:restaurant._id});
+  }
   
 
   if (loading) {
@@ -47,7 +51,7 @@ const RestaurantOverview = ({restaurantId, onTabChange}) => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <InfoCard restaurant={restaurant} />
       <View style={styles.threeSection}>
-        <PopDishes restaurantId={restaurant._id}/>
+        <PopDishes restaurantId={restaurant}/>
           <View style={styles.dishBottom}>
             <TouchableOpacity style={styles.menuButton} onPress={goToMenu}>
                 <Text style={styles.buttonText1}>Explore Full Menu</Text>
@@ -62,7 +66,7 @@ const RestaurantOverview = ({restaurantId, onTabChange}) => {
         </TouchableOpacity>
           
 
-        <TouchableOpacity style={styles.leaveButton} onPress>
+        <TouchableOpacity style={styles.leaveButton} onPress={handleLeaveReview}>
             <Text style={styles.buttonText2}>Leave a Review</Text>
         </TouchableOpacity>
       </View>
