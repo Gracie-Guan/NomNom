@@ -5,8 +5,9 @@ import { RestaurantContext } from '../../Context/RestaurantContext';
 import { Feather } from '@expo/vector-icons';
 
 const RestaurantDetails = ({ route, navigation }) => {
-  const { restaurantId } = route.params;
+  const restaurantId = route.params?.restaurantId;
   const { fetchRestaurant, restaurant, loading, error } = useContext(RestaurantContext);
+  
   const handleBack = () => {
     navigation.goBack();
   };
@@ -28,7 +29,7 @@ const RestaurantDetails = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <Feather name="arrow-left" size={24} color="#221C19" />
+            <Feather name="arrow-left" size={24} color="#9e9e9e" />
             <Text style={styles.normalText}>Back</Text>
       </TouchableOpacity>
       <TopTabs />
