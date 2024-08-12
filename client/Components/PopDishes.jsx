@@ -88,11 +88,6 @@ const PopDishes = ({ restaurantId }) => {
         ))}
         </View>
     </ScrollView>
-    <View style={styles.dishbottom}>
-        <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.buttonText}>Explore Full Menu</Text>
-        </TouchableOpacity>
-    </View>
 </View>
   );
 };
@@ -134,23 +129,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     paddingTop: 5
    },
-   dishbottom: {
-    justifyContent: 'center',
-    alignItems: 'center'
-   },
-   menuButton: {
-    width: 350,
-    height: 30,
-    backgroundColor: '#FF9400',
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center'
-   },
-   buttonText: {
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 16,
-   },
+
 });
 
 export default PopDishes;

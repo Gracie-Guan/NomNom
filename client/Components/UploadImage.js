@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import {  Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import { Button, Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Button } from 'react-native-paper';
+
 import AWS from "aws-sdk";
 import CreateMenu from '../screens/Restaurant/CreateMenu';
 
