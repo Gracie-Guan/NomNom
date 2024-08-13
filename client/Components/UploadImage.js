@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Modal, TouchableOpacity, Text, Alert, ActivityIndicator } from 'react-native';
 import { View } from '@ant-design/react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AWS from "aws-sdk";
 import axios from 'axios';
+import { Button, Image, View, StyleSheet, Modal, TouchableOpacity, Text, Alert } from 'react-native';
+import CreateMenu from '../screens/Restaurant/CreateMenu';
 
 // AWS Config
 
@@ -41,6 +42,7 @@ export default function ImagePickerExample({restaurantId, onPress}) {
   const folderName = "menus";
 
   const fileName = "test_01.jpg"
+
   const fileKey = `${folderName}/${fileName}`; // This specifies the folder and file name
 
   const imagePath = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
@@ -250,80 +252,12 @@ export default function ImagePickerExample({restaurantId, onPress}) {
 }
 
 const styles = StyleSheet.create({
-  UploadButtonContainer: {
-    backgroundColor: "#FFC93C",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  UploadButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  UploadButtonStyle: {
-    color: "white",
-    // flex: 0,
-    // backgroundColor: "#FFC93C",
-    // resizeMode: 'contain',
-    width: 100,
-    height: 50,
-  },
-  FloatingButtonStyle: {
-    resizeMode: 'contain',
-    // backgroundColor: "pink",
-
-    width: 50,
-    height: 50,
-  },
-  floatingButton: {
-    flex: 1,
-    position: "absolute",
-    // flexDirection: 'row', // Arrange children horizontally
-    // justifyContent: 'flex-end',
-    // backgroundColor: "green",
-    alignItems: 'flex-end',
-    marginBottom: "4%",
-    marginRight: "-3%",
-    right: 30,
-    bottom: 35
-  },
-  TouchableOpacityStyle: {
-    // flex: 1,
-    // flexDirection: "row",
-    // position: 'absolute',
-    alignItems: "center",
-    justifyContent: "center",
-    // backgroundColor: "orange",
-    // right: 30,
-    // bottom: 30
-  },
-  ActionButton: {
-    // color: "white",
-    backgroundColor: '#FFC93C', // Yellow background color
-    width: 60, // Width of the button (adjust as needed)
-    height: 60, // Height of the button (adjust as needed)
-    borderRadius: 30, // Half of width/height to make it a perfect circle
-    justifyContent: 'center', // Center the "+" vertically
-    alignItems: 'center', // Center the "+" horizontally
-    // position: 'absolute', // Position it absolutely if needed
-    // right: 30, // Position from the right (adjust as needed)
-    // bottom: 30, // Position from the bottom (adjust as needed)
-  },
-  ActionButtonText: {
-    color: 'white', // Color of the "+"
-    fontSize: 30, // Font size of the "+"
-    fontWeight: 'bold', // Make the "+" bold
-  },
   container: {
-    // flex: 1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
-    // fontFamily: 'Ubuntu-Medium',
-    backgroundColor: "purple",
-
+    marginTop: 10,
+    fontFamily: 'Ubuntu-Medium',
   },
   image: {
     width: 200,

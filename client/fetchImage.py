@@ -60,6 +60,7 @@ def fetch_image():
         return abort(404, description="Bucket not found")
     except Exception as e:
         print("condition 5")
+
         return abort(500, description=f"An error occurred: {str(e)}")
 
 # def extract_information_from_image(directory):

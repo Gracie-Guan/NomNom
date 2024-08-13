@@ -30,7 +30,10 @@ const restaurantSchema = new Schema({
         name: String,
         localized_name: String
     }],
-    image: [String]
+    image: [{
+        url: String,
+        uploaded_at: Date
+    }]
 });
 
 const Restaurant = mongoose.model('restaurant', restaurantSchema);
@@ -38,7 +41,7 @@ const Restaurant = mongoose.model('restaurant', restaurantSchema);
 class RestaurantModel {
 
     static async getRestaurantList(){
-        return Restaurant.find({}, '_id name price_level cuisine features image')
+        return Restaurant.find({},'_id name price_level cuisine features image latitude longitude address_obj rating')
     }
 
     static async getRestaurantById(restaurantId){
