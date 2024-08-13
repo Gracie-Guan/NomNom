@@ -1,12 +1,20 @@
 import React from 'react';
 import { View, StyleSheet , TextInput,TouchableOpacity, Text} from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-const SearchTop = ({ search, onChangeText, onVoicePress}) => {
+const SearchTop = ({ search, onChangeText, onVoicePress, onPress}) => {
+    const navigation = useNavigation();
+    const handleSearch = () => {
+        navigation.navigate('SearchList', {onChangeText});
+    };
+
     return (
     <View style={styles.Container}>
         <View style={styles.search}>
-            <Feather name='search' size={24} color="#FFCDB2" style={styles.searchIcon}/>
+            <TouchableOpacity onPress={onVoicePress} style={styles.voiceContainer}>
+                <Feather name="mic" size={24} color="#FFCDB2" />
+            </TouchableOpacity>
             <TextInput
                 style={styles.input}
                 placeholder="Search for 'Main course under €10'"
@@ -15,9 +23,9 @@ const SearchTop = ({ search, onChangeText, onVoicePress}) => {
                 onChangeText={onChangeText}
             />
         </View>
-        <TouchableOpacity onPress={onVoicePress} style={styles.voiceContainer}>
-            <Feather name="mic" size={24} color="#FFCDB2" />
-        </TouchableOpacity>
+            <TouchableOpacity onPress={handleSearch}>
+                <Feather name='search' size={24} color="#FFCDB2" style={styles.searchIcon}/>
+            </TouchableOpacity>
     </View>
     
     );
@@ -38,13 +46,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     searchIcon: {
-        marginLeft: 5
+        marginRight: 5
+
     },
     input: {
         marginLeft: 5,
     },
     voiceContainer: {
-        marginRight: 5
+        marginLeft: 5,
     }
 
 });
