@@ -1,19 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
-import { useFonts, Ubuntu_300Light, Ubuntu_400Regular, Ubuntu_500Medium, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-
 
 const CouponList = () => {
-    let [fontsLoaded] = useFonts({
-        Ubuntu_300Light,
-        Ubuntu_400Regular,
-        Ubuntu_500Medium,
-        Ubuntu_700Bold,
-    });
-
-    if (!fontsLoaded) {
-        return null;
-    }
 
     return (
             <View style={styles.couponContainer}>
@@ -21,7 +9,7 @@ const CouponList = () => {
                 <View style={styles.coupon}>
                     <View style={styles.eachCoupon}>
                         <View style={styles.left}>
-                            <Text style={styles.one}>Puty Kitchen</Text>
+                            <Text style={styles.one}>Pure Kitchen</Text>
                             <Text style={styles.two}>Free meal tasting event</Text>
                             <Text style={styles.three}></Text>
                             <Text style={styles.four}>Entrance ticket of free meal tasting event for one person</Text>
@@ -40,7 +28,7 @@ const CouponList = () => {
                             <Text style={styles.one}>Bear Market</Text>
                             <Text style={styles.two}>10% off on all coffee</Text>
                             <Text style={styles.three}></Text>
-                            <Text style={styles.four}>Order any coffe you like with 10% off, pastry doesn't applied</Text>
+                            <Text style={styles.four}>Order any coffee you like with 10% off, pastry doesn't applied</Text>
                             <View style={styles.timeContainer}>
                                 <Feather name="clock" color={'#9E9E9E'} size={15}/>
                                 <Text style={styles.five}>10d 20h 29m</Text>
@@ -61,7 +49,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     couponTitle: {
-        fontFamily: 'Ubuntu_500Medium',
+        fontFamily: 'Ubuntu-Medium',
         fontSize: 16,
         textAlign: 'center',
         marginVertical: 25
@@ -88,12 +76,12 @@ const styles = StyleSheet.create({
     },
     one:{
         fontSize: 20,
-        fontFamily: 'Ubuntu_400Regular'
+        fontFamily: 'Ubuntu-Regular'
     },
     two: {
         color: '#E65100',
         fontSize: 14,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         marginTop: 5
     },
     three:{
@@ -104,7 +92,7 @@ const styles = StyleSheet.create({
     },
     four:{
         fontSize: 12,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         color: '#9E9E9E',
         marginTop: 10,
         width: 200,
@@ -119,7 +107,7 @@ const styles = StyleSheet.create({
     },
     five:{
         fontSize: 12,
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         color: '#9E9E9E',
     },
     right:{
@@ -132,15 +120,14 @@ const styles = StyleSheet.create({
     },
     six: {
         fontSize: 11,
-        fontFamily: 'Ubuntu_700Bold',
+        fontFamily: 'Ubuntu-Bold',
         color: 'white'
     },
     seven: {
         fontSize: 24,
-        fontFamily: 'Ubuntu_700Bold',
+        fontFamily: 'Ubuntu-Bold',
         color: 'white',
     }
-
 })
 
 export default CouponList
