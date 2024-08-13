@@ -2,20 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const RatingBar = ({ rating, category, fillColor }) => {
-  const fillWidth = (rating / 5) * 100;
+const RatingBar = ({ rating, category, startColor, endColor }) => {
+  const filledWidth = `${(rating / 5) * 100}%`;
 
   return (
     <View style={styles.container}>
-        <View style={styles.category}>
-            <Text style={styles.categoryText}>{category}</Text>
-            <Text style={styles.ratingText}>
-                {/* {rating.toFixed(1)} */}{rating}
-            </Text>
-        </View>
-        <View style={styles.barContainer}>
-            <View style={[styles.filledBar, { width: `${fillWidth}%`, backgroundColor: fillColor }]} />
-        </View>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{category}</Text>
+        <Text style={styles.rating}>{rating}</Text>
+      </View>
+      <View style={styles.barContainer}>
+        <LinearGradient
+          colors={[startColor, endColor]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[styles.filledBar, { width: filledWidth }]}
+        />
+        <View style={styles.emptyBar} />
+      </View>
     </View>
   );
 };
