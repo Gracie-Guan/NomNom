@@ -88,7 +88,7 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
       // for search result list 
       case 'list':
         return (
-          <TouchableOpacity style={styles.listCard}>
+          <TouchableOpacity style={styles.listCard} onPress={handlePressToRestro}>
             <Image source={{ uri: image }} style={styles.listImage} />
 
             <View style={styles.listInfo}>
@@ -129,7 +129,7 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
       // for surprise me page
       case 'surprise':
         return (
-          <TouchableOpacity style={styles.surpriseCard}>
+          <TouchableOpacity style={styles.surpriseCard} onPress={handlePressToRestro} >
             <Image 
               source={{ uri: image }} 
               style={styles.surpriseImage}

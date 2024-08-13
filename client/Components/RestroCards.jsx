@@ -63,7 +63,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       // for home page and liked
       case 'default':
         return (
-          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} >
+          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} onPress={handlePressToRestro} >
             <Image source={{ uri: image }} style={styles.homeImage} />
 
             
@@ -114,7 +114,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       // for search result list 
       case 'list':
         return (
-          <TouchableOpacity style={styles.listCard}>
+          <TouchableOpacity style={styles.listCard} onPress={handlePressToRestro} >
             <Image source={{ uri: image }} style={styles.listImage} />
 
             <View style={styles.listInfo}>
@@ -156,7 +156,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       // for surprise me page
       case 'surprise':
         return (
-          <TouchableOpacity style={styles.surpriseCard}>
+          <TouchableOpacity style={styles.surpriseCard} onPress={handlePressToRestro} >
             <Image 
               source={{ uri: image }} 
               style={styles.surpriseImage}
