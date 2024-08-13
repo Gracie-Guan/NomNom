@@ -1,9 +1,10 @@
-import { View, Text , StyleSheet, ActivityIndicator} from 'react-native';
+import { View, Text , StyleSheet, ActivityIndicator, SafeAreaView} from 'react-native';
 import RatingCard from '../../Components/RatingCard';
 import ReviewBlock from '../../Components/ReviewBlockk';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Reviews = ({restaurantId}) => {
@@ -62,6 +63,11 @@ useEffect(()=> {
   //   ); 
   // } 
 
+  const navigation = useNavigation();
+  const handleLeaveReview = () => {
+    navigation.navigate('leaveReview', {restaurantId: restaurantId });
+  };
+
   if (loading) {
     return (
       <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
@@ -79,7 +85,7 @@ useEffect(()=> {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
             <RatingCard rating_info={ratings} />
             <View style={styles.reviewTitle}>
@@ -90,10 +96,13 @@ useEffect(()=> {
                 <ReviewBlock review_info={reviews} restaurant_info={restaurantId}/>
             </View>
         </ScrollView>
-        <TouchableOpacity style={styles.leaveButton}>
-            <Text style={styles.buttonText}>Leave a Review</Text>
-        </TouchableOpacity>
-    </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.leaveButton} onPress={handleLeaveReview}>
+              <Text style={styles.buttonText}>Leave a Review</Text>
+          </TouchableOpacity>
+        </View>
+
+    </SafeAreaView>
   );
 }
 
@@ -122,12 +131,16 @@ commentContainer: {
     flex: 1,
     marginTop: 10,
 },
+
+buttonContainer:{
+  position: 'absolute',
+  zIndex:1,
+  bottom: 10,
+  left: 16,
+  right: 16,
+},
+
 leaveButton: {
-    position: 'absolute',
-    zIndex:1,
-    bottom: 10,
-    left: 16,
-    right: 16,
     backgroundColor: '#FFB300',
     paddingVertical: 10,
     borderRadius: 50,
