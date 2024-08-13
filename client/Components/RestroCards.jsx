@@ -31,12 +31,11 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const navigation = useNavigation();
 
   const handlePressToRestro = useCallback(() => {
-    console.log("Navigating with restaurantId:", restaurant._id);
+    // console.log("Navigating with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
       navigation.navigate('RestaurantDetail', {
-        restaurantId: restaurant._id,
         screen: 'RestaurantTabs',
-        params: { screen: 'overview' }
+        params: { screen: 'overview', restaurantId: restaurant._id}
       });
     } else {
       console.error('Invalid restaurant data');
@@ -45,12 +44,11 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
 
 
   const handleToMenu = useCallback(() => {
-    console.log("Navigating to menu with restaurantId:", restaurant._id);
+    // console.log("Navigating to menu with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
       navigation.navigate('RestaurantDetail', {
-        restaurantId: restaurant._id,
         screen: 'RestaurantTabs',
-        params: { screen: 'menu' }
+        params: { screen: 'menu', restaurantId: restaurant._id}
 
       });
     } else {

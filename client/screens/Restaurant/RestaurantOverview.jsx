@@ -9,7 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 
 const RestaurantOverview = ({ onTabChange}) => {
   const { restaurant, loading, error } = useContext(RestaurantContext);
-  console.log("restaurant: ", restaurant);
+
+  // console.log("restaurant: ", restaurant);
+
   const navigation = useNavigation();
   
   const goToMenu = () => {
@@ -46,6 +48,7 @@ const RestaurantOverview = ({ onTabChange}) => {
   if (!restaurant) {
     return <Text>No restaurant data available</Text>;
   }
+
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

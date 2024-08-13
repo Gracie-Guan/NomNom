@@ -7,7 +7,7 @@ import Reviews from '../screens/Restaurant/Reviews';
 import RestaurantOverview from '../screens/Restaurant/RestaurantOverview';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const uniquerestaurantId = "668ee8afc88d544d82f31746";
+// const uniquerestaurantId = "668ee8afc88d544d82f31746";
 
 const photosData = [
   { id: '1', url: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg' },
@@ -24,10 +24,11 @@ const photosData = [
   { id: '12', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqwyQDzcROno1-o6dfOWGC05CAMAXE2UlnFw&s' },
   //...
 ];
-const TopTabs = () => {
+
+const TopTabs = (restaurantId) => {
   const navigation = useNavigation();
   const route = useRoute();
-  const restaurantId = route.params?.restaurantId || "668ee8afc88d544d82f31746";
+  // const restaurantId = route.params?.restaurantId || "668ee8afc88d544d82f31746";
 
   const OverviewRoute = () => (
     <RestaurantOverview 
