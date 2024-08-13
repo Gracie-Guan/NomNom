@@ -4,14 +4,20 @@ import TopTabs from '../../Components/TopTabs';
 import { RestaurantContext } from '../../Context/RestaurantContext';
 import { Feather } from '@expo/vector-icons';
 
+
 const RestaurantDetails = ({ route, navigation }) => {
-  const { restaurantId } = route.params;
+  console.log("Route params:", route.params);
+  const restaurantId = route.params?.restaurantId;
+  console.log("Fetched restaurantId:", restaurantId);
+
   const { fetchRestaurant, restaurant, loading, error } = useContext(RestaurantContext);
+  
   const handleBack = () => {
     navigation.goBack();
   };
 
   useEffect(() => {
+    console.log("Fetched restaurantId:", restaurantId);
     if (restaurantId) {
       fetchRestaurant(restaurantId);
     }

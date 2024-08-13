@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text,StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {Feather} from '@expo/vector-icons'
-import ReviewBlock from './ReviewBlockk'
+import {Feather} from '@expo/vector-icons';
+import ReviewBlock from './ReviewBlockk';
 
 const tags = ['Fresh', 'BBQ', 'Date', 'Family', 'Spicy', 'Vibe']
 
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#6e6e6e',
     },
-    
+
     tagText:{
         color: '#6e6e6e'
     },

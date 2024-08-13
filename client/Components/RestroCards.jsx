@@ -10,6 +10,7 @@ import { RestaurantContext } from '../Context/RestaurantContext';
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
+
 const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const id = restaurant?._id || " ";
   const name = restaurant?.name || "Fiction Bistro";
@@ -28,15 +29,33 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const [isPressed, setIsPressed] = useState(false);
 
   const navigation = useNavigation();
-  const {fetchRestaurant} = useContext(RestaurantContext);
 
   const handlePressToRestro = useCallback(() => {
+    console.log("Navigating with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
-      navigation.navigate('RestaurantDetail', { restaurantId: restaurant._id });
+      navigation.navigate('RestaurantDetail', {
+        restaurantId: restaurant._id,
+        screen: 'RestaurantTabs',
+        params: { screen: 'overview' }
+      });
     } else {
-      console.error('invalid restaurant data')
+      console.error('Invalid restaurant data');
     }
-    
+  }, [navigation, restaurant]);
+
+
+  const handleToMenu = useCallback(() => {
+    console.log("Navigating to menu with restaurantId:", restaurant._id);
+    if (restaurant && restaurant._id) {
+      navigation.navigate('RestaurantDetail', {
+        restaurantId: restaurant._id,
+        screen: 'RestaurantTabs',
+        params: { screen: 'menu' }
+
+      });
+    } else {
+      console.error('Invalid restaurant data');
+    }
   }, [navigation, restaurant]);
 
   const renderContent = () => {
@@ -44,7 +63,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       // for home page and liked
       case 'default':
         return (
-          <View style={[styles.homeCard,styles.shadowSubtle]}>
+          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]}>
             <Image source={{ uri: image }} style={styles.homeImage} />
 
             
@@ -67,9 +86,9 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
             <View style={styles.homeInfo}>
               <View style={styles.homeKeyInfo}>              
                 <Text style={styles.restaurantName}>{name}</Text>
-                <TouchableOpacity style={styles.menuButton}>
+                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
                   <Feather name="pocket" size={16} color="#fff" />
-                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
+                  <Text style={styles.menuButtonText}>Menu</Text>
                 </TouchableOpacity>
               </View>
 
@@ -90,12 +109,12 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
               </View>
 
             </View>
-          </View>
+          </TouchableOpacity>
         );
       // for search result list 
       case 'list':
         return (
-          <View style={styles.listCard}>
+          <TouchableOpacity style={styles.listCard}>
             <Image source={{ uri: image }} style={styles.listImage} />
 
             <View style={styles.listInfo}>
@@ -124,19 +143,20 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                   <Text style={styles.detailsButtonText}>Details</Text>
                   <Feather name="arrow-up-right" size={20} color="#fff" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.menuButton}>
-                  <Text style={styles.menuButtonText} onPress={handlePressToRestro}>Menu</Text>
+                
+                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
+                  <Text style={styles.menuButtonText}>Menu</Text>
                   <Feather name="pocket" size={16} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         );
 
       // for surprise me page
       case 'surprise':
         return (
-          <View style={styles.surpriseCard}>
+          <TouchableOpacity style={styles.surpriseCard}>
             <Image 
               source={{ uri: image }} 
               style={styles.surpriseImage}
@@ -168,7 +188,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 <Feather name="arrow-up-right" size={20} color="#fff" />
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
         );
       default:
         return null;

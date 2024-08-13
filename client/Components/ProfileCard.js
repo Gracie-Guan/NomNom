@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image} from "react-native"
 import { Feather } from "@expo/vector-icons"
 import { useState } from "react"
 
-const ProfileCard = () => {
+const ProfileCard = ({navigation}) => {
     const tagsData = [
     'Brunch', 'Cheese', 'Date'
     ]   
@@ -10,6 +10,18 @@ const ProfileCard = () => {
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
     };
+
+    const handleLogin = () => {
+        navigation.navigate('Login')
+    }
+
+    const handleSignup = () => {
+        navigation.navigate('Signup')
+    }
+
+    const handleLogout = () => {
+        navigation.navigate('Logout')
+    }
 
     return(
     <View style={styles.profileTopContainer}>
@@ -21,13 +33,13 @@ const ProfileCard = () => {
         </View>
         {dropdownVisible && (
             <View style={styles.dropdownContainer}>
-                <TouchableOpacity style={styles.dropdownItem}>
+                <TouchableOpacity style={styles.dropdownItem} onPress={handleLogin}>
                     <Text style={styles.dropdownText}>Log In</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.dropdownItem}>
+                <TouchableOpacity style={styles.dropdownItem} onPress={handleSignup}>
                     <Text style={styles.dropdownText}>Sign Up</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.dropdownItem}>
+                <TouchableOpacity style={styles.dropdownItem} onPress={handleLogout}>
                     <Text style={styles.dropdownText}>Log Out</Text>
                 </TouchableOpacity>
             </View>
@@ -190,7 +202,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'rgb(200,200,200)',
     },
     dropdownText: {
-        fontFamily: 'Ubuntu_400Regular',
+        fontFamily: 'Ubuntu-Regular',
         fontSize: 15,
     },
 })

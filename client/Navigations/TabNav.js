@@ -14,15 +14,34 @@ import LoginScreen from '../screens/Login';
 import RestaurantDetail from '../screens/Restaurant/RestaurantDetail';
 import ProfileScreen from '../screens/ProfileScreen';
 import SignUpScreen from '../screens/Signup';
+import TopTabs from '../Components/TopTabs';
+import CommentsPage from '../screens/CommentsPage';
+import LogoutPage from '../screens/LogoutPage';
+import ProfileCard from '../Components/ProfileCard';
+import SearchList from '../screens/SearchList';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const RestaurantStack = createStackNavigator();
+
+function RestaurantDetailStack() {
+  return (
+    <RestaurantStack.Navigator screenOptions={{ headerShown: false }}>
+      <RestaurantStack.Screen name="RestaurantTabs" component={RestaurantDetail} options={({ route }) => ({
+          restaurantId: route.params?.restaurantId,
+        })}/>
+      <RestaurantStack.Screen name="leaveReview" component={CommentsPage} />
+      <RestaurantStack.Screen name="UserProfile" component={ProfileScreen} />
+    </RestaurantStack.Navigator>
+  );
+}
 
 function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={Home} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
+      <Stack.Screen name="SearchList" component={SearchList}  />
     </Stack.Navigator>
   );
 }
@@ -31,7 +50,7 @@ function MapStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MapMain" component={Map} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -40,7 +59,7 @@ function SurpriseStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="SurpriseMain" component={Surprise} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -49,7 +68,7 @@ function LikedStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="LikedMain" component={Liked} />
-      <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   );
 }
@@ -58,8 +77,11 @@ function ProfileStack(){
   return(
     <Stack.Navigator screenOptions={ {headerShown: false } }>
       <Stack.Screen name='ProfileMain' component={ProfileScreen}  />
+      <Stack.Screen name="ProfileCard" component={ProfileCard} />
       <Stack.Screen name='Login' component={LoginScreen} />
-      <Stack.Screen name='signup' component={SignUpScreen} />
+      <Stack.Screen name='Signup' component={SignUpScreen} />
+      <Stack.Screen name='Logout' component={LogoutPage} />
+      <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
     </Stack.Navigator>
   )
 }
@@ -86,6 +108,7 @@ function TabNav() {
           shadowRadius: 4,
         };
       })(route),
+
       tabBarActiveTintColor: '#FF9400',  
       tabBarInactiveTintColor: '#9E9E9E',
         tabBarIcon: ({ focused, color, size }) => {
@@ -126,6 +149,28 @@ function TabNav() {
             </Text>
           );
         },
+
+        tabBarStyle: ((route) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+          if (
+            routeName === 'RestaurantDetail' ||
+            routeName === 'UploadMenu' ||
+            routeName === 'UserProfile'
+          ) {
+            return { display: 'none' };
+          }
+          return {
+            height: 90,
+            paddingTop: 10,
+            elevation: 8,  
+            shadowOffset: {
+              width: 0,
+              height: -2,
+            },
+            shadowOpacity: 0.15,
+            shadowRadius: 4,
+          };
+        })(route),
       })}
     >
       <Tab.Screen name="Home" component={HomeStack} />

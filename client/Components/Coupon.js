@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
+import { View, Text, StyleSheet,ImageBackground, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 
 const Coupon = () => {
@@ -18,8 +18,10 @@ const Coupon = () => {
                             </View>
                         </View>
                         <View style={styles.right}>
+                        <ImageBackground source={require('../assets/couponRight.png')} resizeMode="cover" style={styles.imageBg}>
                             <Text style={styles.six}>points</Text>
                             <Text style={styles.seven}>1000</Text>
+                            </ImageBackground>
                         </View>
                     </View>
                     <View style={styles.eachCoupon}>
@@ -34,8 +36,12 @@ const Coupon = () => {
                             </View>
                         </View>
                         <View style={styles.right}>
-                            <Text style={styles.six}>points</Text>
-                            <Text style={styles.seven}>200</Text>
+                            <ImageBackground source={require('../assets/couponRight.png')} resizeMode="cover" style={styles.imageBg}>
+                                <Text style={styles.six}>points</Text>
+                                <Text style={styles.seven}>200</Text>
+                            </ImageBackground>
+                            
+                            
                         </View>
                     </View>
                 </View>
@@ -110,8 +116,7 @@ const styles = StyleSheet.create({
         color: '#9E9E9E',
     },
     right:{
-        flex: 1,
-        backgroundColor: '#FFB300',
+        flex: 1.2,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
         justifyContent: 'center',
@@ -126,6 +131,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontFamily: 'Ubuntu-Bold',
         color: 'white',
+    },
+
+    imageBg:{
+        width:'100%',
+        height:'100%',
+        justifyContent:'center',
+        alignItems:'center',
     }
 
 })
