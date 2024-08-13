@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {MaterialIcons, Feather} from '@expo/vector-icons'
-import axios from 'axios';
 import { RestaurantContext } from '../Context/RestaurantContext';
 
-const InfoCard = ({ restaurantId }) => {
+
+const InfoCard = ({ }) => {
 
   const { restaurant, loading, error } = useContext(RestaurantContext);
   

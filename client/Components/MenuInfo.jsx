@@ -1,57 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { View, StyleSheet, Linking, ActivityIndicator, Text } from 'react-native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 import { RestaurantContext } from '../Context/RestaurantContext';
 
-const MenuInfo = ({ restaurantId }) => {
-  const [menuItems, setMenu] = useState(null);
+const MenuInfo = ({ }) => {
+  const [menuItems, setMenuItems] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-    const fetchMenu = async () => {
-      setLoading(true);
+  const { restaurant } = useContext(RestaurantContext);
 
-      setTimeout(async () => {
+  useEffect(() => {
+    const fetchMenu = async () => {
+      if (!restaurant || !restaurant._id) {
+        setError('Invalid restaurant ID');
+        setLoading(false);
+        return;
+      }
 
       try {
-        
-        const first_response = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
+        setLoading(true);
+        const { _id: restaurantId } = restaurant;
+        console.log("restaurantId: ", restaurantId);
 
-        // response.data is an array of menus
-        const menus = first_response.data;
+        const { data: menus } = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
 
-        // Access the restaurant_id of the first (and only) menu
-        const menuId = menus[0].menu_id;
-        const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
+        if (!menus.length) {
+          throw new Error('No menus found for this restaurant.');
+        }
 
-        // console.log(second_response.data);
-        setMenu(second_response.data);
+        const { menu_id: menuId } = menus[0];
+        const { data: dishes } = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
+
+        setMenuItems(dishes);
       } catch (error) {
-        setError('Error fetching restaurant data');
-        console.error('Error fetching restaurant:', error);
+        setError(error.message || 'Error fetching menu data');
+        console.error('Error fetching restaurant menu:', error);
       } finally {
         setLoading(false);
       }
-    }, 500);
-}
+    };
 
-useEffect(()=> {
     fetchMenu();
-  }, [restaurantId]);
-
-  // console.log(menuItems);
-
-  // if (menuItems == "[]") {
-  //   return (
-  //     <View>
-  //       <Text style={styles.uploadText}>
-  //         Be the first to upload a menu!
-  //       </Text>
-  //     </View>
-  //   ); 
-  // } 
+  }, [restaurant]);
 
   if (loading) {
     return (

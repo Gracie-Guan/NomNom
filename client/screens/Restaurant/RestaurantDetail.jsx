@@ -16,6 +16,7 @@ const RestaurantDetails = ({ route, navigation }) => {
     navigation.goBack();
   };
 
+
   useEffect(() => {
     console.log("Fetched restaurantId:", restaurantId);
     if (restaurantId) {
