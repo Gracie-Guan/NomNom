@@ -63,7 +63,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       // for home page and liked
       case 'default':
         return (
-          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]}>
+          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} >
             <Image source={{ uri: image }} style={styles.homeImage} />
 
             

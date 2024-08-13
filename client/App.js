@@ -8,6 +8,7 @@ import TabNav from './Navigations/TabNav';
 import { UserLocation } from './Context/UserLocation';
 import { useFonts } from 'expo-font';
 import { RestaurantProvider } from './Context/RestaurantContext';
+import { AuthProvider } from './Context/AuthContext';
 
 export default function App() {
   const [location, setLocation] = useState(null);
