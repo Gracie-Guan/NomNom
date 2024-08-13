@@ -10,6 +10,7 @@ import { RestaurantContext } from '../Context/RestaurantContext';
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
+
 const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const id = restaurant?._id || " ";
   const name = restaurant?.name || "Fiction Bistro";
@@ -30,6 +31,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const navigation = useNavigation();
 
   const handlePressToRestro = useCallback(() => {
+    console.log("Navigating with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
       navigation.navigate('RestaurantDetail', {
         restaurantId: restaurant._id,
@@ -41,12 +43,15 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
     }
   }, [navigation, restaurant]);
 
+
   const handleToMenu = useCallback(() => {
+    console.log("Navigating to menu with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
       navigation.navigate('RestaurantDetail', {
         restaurantId: restaurant._id,
         screen: 'RestaurantTabs',
         params: { screen: 'menu' }
+
       });
     } else {
       console.error('Invalid restaurant data');
