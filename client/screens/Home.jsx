@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView} from "react-native"
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import FilterBar from "../Components/FilterBar";
 import CuisineBar from "../Components/CuisineBar";
 import VibeCard from "../Components/VibeCard";
@@ -20,22 +21,60 @@ const Home = ({navigation}) => {
 
     const [showRestaurant, setShowRestaurant] = useState(true);
 
+    const [restaurantData, setRestaurantData] = useState([]);
+    const [topDishes, setTopDishes] = useState([]);
+
+    useEffect(() => {
+        const fetchRestaurantsAndDishes = async () => {
+            try {
+                const [restaurantsResponse, dishesResponse, menusResponse] = await Promise.all([
+                    axios.get('http://localhost:6868/restaurants'),
+                    axios.get('http://localhost:6868/dishes'),
+                    axios.get('http://localhost:6868/menus')
+                ]);
+                setRestaurantData(restaurantsResponse.data);
+                
+                const menuToRestaurantMap = menusResponse.data.reduce((map, menu) => {
+                    map[menu._id] = menu.restaurant_id;
+                    return map;
+                }, {});
+
+                const topDishes = dishesResponse.data
+                .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
+                .slice(0, 10)
+                .map(dish => {
+                    const restaurantId = menuToRestaurantMap[dish.menu_id];
+                    const restaurant = restaurantsResponse.data.find(r => r._id === restaurantId);
+                    return { ...dish, restaurant }; 
+                });
+
+                setTopDishes(topDishes); 
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRestaurantsAndDishes();
+    }, []);
+
     const handleToggle = (isRestro) => {
         setShowRestaurant(isRestro);
         console.log(isRestro ? 'Showing Restaurants' : 'Showing Dishes');
       };
 
-      const restaurantData = [
-        { _id: 1, name: 'Restaurant A', rating: 4.5 },
-        { _id: 2, name: 'Restaurant B', rating: 4.7 },
-        { _id: 3, name: 'Restaurant C', rating: 4.6 },
-    ];
+    //   const restaurantData = [
+    //     { _id: 1, name: 'Restaurant A', rating: 4.5 },
+    //     { _id: 2, name: 'Restaurant B', rating: 4.7 },
+    //     { _id: 3, name: 'Restaurant C', rating: 4.6 },
+    // ];
 
-    const dishData = [
-        { _id: 1, name: 'Dish A', rating: 4.8 },
-        { _id: 2, name: 'Dish B', rating: 4.9 },
-        { _id: 3, name: 'Dish C', rating: 4.7 },
-    ];
+    // const dishData = [
+    //     { _id: 1, name: 'Dish A', rating: 4.8 },
+    //     { _id: 2, name: 'Dish B', rating: 4.9 },
+    //     { _id: 3, name: 'Dish C', rating: 4.7 },
+    // ];
 
     return (
         <SafeAreaView style={styles.container}>
@@ -79,10 +118,15 @@ const Home = ({navigation}) => {
                         </View>
                         )) 
                         : 
-                        dishData.map((dish) => (
-                        <View key={dish._id}>
-                            <DishCard key={dish._id} layout="default" dish={dish} />
-                        </View>
+                        topDishes.map((dish) => (
+                            <View key={dish._id}>
+                                <DishCard 
+                                    key={dish._id} 
+                                    layout="default" 
+                                    dish={dish} 
+                                    restaurant={dish.restaurant} 
+                                />
+                            </View>
                         ))
                     }
                 </ScrollView>
