@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { AuthContext } from '../Context/AuthContext';
 
-const user = {
+const default_user = {
   name: "Cara",
   level: "25",
   tag: ["Brunch", "Cheese", "Dating"],
@@ -11,21 +12,32 @@ const user = {
 
 
 const UserHeader = () => {
+  const { user } = useContext(AuthContext); 
+  console.log("User in UserHeader:", user); 
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.name}>No User Logged In</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: user.avatar }}
+        source={{ uri: default_user.avatar }}
         style={styles.profileImage}
       />
       <Text style={styles.name}>{user.name}</Text>
       <View style={styles.level}>
-        <Text>Food Critic Level {user.level} </Text>
+        <Text>Food Critic Level {default_user.level} </Text>
         
         </View>
       <View style={styles.tagContainer}>
-        <Text>{user.tag}</Text>
+        <Text>{default_user.tag}</Text>
       </View>
-      <Text style={styles.subtitle}>{user.bio}</Text>
+      <Text style={styles.subtitle}>{default_user.bio}</Text>
     </View>
   );
 };

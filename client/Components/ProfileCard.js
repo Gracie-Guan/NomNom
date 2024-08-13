@@ -1,8 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image} from "react-native"
 import { Feather } from "@expo/vector-icons"
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { AuthContext } from '../Context/AuthContext'; 
 
 const ProfileCard = ({navigation}) => {
+    const { user, logout } = useContext(AuthContext);
+
     const tagsData = [
     'Brunch', 'Cheese', 'Date'
     ]   
@@ -19,14 +22,19 @@ const ProfileCard = ({navigation}) => {
         navigation.navigate('Signup')
     }
 
-    const handleLogout = () => {
-        navigation.navigate('Logout')
-    }
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigation.navigate('Logout'); 
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
 
     return(
     <View style={styles.profileTopContainer}>
         <View style={styles.userName}>
-            <Text style={styles.userNameText}>Cara</Text>
+            <Text style={styles.userNameText}>{user?.username || 'Guest'}</Text>
             <TouchableOpacity style={styles.settingIcon} onPress={toggleDropdown}>
                 <Feather name="settings" size={15} color={'white'}/>
             </TouchableOpacity>
@@ -60,14 +68,19 @@ const ProfileCard = ({navigation}) => {
                 <Feather name="chevron-right" size={16} color={'#FFB300'}/>
             </View>
             <View style={styles.tags}>
-            {tagsData.map((tag, index)=>(
+
+            {user?.diningPreferences?.length > 0 &&
+                user.diningPreferences.map((tag, index) => (
                 <View key={index} style={styles.tagsContainer}>
                     <Text style={styles.tagText}>
-                        {tag}
+                     {tag}
                     </Text>
                 </View>
-            ))}
+                ))
+            }
             </View>
+
+            
             <View style={styles.bioContainer}>
                 <Text style={styles.bioText}>Shrimp Dumpling Eater</Text>
                 <Feather name="edit-3" size={15} color={'#9E9E9E'}/>

@@ -8,7 +8,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     profile_image: { type: String },
     ethnicity: { type: String },
-    dietary_restrictions: { type: [String], default: [] },
+    dietary_restrictions: { type: String },
     dining_preferences: { type: [String], default: [] },
     points: { type: Number, default: 0 },
     notification_settings: { type: Object, default: {} },
@@ -27,8 +27,8 @@ class UserModel {
             email,
             password: hashedPassword,
             ethnicity,
-            dietary_restrictions:[],
-            dining_preferences:[],
+            dietary_restrictions,
+            dining_preferences
         });
 
         try {

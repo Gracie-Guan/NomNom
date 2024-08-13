@@ -22,7 +22,18 @@ class UserController {
         try {
             const user = await UserModel.login(email, password);
             const token = generateToken(user._id);
-            res.status(200).json({ userId: user._id, token });
+            res.status(200).json({ 
+                userId: user._id,
+                username: user.username,
+                email: user.email,
+                ethnicity: user.ethnicity,
+                dietary_restrictions: user.dietary_restrictions,
+                dining_preferences: user.dining_preferences,
+                points: user.points,
+                favourite_restaurant: user.favourite_restaurant,
+                favourite_dish: user.favourite_dish,
+                token: token
+            });
         } catch (error) {
             res.status(401).json({ message: error.message });
         }
