@@ -12,9 +12,9 @@ export default function GoogleMapsView() {
   const { location } = useContext(UserLocation);
   const [selectedRestro, setSelectedRestro] = useState(null);
   const mapRef = useRef(null);
-  const [restaurants,setRestaurants] = useState([]);
-  const [loading,setLoading] = useState(true);
-  const [error,setError] = useState(null);
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (location) {

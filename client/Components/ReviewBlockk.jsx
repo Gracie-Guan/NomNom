@@ -2,7 +2,7 @@ import { View, Text ,StyleSheet,Image,  ScrollView} from 'react-native'
 import React from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 
-function ReviewBlock({filterId}){
+function ReviewBlock({review_info, restaurant_info, filterId}){
     const reviewData = [
         {
             id: '1',
@@ -48,7 +48,10 @@ function ReviewBlock({filterId}){
         },
     ]
 
+    console.log("review_info", review_info);
+
     const filteredData = filterId ? reviewData.filter(review => review.id === filterId) : reviewData;
+    // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>

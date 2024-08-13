@@ -6,7 +6,7 @@ import Photos from '../screens/Restaurant/Photos';
 import Reviews from '../screens/Restaurant/Reviews';
 import RestaurantOverview from '../screens/Restaurant/RestaurantOverview';
 
-const uniquerestaurantId = "668ee8afc88d544d82f31746";
+const uniquerestaurantId = "668ee8afc88d544d82f31746"; // yamamori
 
 const photosData = [
   { id: '1', url: 'https://feelgoodfoodie.net/wp-content/uploads/2023/04/Pasta-Bolognese-TIMG.jpg' },
@@ -33,7 +33,7 @@ const MenuRoute = () => (
 );
 
 const PhotosRoute = () => (
-  <Photos photos={photosData} />
+  <Photos restaurantId={uniquerestaurantId} />
 );
 
 const ReviewsRoute = () => (

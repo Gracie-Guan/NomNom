@@ -3,11 +3,15 @@ import React from 'react'
 import {MaterialIcons} from '@expo/vector-icons'
 import RatingBar from './RatingBar'
 
-function RatingCard(){
-    const tasteRating = 4.2
-    const authRating = 4.8
-    const ambiRating = 3.8
-    const rating = 4
+function RatingCard({rating_info}){
+    const tasteRating = rating_info.rating_details[0].taste;
+    const authRating = rating_info.rating_details[0].authenticity;
+    const ambiRating = rating_info.rating_details[0].ambience;
+    
+
+    console.log("Rating Card: rating_info", rating_info);
+
+    console.log("Rating Card:", rating_info.rating_details[0].taste);
     return(
         <View style={styles.ratingContainer}>
             <View style={styles.ratingTitle}>
@@ -15,7 +19,7 @@ function RatingCard(){
             </View>
             <View style={styles.ratingNumber}>
                 <View style={styles.numberLeft}>
-                    <Text style={styles.leftText}>4.6</Text>
+                    <Text style={styles.leftText}>{rating_info.rating}</Text>
                 </View>
                 <View style={styles.numberRight}>
                     <View style={styles.star}>
@@ -24,7 +28,7 @@ function RatingCard(){
                            key={index}
                            name="star"
                            size={20}
-                           color={index < rating ? "#FFB300" : "#EEEEEE"}
+                           color={index < rating_info.rating ? "#FFB300" : "#EEEEEE"}
                            style={styles.starIcon}
                        />
                    ))}

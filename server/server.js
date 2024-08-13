@@ -31,4 +31,7 @@ app.use("/menus", menuRouter);
 const dishRouter = require('./routes/Dishes');
 app.use("/dishes", dishRouter);
 
+const reviewRouter = require('./routes/Reviews');
+app.use("/reviews", reviewRouter);
+
 app.listen(port, () => console.log(`APP listening on port ${port}!`));

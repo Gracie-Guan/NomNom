@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const RatingBar = ({ rating,category,fillColor }) => {
+const RatingBar = ({ rating, category, fillColor }) => {
   const fillWidth = (rating / 5) * 100;
 
   return (
@@ -9,7 +9,7 @@ const RatingBar = ({ rating,category,fillColor }) => {
         <View style={styles.category}>
             <Text style={styles.categoryText}>{category}</Text>
             <Text style={styles.ratingText}>
-                {rating.toFixed(1)}
+                {/* {rating.toFixed(1)} */}{rating}
             </Text>
         </View>
         <View style={styles.barContainer}>
