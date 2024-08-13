@@ -26,8 +26,12 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
   const navigation = useNavigation();
 
   const handlePressToRestro = useCallback(() => {
+    console.log("Navigating with restaurantId:", restaurant._id);
     if (restaurant && restaurant._id) {
-      navigation.navigate('RestaurantDetail', { restaurantId: restaurant._id });
+      navigation.navigate('RestaurantDetail', {
+        screen: 'RestaurantTabs',
+        params: { screen: 'overview', restaurantId: restaurant._id}
+      });
     } else {
       console.error('invalid restaurant data')
     }
