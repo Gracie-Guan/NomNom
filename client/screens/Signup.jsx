@@ -107,16 +107,25 @@ const SignUpScreen = ({ navigation }) => {
     { label: 'Paleo', value: 'paleo' },
   ];
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  // const [selectedTags, setSelectedTags] = useState([]);
   const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-friendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
   const MAX_TAGS = 5;
+  // const toggleTag = (tag) => {
+  //   if (selectedTags.includes(tag)) {
+  //     setSelectedTags(selectedTags.filter(t => t !== tag));
+  //   } else {
+  //       if (selectedTags.length < MAX_TAGS) {
+  //           setSelectedTags([...selectedTags, tag]);
+  //         }
+  //   }
+  // };
   const toggleTag = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
+    if (diningPreferences.includes(tag)) {
+      setDiningPreferences(diningPreferences.filter(t => t !== tag));
     } else {
-        if (selectedTags.length < MAX_TAGS) {
-            setSelectedTags([...selectedTags, tag]);
-          }
+      if (diningPreferences.length < MAX_TAGS) {
+        setDiningPreferences([...diningPreferences, tag]);
+      }
     }
   };
 
@@ -231,13 +240,15 @@ const SignUpScreen = ({ navigation }) => {
                                         key={tag}
                                         style={[
                                             styles.tag,
-                                            selectedTags.includes(tag) && styles.selectedTag,
+                                            // selectedTags.includes(tag) && styles.selectedTag,
+                                            diningPreferences.includes(tag) && styles.selectedTag,
                                         ]}
                                         onPress={() => toggleTag(tag)}
                                     >
                                         <Text style={[
                                             styles.tagText,
-                                            selectedTags.includes(tag) && styles.selectedTagText
+                                            // selectedTags.includes(tag) && styles.selectedTagText
+                                            diningPreferences.includes(tag) && styles.selectedTagText
                                         ]}>
                                             {tag}
                                         </Text>

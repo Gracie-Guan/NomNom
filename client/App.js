@@ -39,6 +39,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <AuthProvider>
        <RestaurantProvider>
           <UserLocation.Provider 
              value={{location, setLocation}}>
@@ -47,7 +48,7 @@ export default function App() {
             </NavigationContainer>        
           </UserLocation.Provider>  
        </RestaurantProvider>
-      
+      </AuthProvider>
     </View>
   );
 }
