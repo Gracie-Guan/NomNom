@@ -6,7 +6,7 @@ import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
 
 
-const Reviews=({restaurantId}) => {
+const Reviews = ({restaurantId}) => {
 
   const [ratings, setRatings] = useState(null);
   const [reviews, setReviews] = useState(null);
@@ -94,15 +94,16 @@ useEffect(()=> {
             <Text style={styles.buttonText}>Leave a Review</Text>
         </TouchableOpacity>
     </View>
-  )
-};
+  );
+}
 
 const styles = StyleSheet.create({
 container: {
     flex: 1,
     backgroundColor: '#FAFAFA'
   },
-scrollContent: {
+  scrollContent: {
+    flexGrow:1,
     paddingTop: 12,
     paddingHorizontal: 15,
     paddingBottom: 100,
@@ -110,12 +111,12 @@ scrollContent: {
 reviewTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    marginHorizontal: 16,
+    marginVertical: 10,
   },
 reviewTextLeft: {
     fontSize: 16,
-    fontWeight: '700'
+    fontFamily:'Ubuntu-Medium',
   },
 commentContainer: {
     flex: 1,
@@ -123,11 +124,11 @@ commentContainer: {
 },
 leaveButton: {
     position: 'absolute',
-    bottom: 30,
-    left: 20,
-    right: 20,
+    zIndex:1,
+    bottom: 10,
+    left: 16,
+    right: 16,
     backgroundColor: '#FFB300',
-    marginBottom: 40,
     paddingVertical: 10,
     borderRadius: 50,
     justifyContent: 'center',
@@ -136,7 +137,7 @@ leaveButton: {
 buttonText:{
     fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: '700'
+     fontFamily:'Ubuntu-Bold'
 }
 })
 export default Reviews;

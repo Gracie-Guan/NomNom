@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ImageBackground,Image, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -6,10 +7,30 @@ import { Dropdown } from 'react-native-element-dropdown';
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
+  const [ethnicity, setEthnicity] = useState('');
+  const [dietaryRestrictions, setDietaryRestrictions] = useState('');
+  const [diningPreferences, setDiningPreferences] = useState([]);
 
-  const handleSignUp = () => {
-    navigation.navigate('Home');
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post('http://localhost:6868/auth/register', {
+        username: name,
+        email: email,
+        password: password,
+        ethnicity: ethnicity,
+        dietary_restrictions: dietaryRestrictions,
+        dining_preferences: diningPreferences
+      });
+
+      if (response.status === 201) {
+        // Registration successful, navigate to Home or show a success message
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      // Show error message
+      Alert.alert('Registration Failed', error.response?.data?.message || 'Something went wrong!');
+    }
   };
 
   const [currentCard, setCurrentCard] = useState(0)
@@ -53,7 +74,8 @@ const SignUpScreen = ({ navigation }) => {
 
   const nextCard = () => {
     if (currentCard === cards.length - 1) {
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
+        handleSignUp(); // Submit the form data on the last card
       } else {
         setCurrentCard((prevIndex) => (prevIndex + 1) % cards.length);
       }
@@ -70,7 +92,7 @@ const SignUpScreen = ({ navigation }) => {
     { label: 'German', value: 'german' },
     { label: 'Indian', value: 'indian' },
     { label: 'Irish', value: 'irish' },
-    { label: 'Japanese', value: 'janpanese' },
+    { label: 'Japanese', value: 'japanese' },
   ];
 
   const [value, setValue] = useState(null);
@@ -86,7 +108,7 @@ const SignUpScreen = ({ navigation }) => {
   ];
 
   const [selectedTags, setSelectedTags] = useState([]);
-  const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-fridendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
+  const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-friendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
   const MAX_TAGS = 5;
   const toggleTag = (tag) => {
     if (selectedTags.includes(tag)) {
@@ -156,11 +178,13 @@ const SignUpScreen = ({ navigation }) => {
                                         valueField="value"
                                         placeholder={!isFocus ? 'Select your ethnicity' : '...'}
                                         searchPlaceholder="Search..."
-                                        value={value}
+                                        // value={value}
+                                        value={ethnicity} 
                                         onFocus={() => setIsFocus(true)}
                                         onBlur={() => setIsFocus(false)}
                                         onChange={item => {
-                                            setValue(item.value);
+                                            // setValue(item.value);
+                                            setEthnicity(item.value);  // Update state
                                             setIsFocus(false);
                                         }}
                                     />
@@ -183,13 +207,14 @@ const SignUpScreen = ({ navigation }) => {
                                         maxHeight={210}
                                         labelField="label"
                                         valueField="value"
-                                        placeholder={!isFocus ? 'Select your restraction' : '...'}
+                                        placeholder={!isFocus ? 'Select your restriction' : '...'}
                                         searchPlaceholder="Search..."
-                                        value={value}
+                                        value={dietaryRestrictions}
                                         onFocus={() => setIsFocus(true)}
                                         onBlur={() => setIsFocus(false)}
                                         onChange={item => {
-                                            setValue(item.value);
+                                            // setValue(item.value);
+                                            setDietaryRestrictions(item.value);  // Update state
                                             setIsFocus(false);
                                         }}
                                     />

@@ -1,42 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
+import { RestaurantContext } from '../Context/RestaurantContext';
 
-// const dishesData= [
-//   {
-//       id: 1,
-//       dishPhoto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQW26PAs2xhRm4OD9NopajG-Dwu032ADabTw&s',
-//       dishName: 'Tiramisu'
-//   },
-//   {
-//       id: 2,
-//       dishPhoto: 'https://bmppnorthridgeca.com/wp-content/uploads/2023/10/Lasagna-1024x536-1.png',
-//       dishName: 'Pizza'
-//   },
-//   {
-//       id: 3,
-//       dishPhoto: 'https://images.squarespace-cdn.com/content/v1/5e484ab628c78d6f7e602d73/c0adbacb-2928-4a48-ad5e-65b6524e15e9/What+to+eat+in+Rome%2C+Italy-Caccio+e+Pepe-min.png',
-//       dishName: 'Pasta'
-//   },
-//   {
-//       id: 4,
-//       dishPhoto: 'https://www.weaversorchard.com/wp-content/uploads/2019/06/Frutti-Di-Bosco-Gelato-1000.jpg',
-//       dishName: 'Ice cream'
-//   },
-// ]
-
-
-const PopDishes = ({ restaurantId }) => {
+const PopDishes = ({ }) => {
     const [dishesData, setDishesData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const { restaurant } = useContext(RestaurantContext);
   
     useEffect(() => {
       const fetchDishes = async () => {
+        if (!restaurant || !restaurant._id) {
+          setError('No restaurant selected');
+          setLoading(false);
+          return;
+        }
+
         try {
+          const restaurantId = restaurant._id;
           console.log("restaurantId: ", restaurantId);
 
+          // Fetch the menu using the restaurantId
           const menuResponse = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
           const menus = menuResponse.data;
           
@@ -49,8 +36,6 @@ const PopDishes = ({ restaurantId }) => {
           console.log("menuId: ", menuId);
           // Fetch the dishes using the menuId
           const dishesResponse = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
-          console.log("menuId: ", menuId);
-
           const dishes = dishesResponse.data.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating)).slice(0, 4);
           setDishesData(dishes);
         } catch (err) {
@@ -62,7 +47,7 @@ const PopDishes = ({ restaurantId }) => {
       };
   
       fetchDishes();
-    }, [restaurantId]);
+    }, [restaurant]); 
   
     if (loading) {
       return <ActivityIndicator size="large" color="#FF9400" />;
@@ -88,11 +73,6 @@ const PopDishes = ({ restaurantId }) => {
         ))}
         </View>
     </ScrollView>
-    <View style={styles.dishbottom}>
-        <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.buttonText}>Explore Full Menu</Text>
-        </TouchableOpacity>
-    </View>
 </View>
   );
 };
@@ -134,23 +114,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     paddingTop: 5
    },
-   dishbottom: {
-    justifyContent: 'center',
-    alignItems: 'center'
-   },
-   menuButton: {
-    width: 350,
-    height: 30,
-    backgroundColor: '#FF9400',
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center'
-   },
-   buttonText: {
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 16,
-   },
+
 });
 
 export default PopDishes;

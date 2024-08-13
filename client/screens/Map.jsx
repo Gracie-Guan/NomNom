@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Platform, Linking } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Platform, Linking, SafeAreaView } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { UserLocation } from '../Context/UserLocation';
 import RestaurantCard from '../Components/RestroCards';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { calculateDistance, addDistanceToRestaurants } from '../utils/distance';
+import SearchTop from '../Components/SearchTop';
+import FilterBar from '../Components/FilterBar';
 
 export default function GoogleMapsView() {
   const [mapRegion, setMapRegion] = useState(null);
@@ -89,13 +91,18 @@ export default function GoogleMapsView() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+        <View style={styles.searchBlock}>        
+          <SearchTop  />
+          <FilterBar  />
+        </View>
       
         <MapView 
           style={styles.map} 
           showsUserLocation={true}
           region={mapRegion}
         >
+
         {restaurants.map((restaurant) => (
           <Marker
             key={restaurant._id}
@@ -128,13 +135,19 @@ export default function GoogleMapsView() {
           </View>
         )}
 
-    </View>
+    </SafeAreaView>
   );
 }
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: windowWidth,
+    height:windowHeight,
+    backgroundColor:'#fff',
   },
 
   card:{
@@ -151,15 +164,22 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    width: Dimensions.get('screen').width,
-    height: Dimensions.get('screen').height,
+    width: windowWidth,
+    height: windowHeight,
     padding: 10,
+  },
+
+  searchBlock:{
+    paddingHorizontal:16,
+    marginTop:15,
+    marginBottom:6,
+    gap:6,
   },
 
   goToUser:{
     position:'absolute',
     right:16,
-    top:'60%',
+    bottom:'35%',
     padding: 10,
     borderRadius:30,
     elevation:5,
@@ -169,7 +189,7 @@ const styles = StyleSheet.create({
   navToRestro:{
     position:'absolute',
     right:16,
-    top:'68%',
+    bottom:'27%',
     padding: 10,
     borderRadius:30,
     elevation:5,

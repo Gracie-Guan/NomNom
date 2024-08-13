@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image} from "react-native"
 
-const CuisineBar = () => {
+const CuisineBar = ({navigation}) => {
     const cuisines = [
         {
             id: 1,
@@ -10,7 +10,7 @@ const CuisineBar = () => {
         {
             id: 2,
             photo: 'https://www.tastingtable.com/img/gallery/20-japanese-dishes-you-need-to-try-at-least-once/l-intro-1664219638.jpg',
-            cuisine: 'Janpanese'
+            cuisine: 'Japanese'
         },
         {
             id: 3,
@@ -38,12 +38,17 @@ const CuisineBar = () => {
             cuisine: 'Irish'
         },
     ]
+
+    const handleSearch = () =>{
+        navigation.navigate('SearchList')
+    };
+
     return(
-        <View style={styles.cusineContainer}>
+        <View style={styles.cuisineContainer}>
         {cuisines.map((item)=>(
-            <TouchableOpacity style={styles.eachCusine} key={item.id}>
-                <Image source={{uri:item.photo}} style={styles.cusineImage}/>
-                <Text style={styles.cusineText}>{item.cuisine}</Text>
+            <TouchableOpacity style={styles.eachCuisine} key={item.id} onPress={handleSearch}>
+                <Image source={{uri:item.photo}} style={styles.cuisineImage}/>
+                <Text style={styles.cuisineText}>{item.cuisine}</Text>
             </TouchableOpacity>
         ))}
     </View>
@@ -51,21 +56,21 @@ const CuisineBar = () => {
 }
 
 const styles = StyleSheet.create({
-    cusineContainer: {
+    cuisineContainer: {
         paddingLeft: 20,
         flexDirection: 'row'
     },
-    eachCusine: {
+    eachCuisine: {
         paddingRight: 15,
         justifyContent: 'center',
         alignItems:'center',
     },
-    cusineImage: {
+    cuisineImage: {
         width: 60,
         height: 60,
         borderRadius: 50
     },
-    cusineText: {
+    cuisineText: {
         fontSize: 12,
         color: '#6E6E6E',
         fontWeight: '500',

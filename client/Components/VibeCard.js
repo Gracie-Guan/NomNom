@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Ima
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 
 
-const VibeCard = () => {
+const VibeCard = ({navigation}) => {
     const vibeTypes = [
         {
             id: 1,
@@ -36,10 +36,15 @@ const VibeCard = () => {
         },
         
     ]
+
+    const handleSearch = () =>{
+        navigation.navigate('SearchList')
+    };
+
     return(
         <View style={styles.vibeContainer}>
         {vibeTypes.map((item)=>(
-            <TouchableOpacity style={styles.vibeEach} key={item.id}>
+            <TouchableOpacity style={styles.vibeEach} key={item.id} onPress={handleSearch}>
                 <Image source={{uri:item.photo}} style={styles.vibeImage}/>
                 <View style={styles.vibeName}>
                     <Text style={styles.vibeNameText}>{item.vibe}</Text>
@@ -50,7 +55,6 @@ const VibeCard = () => {
     </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     vibeContainer: {

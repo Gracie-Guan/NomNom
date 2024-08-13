@@ -1,5 +1,4 @@
-import {  ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { List, Text} from 'react-native-paper';
+import {  ScrollView, StyleSheet, TouchableOpacity, View, Text, Alert, Platform } from 'react-native';
 import React, { useState } from 'react';
 import DishItem from '../../Components/DishItems';
 
@@ -74,6 +73,19 @@ export default function MenuDetails({ menuItems }) {
                 />
           ))}
         </ScrollView>
+
+        <View style={styles.uploadBox}>
+          <View style={styles.promptBox}>          
+            <Text style={styles.promptText}>Menu has changed? </Text>
+            <Text style={styles.promptText}>Help by uploading menu photos</Text> 
+          </View>
+          <TouchableOpacity 
+            style={styles.uploadButton}
+            onPress={()=> Alert.alert('upload function goes here')}  
+          >
+            <Text style={styles.buttonText}>Upload Menu</Text>
+          </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -110,22 +122,59 @@ const styles = StyleSheet.create({
   categoryTagText: {
     color: '#707070',
     fontSize: 12,
-    fontWeight:'700'
+    fontFamily: 'Ubuntu-Bold',
   },
   selectedCategoryTagText: {
     color: '#000000',
   },
   menuContainer: {
     flex: 1,
-    marginBottom: 30,
   },
   categoryTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Ubuntu-Bold',
     marginBottom: 15,
     marginLeft: 15,
     color: '#000'
   },
+
+  uploadBox: {
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingHorizontal:16,
+    paddingVertical:16,
+    backgroundColor:'#fff',
+    elevation: 8,  
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+  },
+  uploadButton: {
+    padding:10,
+    paddingHorizontal:15,
+    borderRadius:20,
+    backgroundColor:'#FFCDB2'
+  },
+
+  promptBox:{
+    flexDirection: 'column',
+    gap:2,
+  },
+
+  promptText:{
+    color:'#6e6e6e',
+    fontFamily:'Ubuntu-Regular',
+    fontSize: 14,
+  },
+  
+  buttonText:{
+    color:'221C19',
+    fontFamily:'Ubuntu-Medium',
+    fontSize:14,
+  }
 });
 
 export const title = 'Menu';

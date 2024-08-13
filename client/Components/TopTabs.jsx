@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import MenuInfo from './MenuInfo';
 import Photos from '../screens/Restaurant/Photos';
 import Reviews from '../screens/Restaurant/Reviews';
 import RestaurantOverview from '../screens/Restaurant/RestaurantOverview';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const uniquerestaurantId = "668ee8afc88d544d82f31746"; // yamamori
 
@@ -24,37 +25,64 @@ const photosData = [
   //...
 ];
 
-const OverviewRoute = () => (
-  <RestaurantOverview restaurantId={uniquerestaurantId} />
-);
+const TopTabs = (restaurantId) => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  // const restaurantId = route.params?.restaurantId || "668ee8afc88d544d82f31746";
 
-const MenuRoute = () => (
-  <MenuInfo restaurantId={uniquerestaurantId} />
-);
+  const OverviewRoute = () => (
+    <RestaurantOverview 
+      restaurantId={restaurantId} 
+      navigation={navigation}
+    />
+  );
 
 const PhotosRoute = () => (
-  <Photos restaurantId={uniquerestaurantId} />
+  <Photos restaurantId={uniquerestaurantId} navigation={navigation}/>
 );
 
-const ReviewsRoute = () => (
-  <Reviews restaurantId={uniquerestaurantId} />
-);
+  const MenuRoute = () => (
+    <MenuInfo 
+      restaurantId={restaurantId} 
+      navigation={navigation}
+    />
+  );
 
-const renderScene = SceneMap({
-  overview: OverviewRoute,
-  menu: MenuRoute,
-  photos: PhotosRoute,
-  review: ReviewsRoute,
-});
+  // const PhotosRoute = () => (
+  //   <Photos 
+  //     photos={photosData} 
+  //     navigation={navigation}
+  //   />
+  // );
 
-const TopTabs = () => {
+  const ReviewsRoute = () => (
+    <Reviews 
+      restaurantId={uniquerestaurantId} 
+      navigation={navigation}
+    />
+  );
+
   const [index, setIndex] = useState(0);
+
   const [routes] = useState([
     { key: 'overview', title: 'Overview' },
-    { key: 'menu', title: 'Menu' },
+    { key: 'menu', title: 'Menu' }, 
     { key: 'photos', title: 'Photos' },
     { key: 'review', title: 'Reviews' },
   ]);
+
+  const handleTabChange = (tabName) => {
+    const tabIndex = routes.findIndex(route => route.key === tabName);
+    if (tabIndex !== -1) {
+      setIndex(tabIndex);
+    }
+  };
+  const renderScene = SceneMap({
+    overview: () => <RestaurantOverview restaurantId={restaurantId} onTabChange={handleTabChange} />,
+    menu: MenuRoute,
+    photos: PhotosRoute,
+    review: ReviewsRoute,
+  });
 
   const renderTabBar = props => (
     <TabBar
@@ -67,15 +95,24 @@ const TopTabs = () => {
     />
   );
 
+  useEffect(() => {
+    if (route.params?.screen) {
+      const initialIndex = routes.findIndex(r => r.key === route.params.screen);
+      if (initialIndex !== -1) {
+        setIndex(initialIndex);
+      }
+    }
+  }, [route.params?.screen]);
+
   return (
     <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: Dimensions.get('window').width }}
-      renderTabBar={renderTabBar}
-    />
-  );
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: Dimensions.get('window').width }}
+          renderTabBar={renderTabBar}
+        />
+    );
 };
 
 const styles = StyleSheet.create({
@@ -87,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   indicator: {
-    backgroundColor: '#000000',
+    backgroundColor: '#FFB300',
   },
   tabLabel: {
     fontSize: 12,

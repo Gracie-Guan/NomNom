@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Button, ScrollView, SafeAreaView, Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
-const DishCard = ({ dish, restaurant, layout = 'default' }) => {
+const DishCard = ({  dish, restaurant, layout = 'default' }) => {
   // Use provided data or placeholders
+  
   const name = dish?.name || "Fiction Chips";
   const restName = restaurant?.name || "The Buttery";
   const rating = dish?.rating || "4.99";
@@ -21,14 +23,27 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
 
   const [isPressed, setIsPressed] = useState(false);
 
+  const navigation = useNavigation();
+
+  const handlePressToRestro = useCallback(() => {
+    console.log("Navigating with restaurantId:", restaurant._id);
+    if (restaurant && restaurant._id) {
+      navigation.navigate('RestaurantDetail', {
+        screen: 'RestaurantTabs',
+        params: { screen: 'overview', restaurantId: restaurant._id}
+      });
+    } else {
+      console.error('invalid restaurant data')
+    }
+  }, [navigation, restaurant]);
+
   const renderContent = () => {
     switch (layout) {
       // for home page and liked
       case 'default':
         return (
-          <View style={[styles.homeCard,styles.shadowSubtle]}>
+          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} onPress={handlePressToRestro}>
             <Image source={{ uri: image }} style={styles.homeImage} />
-
           
               <View style={styles.homePriceContainer}>
                 <Feather name="pocket" size={16} color="#fff" />
@@ -71,13 +86,13 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
               </View>
 
             </View>
-          </View>
+          </TouchableOpacity>
         );
         
       // for search result list 
       case 'list':
         return (
-          <View style={styles.listCard}>
+          <TouchableOpacity style={styles.listCard} onPress={handlePressToRestro}>
             <Image source={{ uri: image }} style={styles.listImage} />
 
             <View style={styles.listInfo}>
@@ -102,23 +117,23 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
               <Text style={styles.tinyText}>{distance} · &euro;{price}</Text>
 
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.detailsButton}>
+                <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
                   <Text style={styles.detailsButtonText}>Details</Text>
                   <Feather name="arrow-up-right" size={20} color="#fff" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.menuButton}>
-                  <Text style={styles.menuButtonText}>Menu</Text>
+                  <Text style={styles.menuButtonText} >Menu</Text>
                   <Feather name="pocket" size={16} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         );
 
       // for surprise me page
       case 'surprise':
         return (
-          <View style={styles.surpriseCard}>
+          <TouchableOpacity style={styles.surpriseCard} onPress={handlePressToRestro} >
             <Image 
               source={{ uri: image }} 
               style={styles.surpriseImage}
@@ -146,12 +161,12 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
               </View>
 
 
-              <TouchableOpacity style={styles.detailsButton}>
+              <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
                 <Text style={styles.detailsButtonText}>Details</Text>
                 <Feather name="arrow-up-right" size={20} color="#fff" />
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
         );
       default:
         return null;

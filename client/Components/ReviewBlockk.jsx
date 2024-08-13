@@ -3,6 +3,7 @@ import React from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 
 function ReviewBlock({review_info, restaurant_info, filterId}){
+
     const reviewData = [
         {
             id: '1',
@@ -41,18 +42,54 @@ function ReviewBlock({review_info, restaurant_info, filterId}){
             rating: 4,
             avatar: 'https://cdn3.iconfinder.com/data/icons/avatar-set/512/Avatar01-512.png',
             tags: [],
-            comment: 'The Irish stel reminds me of my mom cooking, cannot have it enough.',
+            comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
+            photos: [
+            ],
+            like: 13
+        },
+        {
+            id: '4',
+            userName: 'Cara',
+            userDate: '1 month ago',
+            rating: 3,
+            avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            tags: ['Dessert'],
+            comment: 'Not a big fan of Irish food, but I like the vibe in this pub. The portion was impressive.',
+            photos: [
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCkom1wMfJJeGRc7rwJa-Rkwgk7TkhuuG9w&s',
+                'https://media.cnn.com/api/v1/images/stellar/prod/160929101749-essential-spanish-dish-paella-phaidon.jpg?q=w_1900,h_1069,x_0,y_0,c_fill',
+                'https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg'
+            ],
+            like: 7
+        },
+        {
+            id: '5',
+            userName: 'Cara',
+            userDate: '21 days ago',
+            rating: 4,
+            avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            tags: [],
+            comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
             photos: [
             ],
             like: 13
         },
     ]
 
-    console.log("review_info", review_info);
+    // console.log("review_info", review_info);
 
     const filteredData = filterId ? reviewData.filter(review => review.id === filterId) : reviewData;
     // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
+    // let filteredData = reviewData;
+    // if (filterId) {
+    //     filteredData = filteredData.filter(review => review.id === filterId);
+    // }
+    
+    // if (filterName) {
+    //     filteredData = filteredData.filter(review => review.userName.toLowerCase().includes(filterName.toLowerCase()));
+    // }
+    
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
     {filteredData.map((review)=>(
@@ -134,12 +171,12 @@ const styles = StyleSheet.create({
       paddingTop: 5
   },
   userName:{
-      fontWeight: '700',
+      fontFamily:'Ubuntu-Medium',
       fontSize: 16
   },
   userDate: {
       color: '#9E9E9E',
-      fontWeight:'500'
+      fontFamily:'Ubuntu-Medium',
   },
   commentStar: {
       flexDirection: 'row',
@@ -166,6 +203,8 @@ const styles = StyleSheet.create({
     },
     tagText: {
       fontSize: 12,
+      fontFamily: 'Ubuntu-Regular',
+      color:'#6e6e6e'
     },
   comment: {
       paddingHorizontal: 18,
@@ -190,9 +229,8 @@ const styles = StyleSheet.create({
   },
   like: {
       flexDirection: 'row',
-      paddingLeft: 310,
-      paddingBottom: 15,
-      paddingTop: 10
+      paddingLeft:290,
+      marginVertical:15,
   },
   likeNumber: {
       paddingLeft: 5,

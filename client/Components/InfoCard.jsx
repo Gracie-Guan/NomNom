@@ -1,32 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {MaterialIcons, Feather} from '@expo/vector-icons'
-import axios from 'axios';
 import { RestaurantContext } from '../Context/RestaurantContext';
 
-const InfoCard = ({ restaurantId }) => {
-  // const [restaurant, setRestaurant] = useState(null);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+
+const InfoCard = ({ }) => {
+
   const { restaurant, loading, error } = useContext(RestaurantContext);
-
-  // useEffect(() => {
-  //   const fetchRestaurant = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:6868/restaurants/${restaurantId}`);
-  //       setRestaurant(response.data);
-  //     } catch (error) {
-  //       setError('Error fetching restaurant data');
-  //       console.error('Error fetching restaurant:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchRestaurant();
-  // }, [restaurantId]);
-
-
+  
   if (loading) {
     return (
       <View style={styles.loadingContainer}>

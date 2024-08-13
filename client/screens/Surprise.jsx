@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity, Text, Platform } from 'react-native';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Dimensions, SafeAreaView, TouchableOpacity, Text, Platform, ActivityIndicator } from 'react-native';
+import axios from 'axios';
 import RestaurantCard from '../Components/RestroCards';
 import DishCard from '../Components/DishCards';
 import ToggleButton from '../Components/ToggleButton';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
 const Surprise = ({navigation}) => {
   const [showRestaurant, setShowRestaurant] = useState(true);
+  const [randomRestaurant, setRandomRestaurant] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchRandomRestaurant = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axios.get('http://localhost:6868/restaurants');
+      const restaurants = response.data;
+      if (restaurants.length > 0) {
+        const randomIndex = Math.floor(Math.random() * restaurants.length);
+        setRandomRestaurant(restaurants[randomIndex]);
+      } else {
+        setError('No restaurants available');
+      }
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+      setError('Error fetching restaurants');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRandomRestaurant();
+  }, [fetchRandomRestaurant]);
 
   const handleToggle = (isRestro) => {
     setShowRestaurant(isRestro);
@@ -16,6 +45,27 @@ const Surprise = ({navigation}) => {
   const handleBack = () => {
     navigation.goBack();
   };
+
+  const handleRefresh = () => {
+    fetchRandomRestaurant();
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#221C19" />
+      </SafeAreaView>
+    );
+  }
+
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>{error}</Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -29,39 +79,42 @@ const Surprise = ({navigation}) => {
         <View style={styles.cardContainer}>
           {showRestaurant ? (
             <View>
-              <RestaurantCard layout="surprise" />
+              {randomRestaurant && (
+                <RestaurantCard restaurant={randomRestaurant} layout="surprise" />
+              )}
+                <View style={styles.stackcard1}></View>
+                <View style={styles.stackcard2}></View>
             </View>
-
           ) : (
-            <View>
+            <View layout='cardStack'>
               <DishCard layout='surprise' />
+              <View style={styles.stackcard1}></View>
+              <View style={styles.stackcard2}></View>
             </View>
           )}
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.smallButton} onPress>
+          <TouchableOpacity style={styles.smallButton} >
            <Feather name="rotate-ccw" size={24} color="#9e9e9e" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.mehButton} onPress>
+          <TouchableOpacity style={styles.mehButton} onPress={handleRefresh}>
             <Feather name="meh" size={40} color="#FFEDD1" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.likeButton} onPress>
+          <TouchableOpacity style={styles.likeButton}>
             <Ionicons name="heart" size={40} color="#FFEDD1" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.smallButton} onPress>
+          <TouchableOpacity style={styles.smallButton}>
             <Ionicons name="navigate-outline" size={24} color="#FFB300" />
           </TouchableOpacity>
-
         </View>
       </View>
     </SafeAreaView>
   );
 }
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -73,7 +126,59 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFB300', 
   },
   
-  
+  cardStack:{
+    width: windowWidth * 0.8,
+    height: windowHeight * 0.55,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+
+  stackcard1:{
+    width: windowWidth * 0.75,
+    height: windowHeight * 0.52,
+    borderRadius:20,
+    overflow:'hidden',
+    backgroundColor:'#fff',
+    position:'absolute',
+    bottom:30,
+    left:10,
+    zIndex:-1,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#221C19',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+
+  stackcard2:{
+    width: windowWidth * 0.7,
+    height: windowHeight * 0.5,
+    borderRadius:20,
+    overflow:'hidden',
+    backgroundColor:'#fff',
+    position:'absolute',
+    bottom:20,
+    left:20,
+    zIndex:-2,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#221C19',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+
   content: {
     flex: 1,
     justifyContent: 'center',
@@ -143,7 +248,6 @@ const styles = StyleSheet.create({
     borderRadius:40,
     justifyContent:'center',
     alignItems:'center',
-
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -164,7 +268,6 @@ const styles = StyleSheet.create({
     borderRadius:40,
     justifyContent:'center',
     alignItems:'center',
-
     ...Platform.select({
       ios: {
         shadowColor: '#000',
