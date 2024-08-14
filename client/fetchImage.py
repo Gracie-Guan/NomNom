@@ -102,16 +102,26 @@ def extract_text(source, filename):
 
     # response = model.generate_content(["Extract the text information and put it into a simple structured JSON table with following structure: " + ' "categories": [ {"name": "Starters", "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string" (if legible), "price": "number", "note": "string" } ] }, { "name": "Main Dishes", "dishes": [ { "name": "string", "description": "string", "price": "number" }, { "name": "string", "description": "string", "price": "number" }]}]. The default for "note" is empty, if there is information about add-ons or similar things, then insert "Add-ons available." ' , img], stream=True)
 
-    response = model.generate_content(["Extract the text information and put it into a simple structured JSON table with following structure: " + format + '. The default for "note" is empty, if there is information about add-ons or similar things, consider inserting "Add-ons available." ' , source], stream=True)
+    first_response = model.generate_content(["Extract the text information and put it into a simple but valid structured JSON table with following structure: " + format + '. The default for "note" is empty, if there is information about add-ons or similar things, consider inserting "Add-ons available." ' , source], stream=True)
 
-    response.resolve()
+    first_response.resolve()
 
-    print(response.text)
+    # second = model.generate_content('Check the following json structure. The last few brackets are missing, please make sure that it ends with }]}]} }]}: ' + first_response.text  + ' Return only the fixed json structure.')
+
+    # print(response.text)
+
+    response = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]} }]}'
+
+    # print(response)
+
+    # response.resolve()
+
+    # response = second_response.text[:-2] + "}" + second_response.text[-2:]
 
     with open("/Users/kieutrangnguyenvu/Downloads/ocr/menu-json/" + filename.split("/")[-1].split(".")[0] + "_02.json", "w") as fw:
-        fw.write(response.text.strip("```json\n").strip("```"))
+        fw.write(response.strip("```json\n").strip("```"))
 
-    return response.text.strip("```json\n").strip("```")
+    return response.strip("```json\n").strip("```")
 
 if __name__ == '__main__':
     app.run(debug=True)

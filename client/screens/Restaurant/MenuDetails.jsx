@@ -74,7 +74,7 @@ export default function MenuDetails({ menuItems }) {
           ))}
         </ScrollView>
 
-        <View style={styles.uploadBox}>
+        {/* <View style={styles.uploadBox}>
           <View style={styles.promptBox}>          
             <Text style={styles.promptText}>Menu has changed? </Text>
             <Text style={styles.promptText}>Help by uploading menu photos</Text> 
@@ -85,7 +85,7 @@ export default function MenuDetails({ menuItems }) {
           >
             <Text style={styles.buttonText}>Upload Menu</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
     </View>
   );
 }
