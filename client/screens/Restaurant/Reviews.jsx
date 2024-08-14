@@ -5,10 +5,12 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { RestaurantContext } from '../../Context/RestaurantContext';
 
 
-const Reviews = ({restaurantId}) => {
-
+const Reviews = ({ }) => {
+  const { restaurant } = useContext(RestaurantContext);
+  const restaurantId = restaurant?._id;
   const [ratings, setRatings] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,9 +49,11 @@ const Reviews = ({restaurantId}) => {
     }, 500);
 }
 
-useEffect(()=> {
-  fetchRatings();
-  }, [restaurantId]);
+useEffect(() => {
+  if (restaurantId) {
+    fetchRatings();
+  }
+}, [restaurantId]);
 
   // console.log(menuItems);
 

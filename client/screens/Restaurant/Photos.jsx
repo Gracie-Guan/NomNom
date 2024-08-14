@@ -1,54 +1,37 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Image, FlatList, StyleSheet, Dimensions, Modal, TouchableOpacity, ActivityIndicator } from 'react-native';
-import axios from 'axios';
+import { RestaurantContext } from '../../Context/RestaurantContext';
 
 const numColumns = 2;
 const screenWidth = Dimensions.get('window').width;
 const itemWidth = (screenWidth - (numColumns + 1) * 10) / numColumns;
 
-const Photos = ({ restaurantId }) => {
+const Photos = ({ }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [photos, setPhotos] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { restaurant, error } = useContext(RestaurantContext);
 
-  const restaurant_id = "6691378108abb998e1cc6038" // hard-coded
+  const [photos, setPhotos] = useState([]);
 
-  const fetchPhotos = async () => {
+
+useEffect(() => {
+  if (restaurant) {
     setLoading(true);
 
-    setTimeout(async () => {
+    const images = restaurant.image || [];
 
-    try {
-      console.log("Photos - restaurantId nimish is a dick: ", restaurant_id);
-      
-      const first_response = await axios.get(`http://localhost:6868/restaurants/${restaurant_id}`);
-
-      // response.data is an array of menus
-      console.log("Photos - first response: ", first_response.data.image);
-
-      // const ratingsresponse = first_response.data;
-      const sortedPhotos = first_response.data.image.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at));
-      // Access the restaurant_id of the first (and only) menu
-      // const menuId = menus[0].menu_id;
-      // const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
-
-      // console.log(second_response.data);
+    if (Array.isArray(images)) {
+      const sortedPhotos = images.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at));
       setPhotos(sortedPhotos);
-      // console.log("Reviews - is rating empty?: ", ratingsresponse);
-    } catch (error) {
-      setError('Error fetching photos data');
-      console.error('Error fetching photos:', error);
-    } finally {
-      setLoading(false);
+    } else {
+      setPhotos([]);
     }
-  }, 500);
-}
 
-useEffect(()=> {
-  fetchPhotos();
-}, [restaurantId]);
+    setLoading(false);
+  }
+}, [restaurant]);
+
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handlePhotoPress(item.url)}>
