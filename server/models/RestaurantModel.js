@@ -41,7 +41,7 @@ const Restaurant = mongoose.model('restaurant', restaurantSchema);
 class RestaurantModel {
 
     static async getRestaurantList(){
-        return Restaurant.find({},'_id name price_level cuisine features image latitude longitude address_obj rating')
+        return Restaurant.find({}, '_id name price_level cuisine features image')
     }
 
     static async getRestaurantById(restaurantId){

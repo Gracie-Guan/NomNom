@@ -9,8 +9,6 @@ import TabNav from './Navigations/TabNav';
 import { UserLocation } from './Context/UserLocation';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { RestaurantProvider } from './Context/RestaurantContext';
-import { AuthProvider } from './Context/AuthContext';
 
 export default function App() {
   const [location, setLocation] = useState(null);
@@ -35,28 +33,14 @@ export default function App() {
     })();
   }, []);
 
-  // return (
-  //   <View style={styles.container}>
-  //     <UserLocation.Provider 
-  //     value={{location, setLocation}}>
-  //       <NavigationContainer>
-  //         <TabNav />  
-  //       </NavigationContainer>        
-  //     </UserLocation.Provider>  
-  if (!loaded) {
-    return null; 
-  }
-
   return (
     <View style={styles.container}>
-       <RestaurantProvider>
-          <UserLocation.Provider 
-             value={{location, setLocation}}>
-            <NavigationContainer>
-              <TabNav />  
-            </NavigationContainer>        
-          </UserLocation.Provider>  
-       </RestaurantProvider>
+      <UserLocation.Provider 
+      value={{location, setLocation}}>
+        <NavigationContainer>
+          <TabNav />  
+        </NavigationContainer>        
+      </UserLocation.Provider>  
     </View>
   );
 }
@@ -67,7 +51,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   text: {
-    // fontFamily: 'Ubuntu',
-    fontFamily: 'Ubuntu-Regular',
+    fontFamily: 'Ubuntu',
   },
 })

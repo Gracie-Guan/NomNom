@@ -2,13 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('./models/db'); 
 const cors = require('cors');
-const Menu = require('./models/MenuModel');
+
 const app = express();
 const port = 6868;
-app.use(cors());
 
 app.use(cors());
-app.use(express.json());
 
 // Check database connection status
 mongoose.connection.once('open', () => {
@@ -31,14 +29,5 @@ app.use("/menus", menuRouter);
 app.use(bodyParser.json());
 const dishRouter = require('./routes/Dishes');
 app.use("/dishes", dishRouter);
-
-const dishRouter = require('./routes/Dishes');
-app.use("/dishes", dishRouter);
-
-const reviewRouter = require('./routes/Reviews');
-app.use("/reviews", reviewRouter);
-
-const authRouter = require('./routes/Users');
-app.use("/auth", authRouter);
 
 app.listen(port, () => console.log(`APP listening on port ${port}!`));
