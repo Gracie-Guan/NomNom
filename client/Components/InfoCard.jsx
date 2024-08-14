@@ -37,7 +37,7 @@ const InfoCard = ({ }) => {
   return(
 <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: restaurant.image }} style={styles.topImage} />
+        <Image source={{ uri: restaurant.image[0].url }} style={styles.topImage} />
         <TouchableOpacity style={styles.heartContainer}>
           <Feather name="heart" size={20} color="#fff" style={styles.heartIcon} />
         </TouchableOpacity>

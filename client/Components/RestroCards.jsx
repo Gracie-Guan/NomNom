@@ -19,7 +19,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
   const cuisine = restaurant?.cuisine?.map(c => c.localized_name).join(', ') || "Irish";
   const distance = restaurant?.distance || "3.5 km";
   const price = restaurant?.price_level || "€200";
-  const image = restaurant?.image || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+  const image = restaurant?.image?.[0]?.url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   const totalReviews = restaurant?.review_rating_count
     ? Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count), 0)

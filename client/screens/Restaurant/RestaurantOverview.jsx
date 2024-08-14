@@ -33,7 +33,7 @@ const RestaurantOverview = ({ onTabChange}) => {
   }
 
   const handleLeaveReview = () =>{
-    navigation.navigate('leaveReview', {restaurantId:restaurant._id});
+    navigation.navigate('leaveReview');
   }
   
 

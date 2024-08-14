@@ -2,6 +2,7 @@ import { View, Text ,StyleSheet,Image,  ScrollView} from 'react-native'
 import React from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 
+
 function ReviewBlock({review_info, restaurant_info, filterId}){
 
     const reviewData = [
