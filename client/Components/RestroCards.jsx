@@ -6,12 +6,16 @@ import Feather from '@expo/vector-icons/Feather';
 import { Link } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { RestaurantContext } from '../Context/RestaurantContext';
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 
 const RestaurantCard = ({ restaurant, layout = 'default' }) => {
+  const { user, setUser } = useContext(AuthContext); 
+
   const id = restaurant?._id || " ";
   const name = restaurant?.name || "Fiction Bistro";
   const rating = restaurant?.rating || "4.99";
@@ -25,8 +29,8 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
     ? Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count), 0)
     : 0;
 
-
-  const [isPressed, setIsPressed] = useState(false);
+  const isFavourite = user?.favouriteRestaurant.includes(id);
+  const [isPressed, setIsPressed] = useState(isFavourite);
 
   const navigation = useNavigation();
 
@@ -56,6 +60,33 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
     }
   }, [navigation, restaurant]);
 
+
+  const toggleFavourite = async () => {
+    const action = isPressed ? 'remove' : 'add';
+
+    try {
+      const response = await fetch(`http://localhost:6868/user/${user.id}/favourites/restaurant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ userId: user.id, restaurantId: id, action })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
+      }
+
+      const data = await response.json();
+      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+      setUser(updatedUser);
+      setIsPressed(!isPressed);
+    } catch (error) {
+      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+    }
+  };
+
   const renderContent = () => {
     switch (layout) {
       // for home page and liked
@@ -72,7 +103,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
               
               
               <TouchableOpacity
-                  onPress={()=> setIsPressed(!isPressed)}
+                  onPress={toggleFavourite}
                   activeOpacity={1}
                   style = {styles.likeButton}>
                   <Ionicons 

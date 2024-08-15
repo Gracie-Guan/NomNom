@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions, Button, ScrollView, SafeAreaView, Platform } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 const DishCard = ({  dish, restaurant, layout = 'default' }) => {
-  // Use provided data or placeholders
-  
+  const { user, setUser } = useContext(AuthContext);
+
+  const dishId = dish?._id || " ";
   const name = dish?.name || "Fiction Chips";
   const restName = restaurant?.name || "The Buttery";
   const rating = dish?.rating || "4.99";
@@ -21,7 +24,8 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
   const price = dish?.price || "20";
   const image = dish?.image || 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
-  const [isPressed, setIsPressed] = useState(false);
+  const isFavourite = user?.favouriteDish.includes(dishId);
+  const [isPressed, setIsPressed] = useState(isFavourite);
 
   const navigation = useNavigation();
 
@@ -37,6 +41,32 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
     }
   }, [navigation, restaurant]);
 
+  const toggleFavourite = async () => {
+    const action = isPressed ? 'remove' : 'add';
+
+    try {
+      const response = await fetch(`http://localhost:6868/user/${user.id}/favourites/dish`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ userId: user.id, dishId, action })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
+      }
+
+      const data = await response.json();
+      const updatedUser = { ...user, favouriteDish: data.favourite_dish };
+      setUser(updatedUser);
+      setIsPressed(!isPressed);
+    } catch (error) {
+      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+    }
+  };
+
   const renderContent = () => {
     switch (layout) {
       // for home page and liked
@@ -51,7 +81,7 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
               </View>
               
               <TouchableOpacity
-                  onPress={()=> setIsPressed(!isPressed)}
+                  onPress={toggleFavourite}
                   activeOpacity={1}
                   style = {styles.likeButton}>
                   <Ionicons 

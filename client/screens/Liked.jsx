@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import ToggleButton from '../Components/ToggleButton';
 import RestaurantCard from '../Components/RestroCards';
 import DishCard from '../Components/DishCards';
 import Feather from '@expo/vector-icons/Feather';
+import { AuthContext } from '../Context/AuthContext';
+import axios from 'axios';
 
 
 const Liked = ({ navigation }) => {
   const [showRestaurants, setShowRestaurants] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
+  const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  // console.log('User favourite restaurants:', user.favouriteRestaurant);
+
+
+  useEffect(() => {
+    const fetchRestaurantsAndDishes = async () => {
+      try {
+        const restaurantsResponse = await axios.get('http://localhost:6868/restaurants');
+        setRestaurants(restaurantsResponse.data);
+
+        const dishesResponse = await axios.get('http://localhost:6868/dishes');
+        setDishes(dishesResponse.data);
+
+      } catch (err) {
+        console.error("Error fetching restaurants:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurantsAndDishes();
+  }, []);
 
   const handleToggle = (isRestro) => {
     setShowRestaurants(isRestro);
@@ -16,6 +43,26 @@ const Liked = ({ navigation }) => {
   const handleBack = () => {
     navigation.goBack();
   };
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  // const filteredRestaurants = restaurants.filter(restaurant => 
+  //   user.favouriteRestaurant.includes(restaurant._id)
+  // );
+
+const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
+  const favouriteDishSet = new Set(user.favouriteDish);
+
+  const filteredRestaurants = restaurants.filter(restaurant => 
+    favouriteRestaurantSet.has(restaurant._id)
+  );
+
+  const filteredDishes = dishes.filter(dish => 
+    favouriteDishSet.has(dish._id)
+  );
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,13 +80,34 @@ const Liked = ({ navigation }) => {
       </View>
       <ScrollView contentContainerStyle={styles.cardContainer}>
         {showRestaurants ? (
-          <View>
-            <RestaurantCard layout="default" />
-            {/* <RestaurantCard layout='list'/> */}
-          </View>
+           <View>
+            {filteredRestaurants.length > 0 ? (
+              filteredRestaurants.map(restaurant => (
+                <RestaurantCard 
+                  key={restaurant._id} 
+                  restaurant={restaurant} 
+                  layout="default" 
+                />
+              ))
+           ) : (
+             <Text>No favourite restaurants found.</Text>
+           )}
+         </View>
 
         ) : (
-          <DishCard layout="default" />
+          <View>
+            {filteredDishes.length > 0 ? (
+              filteredDishes.map((dish) => (
+                <DishCard 
+                  key={dish._id}  
+                  dish={dish}
+                  layout="default" 
+                />
+              ))
+            ) : (
+              <Text>No favourite dishes found.</Text>
+            )}
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>

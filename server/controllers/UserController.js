@@ -58,6 +58,33 @@ class UserController {
             res.status(404).json({ message: error.message });
         }
     }
+
+     static async toggleLikeRestaurant(req, res) {
+        const { userId, restaurantId, action } = req.body;
+        try {
+            const user = await UserModel.toggleLikeRestaurant(userId, restaurantId, action);
+            res.status(200).json({
+                message: `Restaurant ${action === 'add' ? 'added to' : 'removed from'} favourites`,
+                favourite_restaurant: user.favourite_restaurant
+            });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async toggleLikeDish(req, res) {
+        const { userId, dishId, action } = req.body;
+        try {
+            const user = await UserModel.toggleLikeDish(userId, dishId, action);
+            res.status(200).json({
+                message: `Dish ${action === 'add' ? 'added to' : 'removed from'} favourites`,
+                favourite_dish: user.favourite_dish
+            });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
 }
 
 module.exports = UserController;
