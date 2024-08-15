@@ -11,7 +11,7 @@ import { RestaurantContext } from '../../Context/RestaurantContext';
 const Reviews = ({ }) => {
   const { restaurant } = useContext(RestaurantContext);
   const restaurantId = restaurant?._id;
-  const [ratings, setRatings] = useState(null);
+  // const [ratings, setRatings] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const Reviews = ({ }) => {
       try {
         console.log("Reviews - restaurantId: ", restaurantId);
         
-        const first_response = await axios.get(`http://localhost:6868/reviews/restaurantId/${restaurantId}`);
+        const first_response = await axios.get(`http://localhost:6868/reviews/restaurant/${restaurantId}`);
 
         // response.data is an array of menus
         console.log("Reviews - first response: ", first_response.data[0]);
@@ -37,7 +37,6 @@ const Reviews = ({ }) => {
         // const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`)
 
         // console.log(second_response.data);
-        setRatings(first_response.data[0]);
         setReviews(first_response.data);
         // console.log("Reviews - is rating empty?: ", ratingsresponse);
       } catch (error) {
@@ -91,13 +90,13 @@ useEffect(() => {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-            <RatingCard rating_info={ratings} />
+            <RatingCard reviews={reviews} />
             <View style={styles.reviewTitle}>
                 <Text style={styles.reviewTextLeft}>Reviews</Text>
                 <Text style={styles.reviewTextRight}>Latest</Text>
             </View>
             <View style={styles.commentContainer}>
-                <ReviewBlock review_info={reviews} restaurant_info={restaurantId}/>
+                <ReviewBlock reviews={reviews} restaurantId={restaurantId}/>
             </View>
         </ScrollView>
         <View style={styles.buttonContainer}>

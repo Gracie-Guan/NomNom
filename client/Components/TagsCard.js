@@ -1,16 +1,15 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
-import { useEffect, useState} from "react";
 
-const TagsCard= () => {
-    const [selectedTags, setSelectedTags] = useState([]);
+const TagsCard= ({ tags, setTags }) => {
     const tagsData = ['Family-friendly', 'Fine-Dining', 'Date', 'Quick Bite', 'Buffet', 'BBQ', 'Brunch', 'Budget-fridendly', 'Thai', 'Spanish', 'Street food', 'Italian'];
+
     const toggleTag = (tag) => {
-      if (selectedTags.includes(tag)) {
-        setSelectedTags(selectedTags.filter(t => t !== tag));
+      if (tags.includes(tag)) {
+          setTags(tags.filter(t => t !== tag));
       } else {
-        setSelectedTags([...selectedTags, tag]);
+          setTags([...tags, tag]);
       }
-    };
+  };
 
     return(
             <View style={styles.tagsCard}>
@@ -21,13 +20,13 @@ const TagsCard= () => {
                     key={tag}
                     style={[
                         styles.tag,
-                        selectedTags.includes(tag) && styles.selectedTag,
+                        tags.includes(tag) && styles.selectedTag,
                     ]}
                     onPress={() => toggleTag(tag)}
                     >
                         <Text style={[
                             styles.tagText,
-                            selectedTags.includes(tag) && styles.selectedTagText
+                            tags.includes(tag) && styles.selectedTagText
                         ]}>
                             {tag}
                         </Text>

@@ -1,85 +1,112 @@
 import { View, Text ,StyleSheet,Image,  ScrollView} from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
+import axios from 'axios';
 
 
-function ReviewBlock({review_info, restaurant_info, filterId}){
+function ReviewBlock({reviews, filterId}){
 
-    const reviewData = [
-        {
-            id: '1',
-            userName: 'Jenna Aubert',
-            userDate: '1 month ago',
-            rating: 3,
-            avatar: 'https://marketplace.canva.com/EAFqNrAJpQs/1/0/1600w/canva-neutral-pink-modern-circle-shape-linkedin-profile-picture-WAhofEY5L1U.jpg',
-            tags: ['Dessert', 'Irish', 'Pub', 'Vibe'],
-            comment: 'Not a big fan of Irish food, but I like the vibe in this pub. The portion was impressive.',
-            photos: [
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCkom1wMfJJeGRc7rwJa-Rkwgk7TkhuuG9w&s',
-                'https://media.cnn.com/api/v1/images/stellar/prod/160929101749-essential-spanish-dish-paella-phaidon.jpg?q=w_1900,h_1069,x_0,y_0,c_fill',
-                'https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg'
-            ],
-            like: 7
-        },
-        {
-            id: '2',
-            userName: 'John Doe',
-            userDate: '2 weeks ago',
-            rating: 5,
-            avatar: 'https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg',
-            tags: ['Service', 'Vibe'],
-            comment: 'Great service and atmosphere! I would definitely come back.',
-            photos: [
-                'https://www.irishfoodwritersguild.ie/wp-content/uploads/2021/04/Banner2024_5_regan_organic_chicken.jpg',
-                'https://images.ctfassets.net/awb1we50v0om/2Spf80TME2zIhLqsi3Zxv9/919421a45f3260ee426c99c35235f1c8/Plates03__3__copy3.jpg',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRfpZB0_3qGRT0vx7Jlw662goIgQc9en4esg&s'
-            ],
-            like: 12
-        },
-        {
-            id: '3',
-            userName: 'Brian K',
-            userDate: '21 days ago',
-            rating: 4,
-            avatar: 'https://cdn3.iconfinder.com/data/icons/avatar-set/512/Avatar01-512.png',
-            tags: [],
-            comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
-            photos: [
-            ],
-            like: 13
-        },
-        {
-            id: '4',
-            userName: 'Cara',
-            userDate: '1 month ago',
-            rating: 3,
-            avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            tags: ['Dessert'],
-            comment: 'Not a big fan of Irish food, but I like the vibe in this pub. The portion was impressive.',
-            photos: [
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCkom1wMfJJeGRc7rwJa-Rkwgk7TkhuuG9w&s',
-                'https://media.cnn.com/api/v1/images/stellar/prod/160929101749-essential-spanish-dish-paella-phaidon.jpg?q=w_1900,h_1069,x_0,y_0,c_fill',
-                'https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg'
-            ],
-            like: 7
-        },
-        {
-            id: '5',
-            userName: 'Cara',
-            userDate: '21 days ago',
-            rating: 4,
-            avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            tags: [],
-            comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
-            photos: [
-            ],
-            like: 13
-        },
-    ]
+    const [reviewsWithUserData, setReviewsWithUserData] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const reviewsWithUsers = await Promise.all(
+                    reviews.map(async (review) => {
+                        const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
+                        return {
+                            ...review,
+                            userName: userResponse.data.name,
+                            avatar: userResponse.data.profile_image,
+                        };
+                    })
+                );
+                setReviewsWithUserData(reviewsWithUsers);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, [reviews]);
+
+    // const reviewData = [
+    //     {
+    //         id: '1',
+    //         userName: 'Jenna Aubert',
+    //         userDate: '1 month ago',
+    //         rating: 3,
+    //         avatar: 'https://marketplace.canva.com/EAFqNrAJpQs/1/0/1600w/canva-neutral-pink-modern-circle-shape-linkedin-profile-picture-WAhofEY5L1U.jpg',
+    //         tags: ['Dessert', 'Irish', 'Pub', 'Vibe'],
+    //         comment: 'Not a big fan of Irish food, but I like the vibe in this pub. The portion was impressive.',
+    //         photos: [
+    //             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCkom1wMfJJeGRc7rwJa-Rkwgk7TkhuuG9w&s',
+    //             'https://media.cnn.com/api/v1/images/stellar/prod/160929101749-essential-spanish-dish-paella-phaidon.jpg?q=w_1900,h_1069,x_0,y_0,c_fill',
+    //             'https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg'
+    //         ],
+    //         like: 7
+    //     },
+    //     {
+    //         id: '2',
+    //         userName: 'John Doe',
+    //         userDate: '2 weeks ago',
+    //         rating: 5,
+    //         avatar: 'https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg',
+    //         tags: ['Service', 'Vibe'],
+    //         comment: 'Great service and atmosphere! I would definitely come back.',
+    //         photos: [
+    //             'https://www.irishfoodwritersguild.ie/wp-content/uploads/2021/04/Banner2024_5_regan_organic_chicken.jpg',
+    //             'https://images.ctfassets.net/awb1we50v0om/2Spf80TME2zIhLqsi3Zxv9/919421a45f3260ee426c99c35235f1c8/Plates03__3__copy3.jpg',
+    //             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRfpZB0_3qGRT0vx7Jlw662goIgQc9en4esg&s'
+    //         ],
+    //         like: 12
+    //     },
+    //     {
+    //         id: '3',
+    //         userName: 'Brian K',
+    //         userDate: '21 days ago',
+    //         rating: 4,
+    //         avatar: 'https://cdn3.iconfinder.com/data/icons/avatar-set/512/Avatar01-512.png',
+    //         tags: [],
+    //         comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
+    //         photos: [
+    //         ],
+    //         like: 13
+    //     },
+    //     {
+    //         id: '4',
+    //         userName: 'Cara',
+    //         userDate: '1 month ago',
+    //         rating: 3,
+    //         avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //         tags: ['Dessert'],
+    //         comment: 'Not a big fan of Irish food, but I like the vibe in this pub. The portion was impressive.',
+    //         photos: [
+    //             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCkom1wMfJJeGRc7rwJa-Rkwgk7TkhuuG9w&s',
+    //             'https://media.cnn.com/api/v1/images/stellar/prod/160929101749-essential-spanish-dish-paella-phaidon.jpg?q=w_1900,h_1069,x_0,y_0,c_fill',
+    //             'https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg'
+    //         ],
+    //         like: 7
+    //     },
+    //     {
+    //         id: '5',
+    //         userName: 'Cara',
+    //         userDate: '21 days ago',
+    //         rating: 4,
+    //         avatar: 'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //         tags: [],
+    //         comment: 'The Irish stew reminds me of my mom cooking, cannot have it enough.',
+    //         photos: [
+    //         ],
+    //         like: 13
+    //     },
+    // ]
 
     // console.log("review_info", review_info);
 
-    const filteredData = filterId ? reviewData.filter(review => review.id === filterId) : reviewData;
+    const filteredData = filterId
+    ? reviewsWithUserData.filter((review) => review.id === filterId)
+    : reviewsWithUserData;
     // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
     // let filteredData = reviewData;
@@ -99,7 +126,7 @@ function ReviewBlock({review_info, restaurant_info, filterId}){
                <Image source={{uri:review.avatar}} style={styles.avatarImage} />
                <View style={styles.nameDate}>
                    <Text style={styles.userName}> {review.userName}</Text>
-                   <Text style={styles.userDate}> {review.userDate}</Text>
+                   <Text style={styles.userDate}> {new Date(review.review_date).toLocaleDateString()}</Text>
                </View>
                <View style={styles.commentStar}>
                    {Array.from({ length: 5 }, (_, index) => (
@@ -114,7 +141,7 @@ function ReviewBlock({review_info, restaurant_info, filterId}){
                </View>
            </View>
            <View style={styles.tagBar}>
-               {review.tags.map((tag,index)=> (
+               {review.features.map((tag,index)=> (
                    <View key={index} style={styles.tag}>
                        <Text style={styles.tagText}>{tag}</Text>
                    </View>
@@ -122,7 +149,7 @@ function ReviewBlock({review_info, restaurant_info, filterId}){
            </View>
            <View style={styles.comment}>
                <Text style={styles.commentText}>
-                   {review.comment}
+                   {review.text}
                </Text>
            </View>
            <View style={styles.photo}>
@@ -132,7 +159,7 @@ function ReviewBlock({review_info, restaurant_info, filterId}){
            </View>
            <View style={styles.like}>
                <Feather name = "thumbs-up" size={20}/>
-               <Text style={styles.likeNumber}>{review.like}</Text>
+               <Text style={styles.likeNumber}>{review.helpful.length}</Text>
            </View>
        </View>
     ))}

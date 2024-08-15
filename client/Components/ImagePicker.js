@@ -1,13 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
-import { useEffect, useState} from "react";
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import * as ImagePicker from 'expo-image-picker';
 
-const TagsCard= () => {
-  const [selectedImages, setSelectedImages] = useState([]);
+const ImagePickerOne= ({ image, setImage }) => {
 
   const pickImage = async () => {
-    if (selectedImages.length >= 3) {
+    if (image && image.length >= 3) {
       Alert.alert("Limit Reached", "You can only select up to 3 images.");
       return;
     }
@@ -25,14 +23,14 @@ const TagsCard= () => {
 
     if (!result.canceled) {
         const newImageUri = result.assets[0].uri;
-        setSelectedImages((prevImages) => [...prevImages, newImageUri]);
+        setImage((prevImages) => [...prevImages, newImageUri]);
         //console.log('Image selected: ', newImageUri); 
       } else {
         console.log('Image selection canceled');
       }
     };
     const removeImage = (uri) => {
-      setSelectedImages((prevImages) => prevImages.filter((image) => image !== uri));
+      setImage((prevImages) => prevImages.filter((imageUri) => imageUri !== uri));
     };
   
     return(
@@ -40,13 +38,13 @@ const TagsCard= () => {
             <Text style={styles.addTitle}>Add Media!</Text>
             <View style={styles.imagesContainer}>
                 <View style={styles.imagesContent}>
-                    {selectedImages.map((imageUri, index) => (
+                    {image && image.map((imageUri, index) => (
                         <TouchableOpacity key={index} onPress={() => removeImage(imageUri)}>
                             <Image source={{ uri: imageUri }} style={styles.selectedImage} />
                         </TouchableOpacity>
                     ))}
                 </View>
-                {selectedImages.length < 3 && (
+                {(!image || image.length < 3) && (
                     <TouchableOpacity
                         style={styles.imagesIcon}
                         onPress={pickImage}
@@ -93,4 +91,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TagsCard
+export default ImagePickerOne

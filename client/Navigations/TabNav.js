@@ -19,6 +19,7 @@ import CommentsPage from '../screens/CommentsPage';
 import LogoutPage from '../screens/LogoutPage';
 import ProfileCard from '../Components/ProfileCard';
 import SearchList from '../screens/SearchList';
+import EndComments from '../screens/EndComments';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,6 +32,7 @@ function RestaurantDetailStack() {
           restaurantId: route.params?.restaurantId,
         })}/>
       <RestaurantStack.Screen name="leaveReview" component={CommentsPage} />
+      <RestaurantStack.Screen name="EndComments" component={EndComments} />
       <RestaurantStack.Screen name="UserProfile" component={ProfileScreen} />
     </RestaurantStack.Navigator>
   );

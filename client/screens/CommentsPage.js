@@ -1,17 +1,29 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent, ScrollView,KeyboardAvoidingView, Platform} from "react-native"
-import { useEffect, useState} from "react";
+import { useEffect, useState, useContext} from "react";
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 import { useNavigation } from '@react-navigation/native';
 import RatingThree from "../Components/RatingThree";
 import TagsCard from "../Components/TagsCard";
-import ImagePicker from "../Components/ImagePicker";
+import ImagePickerOne from "../Components/ImagePicker";
 import InputComments from "../Components/InputComments";
 import BackButton from "../Components/BackButton";
+import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const CommentsPage = () => {
     const navigation = useNavigation(); 
+    const route = useRoute();
+    const { user } = useContext(AuthContext);
+    const restaurantId = route.params?.restaurantId;
     const [selectedRating, setSelectedRating] = useState(null);
+    const [comments, setComments] = useState(''); 
+    const [image, setImage] = useState(null); 
+    const [tags, setTags] = useState([]);  
+    const [ratingDetails, setRatingDetails] = useState({ taste: '', authenticity: '', ambience: '' }); 
+
     const selectRating = (rating) => {
         setSelectedRating(rating);
     };
@@ -37,9 +49,52 @@ const CommentsPage = () => {
         return <View style={styles.starsContainer}>{stars}</View>;
     };
 
-    const handleSubmit = () => {
-        navigation.navigate("EndComments");
+    // const handleSubmit = () => {
+    //     navigation.navigate("EndComments");
+    // };
+    const handleSubmit = async () => {
+        if (!user) {
+            alert('Please log in to submit a review.');
+            return;
+        }
+
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
+            const reviewData = {
+                user_id: user.id,
+                restaurant_id: restaurantId,
+                rating: selectedRating,
+                text: comments,
+                review_date: new Date(),
+                features: tags,
+                photos: image ? [image] : [],
+                rating_details: ratingDetails
+            };
+
+            const response = await axios.post(`http://localhost:6868/reviews/restaurant/${restaurantId}`, reviewData, {
+                method: 'POST',
+                headers: {
+                    ...authHeader,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.status === 201) {
+                console.log('Review submitted successfully')
+                navigation.navigate('EndComments');
+            } else {
+                alert("Failed to submit review.");
+                const errorData = await response.json();
+                console.error('Failed to submit review:', errorData);
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            alert("Error submitting review.");
+        }
     };
+
     return(
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView 
@@ -54,10 +109,10 @@ const CommentsPage = () => {
                 {renderStars()}
             </View>
             <View style={styles.commentCardContainer}>
-                <RatingThree />
-                <TagsCard />
-                <ImagePicker />
-                <InputComments />
+                <RatingThree ratingDetails={ratingDetails} setRatingDetails={setRatingDetails}/>
+                <TagsCard tags={tags} setTags={setTags}/>
+                <ImagePickerOne image={image} setImage={setImage}/>
+                <InputComments comments={comments} setComments={setComments}/>
             </View>
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                 <Text style={styles.submitText}>SUBMIT</Text>

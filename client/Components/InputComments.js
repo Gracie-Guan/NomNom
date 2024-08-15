@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TextInput, StyleSheet,Text } from 'react-native';
 
-const InputComments = () => {
-    const [text, setText] = useState('');
+const InputComments = ({ comments, setComments }) => {
 
     return (
         <View style={styles.container}>
             <Text style={styles.inputTitle}>Leave a detailed review</Text>
             <TextInput
-                value={text}
-                onChangeText={setText}
+                value={comments}
+                onChangeText={setComments}
                 placeholder="'Write about food and service of the restaurant'"
                 placeholderTextColor="#8F8F8F"
                 style={styles.input}
