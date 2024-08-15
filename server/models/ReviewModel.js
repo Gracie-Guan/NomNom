@@ -36,7 +36,22 @@ class ReviewModel {
         } catch (error) {
             throw new Error('Review not found');
         }
+        
+    }
 
+    static async createReview(reviewData) {
+        const newReview = new Review({
+            _id: new mongoose.Types.ObjectId(),
+            ...reviewData,
+            review_date: new Date(),
+        });
+
+        try {
+            const savedReview = await newReview.save();
+            return savedReview;
+        } catch (error) {
+            throw new Error('Error creating review');
+        }
     }
 
 

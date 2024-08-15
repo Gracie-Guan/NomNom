@@ -72,6 +72,20 @@ class UserModel {
         }
     }
 
+    static async getUserById(userId) {
+        try {
+            const user = await User.findById(userId).select('username profile_image');
+            if (user) {
+                return user;
+            } else {
+                throw new Error('User not found');
+            }
+        } catch (error) {
+            console.error("Error in getUserById:", error);
+            throw error;
+        }
+    }
+
 }
 
 module.exports = UserModel;

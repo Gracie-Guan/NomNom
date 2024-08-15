@@ -1,18 +1,21 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, ViewComponent} from "react-native"
-import { useEffect, useState} from "react";
+// import { useEffect, useState} from "react";
 import { Feather, MaterialIcons } from "@expo/vector-icons"
 
-const RatingThree = () => {
-    const [tasteRating, setTasteRating] = useState(null);
-    const [authenticityRating, setAuthenticityRating] = useState(null);
-    const [ambienceRating, setAmbienceRating] = useState(null);
+const RatingThree = ({ratingDetails, setRatingDetails}) => {
+    // const [tasteRating, setTasteRating] = useState(null);
+    // const [authenticityRating, setAuthenticityRating] = useState(null);
+    // const [ambienceRating, setAmbienceRating] = useState(null);
     
-    const renderStars = (rating, setRating) => {
+    const renderStars = (rating, field) => {
         let stars = [];
         for (let i = 1; i <= 5; i++) {
             stars.push(
-                <TouchableOpacity key={i} onPress={() => setRating(i)}>
-                    {i <= rating ? <MaterialIcons                                 name="star"
+                <TouchableOpacity key={i} onPress={() => setRatingDetails({ ...ratingDetails, [field]: i })}
+                >
+                    {i <= rating ? 
+                    <MaterialIcons                                 
+                        name="star"
                         size={28}
                         color={"#FFB300" }/>
                     : <MaterialIcons
@@ -29,15 +32,15 @@ const RatingThree = () => {
     <View style={styles.RatingContainer}>
         <View style={styles.eachRating}>
             <Text style={styles.RatingText}>Taste</Text>
-            {renderStars(tasteRating, setTasteRating)}
+            {renderStars(ratingDetails.taste, 'taste')}
         </View>
         <View style={styles.eachRating}>
             <Text style={styles.RatingText}>Authenticity</Text>
-            {renderStars(authenticityRating, setAuthenticityRating)}
+            {renderStars(ratingDetails.authenticity, 'authenticity')}
         </View>
         <View style={styles.eachRating}>
             <Text style={styles.RatingText}>Ambience</Text>
-            {renderStars(ambienceRating, setAmbienceRating)}
+            {renderStars(ratingDetails.ambience, 'ambience')}
         </View>
     </View>
     )

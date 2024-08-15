@@ -26,6 +26,27 @@ class ReviewController {
         }
     }
 
+    static async createReview(req, res) {
+        try {
+            const userId = req.user._id;
+            const { rating, text, restaurant_id, features, photos, rating_details } = req.body;
+
+            const newReview = await ReviewModel.createReview({
+                user_id: userId,
+                rating,
+                text,
+                restaurant_id,
+                features,
+                photos,
+                rating_details
+            });
+
+            res.status(201).json(newReview);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
 
 }
 
