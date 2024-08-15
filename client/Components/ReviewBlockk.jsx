@@ -120,8 +120,8 @@ function ReviewBlock({reviews, filterId}){
     
     return(
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-    {filteredData.map((review)=>(
-           <View key={review.id} style={styles.reviewCard}>
+    {filteredData.map((review, index)=>(
+           <View key={review.id || index} style={styles.reviewCard}>
            <View style={styles.avatar}>
                <Image source={{uri:review.avatar}} style={styles.avatarImage} />
                <View style={styles.nameDate}>

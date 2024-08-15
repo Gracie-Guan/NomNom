@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView} from "react-native"
 import { createStackNavigator } from '@react-navigation/stack';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import FilterBar from "../Components/FilterBar";
 import CuisineBar from "../Components/CuisineBar";
@@ -10,6 +10,7 @@ import ToggleButton from "../Components/ToggleButton";
 import SearchTop from "../Components/SearchTop";
 import DishCard from "../Components/DishCards";
 import RestaurantCard from "../Components/RestroCards";
+import { AuthContext } from '../Context/AuthContext'; 
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ const Home = ({navigation}) => {
     const [loading, setLoading] = useState(true);
     const [restaurantData, setRestaurantData] = useState([]);
     const [topDishes, setTopDishes] = useState([]);
+    const { user } = useContext(AuthContext); 
 
     useEffect(() => {
         const fetchRestaurantsAndDishes = async () => {
@@ -76,6 +78,14 @@ const Home = ({navigation}) => {
     //     { _id: 3, name: 'Dish C', rating: 4.7 },
     // ];
 
+    const isRestaurantLiked = (restaurantId) => {
+        return user && user.favouriteRestaurant.includes(restaurantId);
+    };
+
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -114,7 +124,7 @@ const Home = ({navigation}) => {
                     {showRestaurant ? 
                         restaurantData.map((restaurant) => (
                         <View key={restaurant._id}>
-                            <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} />
+                            <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} liked={isRestaurantLiked(restaurant._id)}/>
                         </View>
                         )) 
                         : 

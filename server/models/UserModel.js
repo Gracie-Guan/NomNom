@@ -86,6 +86,72 @@ class UserModel {
         }
     }
 
+
+    static async toggleLikeRestaurant(userId, restaurantId, action) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            if (action === 'add') {
+                if (!user.favourite_restaurant.includes(restaurantId)) {
+                    user.favourite_restaurant.push(restaurantId);
+                } else {
+                    throw new Error('Restaurant already in favourites');
+                }
+            } else if (action === 'remove') {
+                const index = user.favourite_restaurant.indexOf(restaurantId);
+                if (index !== -1) {
+                    user.favourite_restaurant.splice(index, 1);
+                } else {
+                    throw new Error('Restaurant not found in favourites');
+                }
+            } else {
+                throw new Error('Invalid action');
+            }
+
+            await user.save();
+            return user;
+        } catch (error) {
+            console.error("Error in updateFavouriteRestaurant:", error);
+            throw error;
+        }
+    }
+
+    static async toggleLikeDish(userId, dishId, action) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            if (action === 'add') {
+                if (!user.favourite_dish.includes(dishId)) {
+                    user.favourite_dish.push(dishId);
+                } else {
+                    throw new Error('Dish already in favourites');
+                }
+            } else if (action === 'remove') {
+                const index = user.favourite_dish.indexOf(dishId);
+                if (index !== -1) {
+                    user.favourite_dish.splice(index, 1);
+                } else {
+                    throw new Error('Dish not found in favourites');
+                }
+            } else {
+                throw new Error('Invalid action');
+            }
+
+            await user.save();
+            return user;
+        } catch (error) {
+            console.error("Error in updateFavouriteDish:", error);
+            throw error;
+        }
+    }
+
+
 }
 
 module.exports = UserModel;
