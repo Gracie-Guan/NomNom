@@ -97,7 +97,7 @@ const InfoCard = ({ }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green"
+    // backgroundColor: "green"
   },
   imageContainer: {
     position: 'relative',
