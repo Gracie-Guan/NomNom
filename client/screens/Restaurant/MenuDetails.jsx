@@ -3,6 +3,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, Modal } from 'react-native';
 import { List, Text } from 'react-native-paper';
 import ImageUpload from '../../Components/UploadImage';
+import SearchBar from '../../Components/SearchBar02';
 
 export default function MenuDetails({ menuItems, restaurant_id }) {
   // Helper function to safely get the price
@@ -60,6 +61,7 @@ export default function MenuDetails({ menuItems, restaurant_id }) {
         ))
       )}
     </ScrollView>
+    {/* <SearchBar restaurantId={restaurant_id} /> */}
     </View>
   );
 }

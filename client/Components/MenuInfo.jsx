@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { View, StyleSheet, ActivityIndicator, Text, Switch } from 'react-native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
-import SearchBar from '../screens/Restaurant/SearchBar';
+import SearchBar from './SearchBar02';
 import ImageUpload from './UploadImage';
 
 const MenuInfo = ({ restaurantId }) => {
@@ -63,7 +63,7 @@ const MenuInfo = ({ restaurantId }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         <Text>{isEnabled ? 'Search ' : 'Menu '}</Text>
         <Switch
           trackColor={{ false: "#767577", true: "#81b0ff" }}
@@ -72,13 +72,17 @@ const MenuInfo = ({ restaurantId }) => {
           onValueChange={toggleSwitch}
           value={isEnabled}
         />
-      </View>
+      </View> */}
 
-      {isEnabled ?
+      {/* {isEnabled ?
         (<SearchBar restaurantId={restaurantId} />) : (<MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />)
-      }
-
+      } */}
+      <MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />
+      <View style={StyleSheet.container}>
+      <SearchBar restaurantId={restaurantId} />
       <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/>
+
+      </View>
     </View>);
 
 };
@@ -143,14 +147,14 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     marginTop: 5,
   },
-  container: {
-    flex: 0,
-    // position: "absolute",
-    flexDirection: 'row', // Arrange children horizontally
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    padding: "3%", // Optional padding
-  },
+  // container: {
+  //   flex: 0,
+  //   // position: "absolute",
+  //   flexDirection: 'row', // Arrange children horizontally
+  //   justifyContent: 'flex-end',
+  //   alignItems: 'center',
+  //   padding: "3%", // Optional padding
+  // },
   floatingButton: {
     flex: 1,
     position: "absolute",

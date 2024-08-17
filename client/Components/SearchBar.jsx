@@ -10,6 +10,7 @@ import {
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import filter from 'lodash.filter';
+// import MenuDetails from '../screens/Restaurant/MenuDetails';
 
 function SearchBar({ restaurantId }) {
   const [data, setData] = useState([]);
@@ -119,9 +120,9 @@ function SearchBar({ restaurantId }) {
   }
 
   return (
-    <View style={styles.resultContainer}>
-      <Text style={styles.searchTitle}>Dish Search</Text>
-      <FlatList
+    <View>
+      {/* <Text style={styles.searchTitle}>Dish Search</Text> */}
+      {/* <FlatList
         ListHeaderComponent={renderHeader}
         data={data}
         keyExtractor={(item) => item._id}
@@ -134,7 +135,8 @@ function SearchBar({ restaurantId }) {
             <Text style={styles.price}>{item.price}</Text>
           </View>
         )}
-      />
+      /> */}
+      {/* <MenuDetails menuItems={menuItems} restaurant_id={restaurantId}/> */}
     </View>
   );
 }
