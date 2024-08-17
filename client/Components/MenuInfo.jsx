@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { View, StyleSheet, ActivityIndicator, Text, Switch } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, Switch, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 import SearchBar from './SearchBar02';
 import FloatingSearchBar from './FloatingSearchBar';
 import ImageUpload from './UploadImage';
 import filter from 'lodash.filter';
+// import Ionicons from '@react-native-vector-icons/ionicons';
 
 const MenuInfo = ({ restaurantId }) => {
   const [menuItems, setMenu] = useState(null);
@@ -16,6 +17,9 @@ const MenuInfo = ({ restaurantId }) => {
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
 
+  console.log("--------- type QUERY: ", typeof query);
+  // console.log("--------- QUERY: ", query);
+
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   // console.log('Search...');
@@ -23,14 +27,35 @@ const MenuInfo = ({ restaurantId }) => {
   // console.log('data', data);
 
   const handleSearch = () => {
+    console.log("menu info - handleSearch no. 1 - handle search...");
+    // console.log("type of query is string? 1: ", typeof query !== "string")
+      console.log("type of query is not string? 2: ", typeof query !== "string")
+      console.log("type of query is object? 2: ", typeof query === "object")
+    if (typeof query !== "string") {
+      setQuery('');
+      console.log("Set query to be: ", query);
+    }
+
+  try {
+    console.log("menu info - handleSearch no. 2 - query: ", query);
+
+    // console.log("menu info - handleSearch no. 3 - query.type: ", query.type);
+
+    // if (typeof query !== String || query.type === undefined) {
+    //   setQuery('');
+    // } else {
     const formattedQuery = query.toLowerCase();
-    console.log(formattedQuery);
+    console.log("MenuInfo - handleSearch no. 4 - formattedQuery: ", formattedQuery);
     const filteredData = filter(fullData, (dish) => {
       return contains(dish, formattedQuery);
     });
     setData(filteredData);
     // setMenu(filteredData);
-  };
+  // }
+  } catch (error) {
+    setError('Error reset data');
+    console.error('Error reset data:', error);
+  }};
 
   const contains = (dishInfo, query) => {
     if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query) || dishInfo.category.toLowerCase().includes(query)) {
@@ -39,10 +64,35 @@ const MenuInfo = ({ restaurantId }) => {
     return false;
   };
 
+  useEffect(() => {
+    // console.log("Query changed: ", query);
+    // handleSearch()
+}, [query]);
+
   const handleClear = () => {
     setQuery('');
     setData(fullData); // Reset data to fullData when cleared
   };
+
+  const handleDismissKeyboard = () => {
+    Keyboard.dismiss(); // Dismiss keyboard and lose focus
+    };
+
+  const handleReset = () => {
+    // console.log("menu info - handleReset - typeof query: ", typeof query);
+    if (typeof query !== "string" || typeof query !== "object") {
+      setQuery('');
+      // console.log("menu info - handleReset 2 - typeof query: ", typeof query);
+      // handleDismissKeyboard();
+      // handleSearch();
+    } else {
+      setQuery('');
+    }
+    // setQuery('');
+    // console.log("menu info - handleReset 2 - typeof query: ", typeof query);
+    handleDismissKeyboard();
+    // handleSearch();
+    };
 
   // useEffect(() => {
     const fetchMenu = async () => {
@@ -99,12 +149,16 @@ const MenuInfo = ({ restaurantId }) => {
 
   return (
     <View style={{ flex: 1, flexDirection: 'column' }}>
+      <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
             <FloatingSearchBar
         query={query}
         setQuery={setQuery}
         onSearch={handleSearch}
         onClear={handleClear}
+        onPress={handleReset}
       />
+      </TouchableWithoutFeedback>
+
       {/* <View style={styles.container}>
         <Text>{isEnabled ? 'Search ' : 'Menu '}</Text>
         <Switch
@@ -124,7 +178,9 @@ const MenuInfo = ({ restaurantId }) => {
 
       {/* <View style={styles.floatingContainer}> */}
 
+      <TouchableWithoutFeedback>
       <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/>
+      </TouchableWithoutFeedback>
 
       {/* </View> */}
 

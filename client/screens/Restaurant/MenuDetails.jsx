@@ -69,6 +69,7 @@ export default function MenuDetails({ menuItems, restaurant_id }) {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
+    marginBottom: 25
   },
   container: {
     flex: 1,

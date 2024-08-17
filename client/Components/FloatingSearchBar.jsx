@@ -1,8 +1,8 @@
 // FloatingSearchBar.jsx
 import React from 'react';
-import { View, TextInput, StyleSheet, Button } from 'react-native';
+import { View, TextInput, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Image } from 'react-native';
 
-export default function FloatingSearchBar({ query, setQuery, onSearch, onClear }) {
+export default function FloatingSearchBar({ query, setQuery, onSearch, onClear, onPress }) {
 //   return (
 //     <View style={styles.searchBarContainer}>
 //       <TextInput
@@ -14,15 +14,30 @@ export default function FloatingSearchBar({ query, setQuery, onSearch, onClear }
 //       <Button title="Search" onPress={onSearch} />
 //     </View>
 //   );
-const handleTextChange = (text) => {
-    setQuery(text);
-    if (text === '') {
-      onClear(); // Call onClear when text is cleared
-    }
-  };
+
+
+    const handleTextChange = (text) => {
+        setQuery(text);
+        if (text === '') {
+        onClear(); // Call onClear when text is cleared
+        }
+    };
+
+    const handleDismissKeyboard = () => {
+    Keyboard.dismiss(); // Dismiss keyboard and lose focus
+    onSearch();
+    };
+
+    const handleReset = () => {
+        setQuery('');
+        handleDismissKeyboard();
+        };
+
 return (
+    // <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
 <View style={styles.searchContainer}>
 <TextInput
+  onSubmitEditing={handleDismissKeyboard}
   autoCapitalize="none"
   autoCorrect={false}
   clearButtonMode="always"
@@ -35,8 +50,18 @@ return (
 //   onFocus={handleFocus}
   // onBlur={handleBlur}
 />
-<Button title="Search" onPress={onSearch} />
+<Button title="🔍" onPress={onSearch} />
+{/* <TouchableOpacity style={styles.button} onPress={handleReset}>
+        <Image
+        style={{height: 20, width: 20, marginRight: 5}}
+        resizeMode="contain"
+          source={require('../assets/reset-02.png')}
+        //   style={styles.image}
+        />
+      </TouchableOpacity> */}
 </View>
+
+// </TouchableWithoutFeedback>
 );
 }
 
@@ -62,7 +87,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    height: '100%'
   }, 
 //   searchContainer: {
 //     flex: 1,
