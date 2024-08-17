@@ -93,7 +93,12 @@ const MenuInfo = ({ restaurantId }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, flexDirection: 'column' }}>
+            <FloatingSearchBar
+        query={query}
+        setQuery={setQuery}
+        onSearch={handleSearch}
+      />
       {/* <View style={styles.container}>
         <Text>{isEnabled ? 'Search ' : 'Menu '}</Text>
         <Switch
@@ -111,16 +116,11 @@ const MenuInfo = ({ restaurantId }) => {
       <MenuDetails menuItems={data} restaurant_id={restaurantId} />
       {/* <View style={StyleSheet.container}> */}
 
-      <View style={styles.floatingContainer}>
+      {/* <View style={styles.floatingContainer}> */}
 
-      <FloatingSearchBar
-        query={query}
-        setQuery={setQuery}
-        onSearch={handleSearch}
-      />
-      {/* <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/> */}
+      <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/>
 
-      </View>
+      {/* </View> */}
 
       {/* </View> */}
     </View>);

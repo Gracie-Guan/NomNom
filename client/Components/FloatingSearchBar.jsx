@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: '#fff'
@@ -69,16 +69,16 @@ const styles = StyleSheet.create({
 //     marginBottom: 0
 //   }
 searchContainer: {
-    position: 'absolute',
-    bottom: 32, // Position at the bottom of the screen
+    // position: 'absolute',
+    // bottom: 32, // Position at the bottom of the screen
     left: 0,   // Stretch the container to the left edge
     right: 0,  // Stretch the container to the right edge
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFC93C',
-    padding: 10,
+    padding: 8,
     // marginBottom: 0,  // No margin at the bottom
-    borderRadius: 20,
+    // borderRadius: 20,
     zIndex: 1000, // Ensure it appears on top of other content
     // paddingLeft: 10,
     // paddingRight: 10
