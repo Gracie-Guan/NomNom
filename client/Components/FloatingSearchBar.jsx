@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, Button } from 'react-native';
 
-export default function FloatingSearchBar({ query, setQuery, onSearch }) {
+export default function FloatingSearchBar({ query, setQuery, onSearch, onClear }) {
 //   return (
 //     <View style={styles.searchBarContainer}>
 //       <TextInput
@@ -14,6 +14,12 @@ export default function FloatingSearchBar({ query, setQuery, onSearch }) {
 //       <Button title="Search" onPress={onSearch} />
 //     </View>
 //   );
+const handleTextChange = (text) => {
+    setQuery(text);
+    if (text === '') {
+      onClear(); // Call onClear when text is cleared
+    }
+  };
 return (
 <View style={styles.searchContainer}>
 <TextInput
@@ -21,7 +27,8 @@ return (
   autoCorrect={false}
   clearButtonMode="always"
   value={query}
-  onChangeText={queryText => setQuery(queryText)}
+//   onChangeText={queryText => setQuery(queryText)}
+  onChangeText={handleTextChange}
   onEndEditing={queryText => setQuery(queryText)}
   placeholder="Search"
   style={styles.searchInput}

@@ -39,6 +39,11 @@ const MenuInfo = ({ restaurantId }) => {
     return false;
   };
 
+  const handleClear = () => {
+    setQuery('');
+    setData(fullData); // Reset data to fullData when cleared
+  };
+
   // useEffect(() => {
     const fetchMenu = async () => {
       setLoading(true); // Set loading to true at the start
@@ -98,6 +103,7 @@ const MenuInfo = ({ restaurantId }) => {
         query={query}
         setQuery={setQuery}
         onSearch={handleSearch}
+        onClear={handleClear}
       />
       {/* <View style={styles.container}>
         <Text>{isEnabled ? 'Search ' : 'Menu '}</Text>
