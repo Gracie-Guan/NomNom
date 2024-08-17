@@ -3,15 +3,41 @@ import axios from 'axios';
 import { View, StyleSheet, ActivityIndicator, Text, Switch } from 'react-native';
 import MenuDetails from '../screens/Restaurant/MenuDetails';
 import SearchBar from './SearchBar02';
+import FloatingSearchBar from './FloatingSearchBar';
 import ImageUpload from './UploadImage';
+import filter from 'lodash.filter';
 
 const MenuInfo = ({ restaurantId }) => {
   const [menuItems, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [query, setQuery] = useState('');
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  // console.log('Search...');
+  // console.log('query', query);
+  // console.log('data', data);
+
+  const handleSearch = () => {
+    const formattedQuery = query.toLowerCase();
+    console.log(formattedQuery);
+    const filteredData = filter(fullData, (dish) => {
+      return contains(dish, formattedQuery);
+    });
+    setData(filteredData);
+    // setMenu(filteredData);
+  };
+
+  const contains = (dishInfo, query) => {
+    if (dishInfo.name.toLowerCase().includes(query) || dishInfo.description.toLowerCase().includes(query) || dishInfo.category.toLowerCase().includes(query)) {
+      return true;
+    }
+    return false;
+  };
 
   // useEffect(() => {
     const fetchMenu = async () => {
@@ -30,7 +56,12 @@ const MenuInfo = ({ restaurantId }) => {
         const second_response = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}?timestamp=${new Date().getTime()}`)
 
         // console.log(second_response.data);
-        setMenu(second_response.data);
+        // setMenu(second_response.data);
+        // setData(second_response.data);
+
+        setData(second_response.data);
+        setFullData(second_response.data);
+        
       } catch (error) {
         setError('Error fetching restaurant data');
         console.error('Error fetching restaurant:', error);
@@ -45,7 +76,7 @@ const MenuInfo = ({ restaurantId }) => {
     [restaurantId]);
 
   if (loading) {
-    console.log("--- loading data... #2");
+    // console.log("--- loading data... #2");
     return (
       <View style={[StyleSheet.absoluteFill, {justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)'}]}>
         <ActivityIndicator size="large" color="#FFC93C" />
@@ -77,17 +108,52 @@ const MenuInfo = ({ restaurantId }) => {
       {/* {isEnabled ?
         (<SearchBar restaurantId={restaurantId} />) : (<MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />)
       } */}
-      <MenuDetails menuItems={menuItems} restaurant_id={restaurantId} />
-      <View style={StyleSheet.container}>
-      <SearchBar restaurantId={restaurantId} />
-      <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/>
+      <MenuDetails menuItems={data} restaurant_id={restaurantId} />
+      {/* <View style={StyleSheet.container}> */}
+
+      <View style={styles.floatingContainer}>
+
+      <FloatingSearchBar
+        query={query}
+        setQuery={setQuery}
+        onSearch={handleSearch}
+      />
+      {/* <ImageUpload restaurantId={restaurantId} onPress={fetchMenu}/> */}
 
       </View>
+
+      {/* </View> */}
     </View>);
 
 };
 
 const styles = StyleSheet.create({
+  floatingContainer: {
+    position: 'absolute',
+    bottom: 20,  // Position it slightly above the bottom edge of the screen
+    left: 20,    // Position it slightly away from the left edge of the screen
+    right: 20,   // Position it slightly away from the right edge of the screen
+    alignItems: 'center',  // Center the items horizontally
+    justifyContent: 'flex-end', // Align items at the bottom of the container
+    backgroundColor: '#fff',  // Optional: add a background color if needed
+    padding: 10,
+    borderRadius: 20,  // Round the corners of the container
+    elevation: 5,      // Add some elevation for shadow (Android)
+    shadowColor: '#000',  // Shadow properties for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    zIndex: 1000, // Ensure it floats above other content
+  },
+  floatingSearchBar: {
+    width: '100%',  // Make sure the search bar takes up full width of the container
+    marginTop: 10,  // Add some space between the button and the search bar
+  },
+  imageUploadButton: {
+    width: 50,  // Width of the round button
+    height: 50, // Height of the round button
+    borderRadius: 25,  // Make it round
+  },
   UploadButtonContainer: {
     backgroundColor: "#FFC93C",
     paddingVertical: 10,
