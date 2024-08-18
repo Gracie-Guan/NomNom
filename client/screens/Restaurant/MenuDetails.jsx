@@ -55,6 +55,7 @@ export default function MenuDetails({ menuItems }) {
                     {categoryMap[category].map((item) => (
                         <DishItem
                             key={item._id}
+                            dishId={item._id} 
                             name={item.name}
                             price={getPrice(item.price)}
                             description={item.description}
@@ -66,6 +67,7 @@ export default function MenuDetails({ menuItems }) {
             : filteredMenuItems.map((item) => (
                 <DishItem
                     key={item._id}
+                    dishId={item._id} 
                     name={item.name}
                     price={getPrice(item.price)}
                     description={item.description}
