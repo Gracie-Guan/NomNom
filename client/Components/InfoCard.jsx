@@ -85,7 +85,7 @@ const InfoCard = ({ }) => {
   </View>
   <View style={styles.distance}>
     <Text style={styles.distanceText}>2.4km away | </Text> 
-    <Text style={styles.priceText}> Avg. €{averagePrice} </Text>
+    <Text style={styles.priceText}> Avg. Main €{averagePrice} </Text>
   </View>
   <View style={styles.type}>
       <Text style={styles.typeText}> {restaurant.cuisine && restaurant.cuisine.length > 0 ? restaurant.cuisine[0].localized_name : 'Cuisine not available'}</Text>

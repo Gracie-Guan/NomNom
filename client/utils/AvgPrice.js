@@ -34,7 +34,10 @@ export const calculateAveragePrice = async (restaurantId) => {
       !(dish.category && (
         dish.category.toLowerCase().includes('drink') ||
         dish.category.toLowerCase().includes('extra') ||
-        dish.category.toLowerCase().includes('dip')
+        dish.category.toLowerCase().includes('dip') ||
+        dish.category.toLowerCase().includes('side') ||
+        dish.category.toLowerCase().includes('dessert') ||
+        dish.category.toLowerCase().includes('starter')
       ))
     );
     

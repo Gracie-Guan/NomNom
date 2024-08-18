@@ -151,7 +151,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                   <MaterialCommunityIcons name="bowl-mix-outline" size={18} color="#E65100" />
                   <Text style={styles.smallText}>{cuisine}</Text>
                 </View>
-                <Text style={styles.smallText}>Avg. €{price}</Text>
+                <Text style={styles.smallText}>Avg. Main €{price}</Text>
               </View>
 
             </View>
@@ -182,7 +182,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 <Text style={styles.tinyText}>{cuisine}</Text>
               </View>
 
-              <Text style={styles.tinyText}>{distance} · Avg. €{price}</Text>
+              <Text style={styles.tinyText}>{distance} · Avg. Main €{price}</Text>
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
@@ -217,7 +217,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 </View>
               </View>
 
-              <Text style={styles.mediumText}>{distance} · Avg. €{price}</Text>
+              <Text style={styles.mediumText}>{distance} · Avg. Main €{price}</Text>
 
               <View style={styles.smallContainer}>
                 <Feather name="map-pin" size={16} color="#FFB300" />
