@@ -58,7 +58,7 @@ export default function MenuDetails({ menuItems }) {
                             name={item.name}
                             price={getPrice(item.price)}
                             description={item.description}
-                            rate={item.rate}
+                            rating={item.rating}
                         />
                     ))}
                 </View>
@@ -69,7 +69,7 @@ export default function MenuDetails({ menuItems }) {
                     name={item.name}
                     price={getPrice(item.price)}
                     description={item.description}
-                    rate={item.rate}
+                    rating={item.rating}
                 />
           ))}
         </ScrollView>

@@ -2,11 +2,59 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {MaterialIcons, Feather} from '@expo/vector-icons'
 import { RestaurantContext } from '../Context/RestaurantContext';
-
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const InfoCard = ({ }) => {
 
   const { restaurant, loading, error } = useContext(RestaurantContext);
+  const { user, setUser } = useContext(AuthContext);
+
+  const [isPressed, setIsPressed] = useState(false);
+
+  useEffect(() => {
+    if (user && restaurant) {
+      setIsPressed(user.favouriteRestaurant.includes(restaurant._id));
+    }
+  }, [user, restaurant]);
+
+  const toggleFavourite = async () => {
+    if (!user || !restaurant) {
+      console.warn('User not logged in or no restaurant available');
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+
+      const action = isPressed ? 'remove' : 'add';
+      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: user.id, restaurantId: restaurant._id, action }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites: ${errorData.message || 'Unknown error'}`);
+      }
+
+      const data = await response.json();
+      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+      setUser(updatedUser);
+      setIsPressed(!isPressed);
+
+    } catch (error) {
+      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+    }
+  };
   
   if (loading) {
     return (
@@ -38,9 +86,24 @@ const InfoCard = ({ }) => {
 <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: restaurant.image[0].url }} style={styles.topImage} />
-        <TouchableOpacity style={styles.heartContainer}>
+        {/* <TouchableOpacity style={styles.heartContainer}>
           <Feather name="heart" size={20} color="#fff" style={styles.heartIcon} />
+        </TouchableOpacity> */}
+
+         
+        <TouchableOpacity 
+          style={styles.heartContainer} 
+          onPress={toggleFavourite}
+          activeOpacity={1}
+        >
+          <Feather 
+            name="heart" 
+            size={20} 
+            color={isPressed ? '#E65100' : '#fff'} 
+            style={styles.heartIcon} 
+          />
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.uploadContainer}>
           <Feather name="upload" size={20} color="#fff" style={styles.uploadIcon} />
         </TouchableOpacity>

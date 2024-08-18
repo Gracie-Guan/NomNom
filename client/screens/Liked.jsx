@@ -13,7 +13,7 @@ const Liked = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [dishes, setDishes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   // console.log('User favourite restaurants:', user.favouriteRestaurant);
 
 
@@ -42,6 +42,29 @@ const Liked = ({ navigation }) => {
 
   const handleBack = () => {
     navigation.goBack();
+  };
+
+  const handleRemoveRestaurant = (restaurantId) => {
+    setRestaurants((prevRestaurants) => 
+      prevRestaurants.filter((restaurant) => restaurant._id !== restaurantId)
+    );
+
+    // Also update the user context to reflect the removal
+    setUser((prevUser) => ({
+      ...prevUser,
+      favouriteRestaurant: prevUser.favouriteRestaurant.filter(id => id !== restaurantId),
+    }));
+  };
+
+  const handleRemoveDish = (dishId) => {
+    setDishes((prevDishes) =>
+      prevDishes.filter((dish) => dish._id !== dishId)
+    );
+
+    setUser((prevUser) => ({
+      ...prevUser,
+      favouriteDish: prevUser.favouriteDish.filter(id => id !== dishId),
+    }));
   };
 
   if (loading) {
@@ -87,6 +110,7 @@ const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
                   key={restaurant._id} 
                   restaurant={restaurant} 
                   layout="default" 
+                  onRemove={handleRemoveRestaurant} 
                 />
               ))
            ) : (
@@ -102,6 +126,7 @@ const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
                   key={dish._id}  
                   dish={dish}
                   layout="default" 
+                  onRemove={handleRemoveDish}
                 />
               ))
             ) : (

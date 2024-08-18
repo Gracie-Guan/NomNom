@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
-const DishCard = ({  dish, restaurant, layout = 'default' }) => {
+const DishCard = ({  dish, restaurant, layout = 'default', onRemove }) => {
   const { user, setUser } = useContext(AuthContext);
 
   const dishId = dish?._id || " ";
@@ -45,7 +45,7 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
     const action = isPressed ? 'remove' : 'add';
 
     try {
-      const response = await fetch(`http://localhost:6868/user/${user.id}/favourites/dish`, {
+      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/dish`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,6 +62,10 @@ const DishCard = ({  dish, restaurant, layout = 'default' }) => {
       const updatedUser = { ...user, favouriteDish: data.favourite_dish };
       setUser(updatedUser);
       setIsPressed(!isPressed);
+
+      if (action === 'remove' && onRemove) {
+        onRemove(dishId);
+      }
     } catch (error) {
       console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
     }

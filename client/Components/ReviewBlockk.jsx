@@ -4,21 +4,26 @@ import {Feather, MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios';
 
 
-function ReviewBlock({reviews, filterId}){
+function ReviewBlock({reviews, filterId, userReviews}){
 
     const [reviewsWithUserData, setReviewsWithUserData] = useState([]);
 
     useEffect(() => {
+        console.log('Reviews array:', reviews);
+
         const fetchUserData = async () => {
             try {
                 const reviewsWithUsers = await Promise.all(
                     reviews.map(async (review) => {
-                        const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
-                        return {
-                            ...review,
-                            userName: userResponse.data.name,
-                            avatar: userResponse.data.profile_image,
-                        };
+                        if (!review.userName || !review.avatar) {
+                            const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
+                            return {
+                                ...review,
+                                userName: userResponse.data.name,
+                                avatar: userResponse.data.profile_image,
+                            };
+                        }
+                        return review;
                     })
                 );
                 setReviewsWithUserData(reviewsWithUsers);
@@ -27,8 +32,14 @@ function ReviewBlock({reviews, filterId}){
             }
         };
 
-        fetchUserData();
-    }, [reviews]);
+        if (reviews) {
+            fetchUserData(reviews);
+        } else if (userReviews) {
+            fetchUserData(userReviews);
+        }
+    }, [reviews, userReviews]);
+
+    
 
     // const reviewData = [
     //     {
@@ -104,9 +115,9 @@ function ReviewBlock({reviews, filterId}){
 
     // console.log("review_info", review_info);
 
-    const filteredData = filterId
-    ? reviewsWithUserData.filter((review) => review.id === filterId)
-    : reviewsWithUserData;
+    const filteredData = reviews
+    ? (filterId ? reviewsWithUserData.filter((review) => review.id === filterId) : reviewsWithUserData)
+    : userReviews;
     // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
     // let filteredData = reviewData;

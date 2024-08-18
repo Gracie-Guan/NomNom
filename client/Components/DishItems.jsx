@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Feather, MaterialIcons} from '@expo/vector-icons';
 
-const DishItem = ({name, price, description, rate}) => {
+const DishItem = ({name, price, description, rating}) => {
     const [ratingVisible, setRatingVisible] = useState(false);
     const [selectedRating, setSelectedRating] = useState(null);
 
@@ -51,7 +51,7 @@ const DishItem = ({name, price, description, rate}) => {
         <View style={styles.dishBottom}>
             <View style={styles.dishRate}>
                 <MaterialIcons name="star" size={15} color="#FFB300" />
-                <Text style={styles.dishRateText}>{rate}</Text>
+                <Text style={styles.dishRateText}>{rating}</Text>
                 <Feather name="chevron-right" size={15} color="#FFB300" />
             </View>
         </View>

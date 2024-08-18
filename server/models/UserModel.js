@@ -88,11 +88,14 @@ class UserModel {
 
 
     static async toggleLikeRestaurant(userId, restaurantId, action) {
+        // console.log(`UserModel.toggleLikeRestaurant called with userId: ${userId}, restaurantId: ${restaurantId}, action: ${action}`);
         try {
             const user = await User.findById(userId);
             if (!user) {
                 throw new Error('User not found');
             }
+
+            // console.log(`User found: ${userId}. Current favourite_restaurant:`, user.favourite_restaurant);
 
             if (action === 'add') {
                 if (!user.favourite_restaurant.includes(restaurantId)) {

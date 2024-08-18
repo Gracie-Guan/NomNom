@@ -13,7 +13,7 @@ Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 
-const RestaurantCard = ({ restaurant, layout = 'default' }) => {
+const RestaurantCard = ({ restaurant, layout = 'default' , onRemove }) => {
   const { user, setUser } = useContext(AuthContext); 
 
   const id = restaurant?._id || " ";
@@ -29,8 +29,16 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
     ? Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count), 0)
     : 0;
 
-  const isFavourite = user?.favouriteRestaurant.includes(id);
-  const [isPressed, setIsPressed] = useState(isFavourite);
+  // const isFavourite = user?.favouriteRestaurant.includes(id);
+  // const [isPressed, setIsPressed] = useState(isFavourite);
+
+  const [isPressed, setIsPressed] = useState(false);
+
+  useEffect(() => {
+    if (user && user.favouriteRestaurant) {
+      setIsPressed(user.favouriteRestaurant.includes(id));
+    }
+  }, [user, id]);
 
   const navigation = useNavigation();
 
@@ -63,9 +71,10 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
 
   const toggleFavourite = async () => {
     const action = isPressed ? 'remove' : 'add';
+    console.log(`Action: ${action}, UserId: ${user.id}, RestaurantId: ${id}`);
 
     try {
-      const response = await fetch(`http://localhost:6868/user/${user.id}/favourites/restaurant`, {
+      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,14 +83,22 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
         body: JSON.stringify({ userId: user.id, restaurantId: id, action })
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
+        const errorData = await response.json();
+        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites: ${errorData.message || 'Unknown error'}`);
       }
 
       const data = await response.json();
       const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
       setUser(updatedUser);
       setIsPressed(!isPressed);
+
+      // If the restaurant is being removed, call the onRemove callback to update the parent state
+    if (action === 'remove' && layout === 'default' && onRemove) {
+      onRemove(id);
+    }
     } catch (error) {
       console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
     }

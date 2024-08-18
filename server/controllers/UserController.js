@@ -61,13 +61,18 @@ class UserController {
 
      static async toggleLikeRestaurant(req, res) {
         const { userId, restaurantId, action } = req.body;
+        // console.log(`toggleLikeRestaurant called with userId: ${userId}, restaurantId: ${restaurantId}, action: ${action}`);
+    
         try {
             const user = await UserModel.toggleLikeRestaurant(userId, restaurantId, action);
+            // console.log(`User favourite_restaurant after ${action}:`, user.favourite_restaurant);
+
             res.status(200).json({
                 message: `Restaurant ${action === 'add' ? 'added to' : 'removed from'} favourites`,
                 favourite_restaurant: user.favourite_restaurant
             });
         } catch (error) {
+            console.error("Error in toggleLikeRestaurant:", error);
             res.status(500).json({ message: error.message });
         }
     }
