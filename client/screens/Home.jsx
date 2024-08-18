@@ -78,9 +78,9 @@ const Home = ({navigation}) => {
     //     { _id: 3, name: 'Dish C', rating: 4.7 },
     // ];
 
-    const isRestaurantLiked = (restaurantId) => {
-        return user && user.favouriteRestaurant.includes(restaurantId);
-    };
+    // const isRestaurantLiked = (restaurantId) => {
+    //     return user && user.favouriteRestaurant.includes(restaurantId);
+    // };
 
     if (loading) {
         return <Text>Loading...</Text>;
@@ -124,7 +124,7 @@ const Home = ({navigation}) => {
                     {showRestaurant ? 
                         restaurantData.map((restaurant) => (
                         <View key={restaurant._id}>
-                            <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} liked={isRestaurantLiked(restaurant._id)}/>
+                            <RestaurantCard key={restaurant._id} layout="default" restaurant={restaurant} />
                         </View>
                         )) 
                         : 

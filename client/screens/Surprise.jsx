@@ -6,9 +6,12 @@ import DishCard from '../Components/DishCards';
 import ToggleButton from '../Components/ToggleButton';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Surprise = ({navigation}) => {
+  const { user, setUser } = useContext(AuthContext); 
   const [showRestaurant, setShowRestaurant] = useState(true);
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,6 +51,47 @@ const Surprise = ({navigation}) => {
 
   const handleRefresh = () => {
     fetchRandomRestaurant();
+  };
+
+  //added like button
+  const handleLike = async () => {
+    if (!user || !randomRestaurant) {
+      console.warn('User not logged in or no restaurant available');
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: user.id, restaurantId: randomRestaurant._id, action: 'add' }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to add to favourites: ${errorData.message || 'Unknown error'}`);
+      }
+
+      const data = await response.json();
+      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+      setUser(updatedUser);
+
+      console.log(`Restaurant ${randomRestaurant.name} added to favourites`);
+      
+      handleRefresh();
+
+    } catch (error) {
+      console.error('Error adding to favourites:', error);
+    }
   };
 
   if (loading) {
@@ -104,7 +148,7 @@ const Surprise = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.likeButton}>
-            <Ionicons name="heart" size={40} color="#FFEDD1" />
+            <Ionicons name="heart" size={40} color="#FFEDD1" onPress={handleLike} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.smallButton}>

@@ -47,6 +47,19 @@ class ReviewController {
         }
     }
 
+    static async getReviewByUserId(req, res) {
+        const userId = req.params.user_id;
+        try {
+            const reviews = await ReviewModel.getReviewByUserId(userId);
+            if (reviews && reviews.length > 0) {
+                res.status(200).json(reviews);
+            } else {
+                res.status(404).json({ message: 'No reviews found for this user' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
 }
 
