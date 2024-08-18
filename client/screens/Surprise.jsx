@@ -8,27 +8,47 @@ import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from '../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Swiper from 'react-native-deck-swiper';
 
 
 const Surprise = ({navigation}) => {
   const { user, setUser } = useContext(AuthContext); 
   const [showRestaurant, setShowRestaurant] = useState(true);
-  const [randomRestaurant, setRandomRestaurant] = useState(null);
+  // const [randomRestaurant, setRandomRestaurant] = useState(null);
+  const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchRandomRestaurant = useCallback(async () => {
+  // const fetchRandomRestaurant = useCallback(async () => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+  //     const response = await axios.get('http://localhost:6868/restaurants');
+  //     const restaurants = response.data;
+  //     if (restaurants.length > 0) {
+  //       const randomIndex = Math.floor(Math.random() * restaurants.length);
+  //       setRandomRestaurant(restaurants[randomIndex]);
+  //     } else {
+  //       setError('No restaurants available');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching restaurants:', error);
+  //     setError('Error fetching restaurants');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   fetchRandomRestaurant();
+  // }, [fetchRandomRestaurant]);
+
+  const fetchRestaurants = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await axios.get('http://localhost:6868/restaurants');
-      const restaurants = response.data;
-      if (restaurants.length > 0) {
-        const randomIndex = Math.floor(Math.random() * restaurants.length);
-        setRandomRestaurant(restaurants[randomIndex]);
-      } else {
-        setError('No restaurants available');
-      }
+      setRestaurants(response.data);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
       setError('Error fetching restaurants');
@@ -38,8 +58,8 @@ const Surprise = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-    fetchRandomRestaurant();
-  }, [fetchRandomRestaurant]);
+    fetchRestaurants();
+  }, [fetchRestaurants]);
 
   const handleToggle = (isRestro) => {
     setShowRestaurant(isRestro);
@@ -49,13 +69,17 @@ const Surprise = ({navigation}) => {
     navigation.goBack();
   };
 
-  const handleRefresh = () => {
-    fetchRandomRestaurant();
-  };
+  // const handleRefresh = () => {
+  //   fetchRandomRestaurant();
+  // };
 
+  const handleRefresh = () => {
+    fetchRestaurants();
+  };
+  
   //added like button
-  const handleLike = async () => {
-    if (!user || !randomRestaurant) {
+  const handleLike = async (restaurant) => {
+    if (!user || !restaurant) {
       console.warn('User not logged in or no restaurant available');
       return;
     }
@@ -73,7 +97,7 @@ const Surprise = ({navigation}) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId: user.id, restaurantId: randomRestaurant._id, action: 'add' }),
+        body: JSON.stringify({ userId: user.id, restaurantId: restaurant._id, action: 'add' }),
       });
 
       if (!response.ok) {
@@ -85,9 +109,8 @@ const Surprise = ({navigation}) => {
       const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
       setUser(updatedUser);
 
-      console.log(`Restaurant ${randomRestaurant.name} added to favourites`);
+      console.log(`Restaurant ${restaurant.name} added to favourites`);
       
-      handleRefresh();
 
     } catch (error) {
       console.error('Error adding to favourites:', error);
@@ -120,15 +143,56 @@ const Surprise = ({navigation}) => {
           </TouchableOpacity>
           <ToggleButton style="icon-based" onToggle={handleToggle} />
         </View>
+
         <View style={styles.cardContainer}>
-          {showRestaurant ? (
-            <View>
-              {randomRestaurant && (
-                <RestaurantCard restaurant={randomRestaurant} layout="surprise" />
+          {/* <Swiper>
+            ref = {swiper => {
+              this.swiper = swiper;
+            }}
+
+            onSwiped = {() => this.onSwiped('general')}
+            onSwipedLeft = {() => this.onSwiped('left')}
+            onSwipedRight = {() => this.onSwiped('right')}
+            onTapCard = {this.swipedLeft}
+            cards = {this.state.cards}
+            cardIndex = {this.state.cardIndex}
+            renderCard = {this.renderCard}
+            onSwipedAll = {this.onSwipedAllCards}
+            stackSize = {3}
+            stackSeparation = {15}
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            swipeBackCard
+          </Swiper> */}
+
+          {showRestaurant && restaurants.length > 0 ? (
+          <Swiper
+              cards={restaurants}
+              renderCard={(restaurant) => (
+                <RestaurantCard restaurant={restaurant} layout="surprise" />
               )}
-                <View style={styles.stackcard1}></View>
-                <View style={styles.stackcard2}></View>
-            </View>
+              onSwipedRight={(cardIndex) => handleLike(restaurants[cardIndex])}
+              onSwipedLeft={(cardIndex) => {
+                if (cardIndex === restaurants.length - 1) {
+                  handleRefresh();
+                }
+              }} 
+              cardIndex={0}
+              backgroundColor={'#FFB300'}
+              stackSize={3}
+              stackSeparation={15}
+              animateOverlayLabelsOpacity
+              animateCardOpacity
+              swipeBackCard
+              cardStyle={{ justifyContent: 'center', alignItems: 'center', left: 3, top: -80 }} 
+            />
+            // <View>
+            //   {randomRestaurant && (
+            //     <RestaurantCard restaurant={randomRestaurant} layout="surprise" />
+            //   )}
+            //     <View style={styles.stackcard1}></View>
+            //     <View style={styles.stackcard2}></View>
+            // </View>
           ) : (
             <View layout='cardStack'>
               <DishCard layout='surprise' />
@@ -169,7 +233,7 @@ const styles = StyleSheet.create({
     height: windowHeight,
     backgroundColor: '#FFB300', 
   },
-  
+
   cardStack:{
     width: windowWidth * 0.8,
     height: windowHeight * 0.55,
@@ -235,6 +299,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems:'center',
     justifyContent:'space-between',
+    zIndex: 1,
   },
 
   backButton:{
