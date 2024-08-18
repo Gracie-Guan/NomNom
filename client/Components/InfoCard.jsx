@@ -2,11 +2,30 @@ import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {MaterialIcons, Feather} from '@expo/vector-icons'
 import { RestaurantContext } from '../Context/RestaurantContext';
-
+import { calculateAveragePrice } from '../utils/AvgPrice';
 
 const InfoCard = ({ }) => {
 
   const { restaurant, loading, error } = useContext(RestaurantContext);
+  const [averagePrice, setAveragePrice] = useState(null);
+
+  useEffect(() => {
+    const fetchAveragePrice = async () => {
+      if (restaurant && restaurant._id) {
+        const price = await calculateAveragePrice(restaurant._id);
+        setAveragePrice(price);
+      } else {
+        console.error('Invalid restaurant object:', restaurant);
+      }
+    };
+
+    fetchAveragePrice();
+  }, [restaurant]);
+
+  if (!restaurant) {
+    return <Text>Loading restaurant information...</Text>;
+  }
+  
   
   if (loading) {
     return (
@@ -65,9 +84,8 @@ const InfoCard = ({ }) => {
      <Text style={styles.addressText}>{`${street1}, ${city}, ${state}, ${country} ${postalcode}`}</Text>
   </View>
   <View style={styles.distance}>
-    {/* <Text style={styles.distanceText}>{restaurant.distance}km away | </Text> */}
-    <Text style={styles.distanceText}>2.4km away|</Text> 
-    <Text style={styles.priceText}>{restaurant.price_level}</Text>
+    <Text style={styles.distanceText}>2.4km away | </Text> 
+    <Text style={styles.priceText}> Avg. €{averagePrice} </Text>
   </View>
   <View style={styles.type}>
       <Text style={styles.typeText}> {restaurant.cuisine && restaurant.cuisine.length > 0 ? restaurant.cuisine[0].localized_name : 'Cuisine not available'}</Text>
@@ -97,7 +115,6 @@ const InfoCard = ({ }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "green"
   },
   imageContainer: {
     position: 'relative',
@@ -198,8 +215,8 @@ const styles = StyleSheet.create({
    },
    priceText: {
     fontSize: 14,
-    fontWeight: '500',
-    color:'#000'
+    fontFamily: 'Ubuntu-Regular',
+    color:'#9e9e9e',
    },
    type: {
      flexDirection: 'row',

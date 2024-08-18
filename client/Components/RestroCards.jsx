@@ -8,23 +8,41 @@ import { useNavigation } from '@react-navigation/native';
 import { RestaurantContext } from '../Context/RestaurantContext';
 import { AuthContext } from '../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { calculateAveragePrice } from '../utils/AvgPrice';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
-
 const RestaurantCard = ({ restaurant, layout = 'default' }) => {
-  const { user, setUser } = useContext(AuthContext); 
-
+  const { user, setUser } = useContext(AuthContext);   
   const id = restaurant?._id || " ";
+  const [averagePrice, setAveragePrice] = useState(null);
+
   const name = restaurant?.name || "Fiction Bistro";
   const rating = restaurant?.rating || "4.99";
   const address = restaurant?.address_obj?.street1 || "Walden Lake, D19";
   const cuisine = restaurant?.cuisine?.map(c => c.localized_name).slice(0,3).join(', ') || "Irish";
   const distance = restaurant?.distance || "3.5 km";
-  const price = restaurant?.price_level || "€200";
+  const price = averagePrice || restaurant?.price_level;
   const image = restaurant?.image?.[0]?.url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
+  useEffect(() => {
+    const fetchAveragePrice = async () => {
+      if (restaurant && restaurant._id) {
+        const price = await calculateAveragePrice(restaurant._id);
+        setAveragePrice(price);
+      } else {
+        console.error('Invalid restaurant object:', restaurant);
+      }
+    };
+
+    fetchAveragePrice();
+  }, [restaurant]);
+
+  if (!restaurant) {
+    return <Text>Loading restaurant information...</Text>;
+  }
+  
   const totalReviews = restaurant?.review_rating_count
     ? Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count), 0)
     : 0;
@@ -59,7 +77,6 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
       console.error('Invalid restaurant data');
     }
   }, [navigation, restaurant]);
-
 
   const toggleFavourite = async () => {
     const action = isPressed ? 'remove' : 'add';
@@ -134,7 +151,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                   <MaterialCommunityIcons name="bowl-mix-outline" size={18} color="#E65100" />
                   <Text style={styles.smallText}>{cuisine}</Text>
                 </View>
-                <Text style={styles.smallText}>Avg. {price}</Text>
+                <Text style={styles.smallText}>Avg. €{price}</Text>
               </View>
 
             </View>
@@ -165,7 +182,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 <Text style={styles.tinyText}>{cuisine}</Text>
               </View>
 
-              <Text style={styles.tinyText}>{distance} · Avg {price}</Text>
+              <Text style={styles.tinyText}>{distance} · Avg. €{price}</Text>
 
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.detailsButton} onPress={handlePressToRestro}>
@@ -200,7 +217,7 @@ const RestaurantCard = ({ restaurant, layout = 'default' }) => {
                 </View>
               </View>
 
-              <Text style={styles.mediumText}>{distance} · Avg {price}</Text>
+              <Text style={styles.mediumText}>{distance} · Avg. €{price}</Text>
 
               <View style={styles.smallContainer}>
                 <Feather name="map-pin" size={16} color="#FFB300" />

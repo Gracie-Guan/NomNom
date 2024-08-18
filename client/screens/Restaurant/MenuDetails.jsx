@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   categoryTagText: {
     color: '#707070',
     fontSize: 12,
-    fontFamily: 'Ubuntu-Bold',
+    fontFamily: 'Ubuntu-Regular',
   },
   selectedCategoryTagText: {
     color: '#000000',

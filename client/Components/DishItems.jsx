@@ -22,7 +22,7 @@ const DishItem = ({name, price, description, rate}) => {
                     <MaterialIcons
                         name="star"
                         size={30}
-                        color={i <= selectedRating ? "#FFB300" : "#9E9E9E"}
+                        color={i <= selectedRating ? "#FFB300" : "#9e9e9e"}
                     />
                 </TouchableOpacity>
             );
@@ -56,7 +56,10 @@ const DishItem = ({name, price, description, rate}) => {
             </View>
         </View>
     </View>
-    {ratingVisible && renderStars()}
+  
+        {ratingVisible && renderStars()}
+
+
     </TouchableOpacity>
     )
 }
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderRadius: 5,
+        borderRadius: 10,
         marginHorizontal: 15,
         backgroundColor: '#fff',
         shadowColor: '#000',
@@ -89,15 +92,16 @@ const styles = StyleSheet.create({
     },
     dishNameText:{
         fontSize: 14,
-        fontWeight: 'bold',
-        paddingRight: 10
+        fontFamily:'Ubuntu-Medium',
+        paddingRight: 10,
+        paddingBottom:5,
     },
     heartIcon:{
         paddingTop: 1
     },
     dishPriceText: {
         fontSize: 14,
-        fontWeight: 'bold',
+        fontFamily:'Ubuntu-Medium',
         paddingRight: 5
       },
     dishMiddle: {
@@ -117,15 +121,22 @@ const styles = StyleSheet.create({
     dishRateText: {
         fontSize: 11,
         color:'#9E9E9E',
-        fontWeight: 'bold',
+        fontFamily:'Ubuntu-Medium',
         paddingLeft: 2,
         paddingRight: 3
     },
+
     starsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingBottom: 10,
-    }
+        paddingVertical: 10,
+        backgroundColor: '#e8e8e8',
+        marginHorizontal: 15,
+        marginBottom:10,
+        marginTop:-10,
+        borderBottomLeftRadius:10,
+        borderBottomRightRadius:10,
+    },
 })
 
 export default DishItem
