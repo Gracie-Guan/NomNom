@@ -131,8 +131,8 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-        <ImageBackground source={require('../assets/background.jpg')} style={styles.background}>
-            <Image source={require('../assets/logo.jpg')} style={styles.logo}/>
+        <ImageBackground source={require('../assets/gradient-abstract-background.jpg')} style={styles.background}>
+            <Image source={require('../assets/nomnom_logo.png')} style={styles.logo}/>
             <View style={styles.cardContainer}>
                 <View style={styles.card}>
                     <View style={styles.titleContainer}>
@@ -148,14 +148,14 @@ const SignUpScreen = ({ navigation }) => {
                                     style={styles.input}
                                     placeholder="What is your name"
                                     value={name}
-                                    placeholderTextColor={'black'}
+                                    placeholderTextColor={'#9e9e9e'}
                                     onChangeText={setName}
                                 />
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Email"
                                     value={email}
-                                    placeholderTextColor={'black'}
+                                    placeholderTextColor={'#9e9e9e'}
                                     onChangeText={setEmail}
                                     keyboardType="email-address"
                                 />
@@ -163,7 +163,7 @@ const SignUpScreen = ({ navigation }) => {
                                     style={styles.input}
                                     placeholder="Password"
                                     value={password}
-                                    placeholderTextColor={'black'}
+                                    placeholderTextColor={'#9e9e9e'}
                                     onChangeText={setPassword}
                                     secureTextEntry
                                 />
@@ -291,186 +291,212 @@ const SignUpScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-      },
-    background: {
-        flex: 1,
-      },
-      logo: {
-        width: 80,
-        height: 80,
-        borderRadius: 20,
-        marginTop: 20,
-        marginLeft: 20
-      },
-      cardContainer: {
-        flex: 1,
-        alignItems: 'center',
-        marginVertical: 60
-      },
-      card: {
-        width: '100%',
-        width: 350,
-        height: 380,
-        padding: 20,
-        borderRadius: 15,
-        backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      titleContainer: {
-        flexDirection: 'row',
-        marginTop: 10,
-        marginBottom: 10
-      },
-      number:{
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 6,
-        paddingBottom: 4,
-        marginRight: 20,
-        backgroundColor:'rgb(40,40,40)',
-        borderRadius: 20
-      },
-      first:{
-        fontSize: 15,
-        fontWeight: '700',
-        color:'white'
-      },
-      cardTitle: {
-        fontSize: 20,
-        fontWeight: '700',
-      },
-      contentContainer:{
-        height: 250,
-        alignItems:'center'
-      },
-      inputContainer: {
-        width: '100%',
-        alignItems: 'center',
-        marginVertical: 20
+  safeArea: {
+      flex: 1,
     },
-      input:{
-        fontSize:13,
-        padding: 15,
-        backgroundColor: 'rgb(230,230,230)',
-        width: '70%',
-        borderRadius: 5,
-        color:'black',
-        marginBottom: 15,
+  background: {
+      flex: 1,
+    },
+    logo: {
+      width: 80,
+      height: 80,
+      borderRadius: 10,
+      marginTop: 20,
+      marginLeft: 20
+    },
+    cardContainer: {
+      flex: 1,
+      alignItems: 'center',
+      marginVertical: 60
+    },
+    card: {
+      width: '100%',
+      width: 350,
+      height: 380,
+      padding: 20,
+      borderRadius: 15,
+      backgroundColor: 'white',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    titleContainer: {
+      flexDirection: 'row',
+      marginTop: 12,
+      marginBottom: 10
+    },
+    number:{
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingTop: 6,
+      paddingBottom: 6,
+      marginRight: 20,
+      backgroundColor:'#FF9400',
+      borderRadius: 30,
+    },
+    first:{
+      fontSize: 15,
+      fontFamily:'Ubuntu-Medium',
+      color:'white'
+    },
+    cardTitle: {
+      fontSize: 20,
+      fontFamily:'Ubuntu-Medium',
+    },
+    contentContainer:{
+      height: 250,
+      alignItems:'center'
+    },
+    inputContainer: {
+      width: '100%',
+      alignItems: 'center',
+      marginVertical: 20
+  },
+    input:{
+      fontSize:14,
+      padding: 15,
+      backgroundColor: 'white',
+      shadowColor:'rgb(200,200,200)',
+      shadowOffset:{
+        width: 0,
+        height:2
       },
-      cardDescription: {
-        fontSize: 16,
+      shadowOpacity: 0.6,
+      shadowRadius: 3,
+      width: '70%',
+      borderRadius: 5,
+      color:'black',
+      marginBottom: 15,
+      fontFamily:'Ubuntu-regular',
+    },
+    cardDescription: {
+      fontSize: 16,
+      fontFamily:'Ubuntu-regular',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 60
+    },
+    button: {
+      position: 'absolute',
+      bottom: 10,
+      padding: 10,
+    },
+    prevButton: {
+      left: 10,
+    },
+    nextButton: {
+      right: 10,
+    },
+    arrowNext:{
+      backgroundColor:'#FFB300',
+      padding: 8,
+      borderRadius: 50,
+      marginBottom: 10
+    },
+    nextText: {
+      fontsize: 13,
+      fontFamily:'Ubuntu-Regular',
+      textAlign:'center',
+    },
+    prevText:{
+      fontsize: 13,
+      fontFamily:'Ubuntu-Regular',
+    },
+    arrowPrev:{
+      backgroundColor:'#FFB300',
+      width:36,
+      paddingLeft: 8,
+      paddingVertical: 8,
+      borderRadius: 50,
+      marginBottom: 10,
+    },
+    ethContainer:{
+      height: 200,
+      maxWidth: 200
+    },
+    ethText:{
+      color: 'rgb(100,100,100)',
+      fontFamily:'Ubuntu-Regular',
+      fontSize: 12
+    },
+    dropContainer:{
+      marginTop: 40
+    },
+    dropdown:{
+      backgroundColor: 'white',
+      shadowColor: 'rbg(200,200,200)',
+      shadowOffset:{
+        width: 0,
+        height:2
       },
-      buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 60
-      },
-      button: {
-        position: 'absolute',
-        bottom: 10,
-        padding: 10,
-    
-      },
-      prevButton: {
-        left: 10,
-      },
-      nextButton: {
-        right: 10,
-      },
-      arrowNext:{
-        backgroundColor:'rgb(180, 180,180)',
-        padding: 8,
-        borderRadius: 50,
-        marginBottom: 10
-      },
-      nextText: {
-        fontsize: 13,
-        fontWeight: '700',
-        textAlign:'center',
-      },
-      prevText:{
-        fontsize: 13,
-        fontWeight: '700',
-      },
-      arrowPrev:{
-        backgroundColor:'rgb(180, 180,180)',
-        width:36,
-        paddingLeft: 8,
-        paddingVertical: 8,
-        borderRadius: 50,
-        marginBottom: 10,
-      },
-      ethContainer:{
-        height: 200,
-        maxWidth: 200
-      },
-      ethText:{
-        color: 'rgb(100,100,100)',
-        fontWeight: '500',
-        fontSize: 12
-      },
-      dropContainer:{
-        marginTop: 20
-      },
-      dropdown:{
-        backgroundColor: 'rgb(200,200,200)',
-        padding: 10,
-        borderRadius: 10
-      },
-      placeholderStyle:{
-        color: 'rgb(50, 50, 50)',
-        fontSize: 13,
-      },
-      resContainer:{
-        height: 200,
-        width: 200
-      },
-      tagContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        margin: 10,
-      },
-      tag: {
-        backgroundColor: 'rgb(230,230,230)',
-        borderRadius: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingVertical: 5,
-        margin: 5,
-      },
-      selectedTag: {
-        backgroundColor: 'rgb(100,100,100)',
-      },
-      tagText: {
-        color: 'black',
-        fontSize: 13
-      },
-      selectedTagText: {
-        color: 'white',
-      },
-      descriptionTag:{
-        color: 'rgb(100,100,100)',
-        fontWeight: '500',
-        fontSize: 12,
-        marginBottom: 20,
-        marginLeft: 10
-      },
-      finalContainer:{
-        width: 200,
-        height: 200,
-        justifyContent: 'center',
-        alignItems: 'center'
-      },
-      finalText: {
-        fontWeight: 'bold',
-        fontSize: 17,
-        textAlign:'center'
-      }
+      shadowOpacity: 0.15,
+      shadowRadius: 3,
+      padding: 10,
+      borderRadius: 10
+    },
+    placeholderStyle:{
+      color: 'rgb(180, 180, 180)',
+      fontSize: 13,
+      fontFamily:'Ubuntu-Regular',
+    },
+    textStyle: {
+      color: 'black',
+      fontSize: 14,
+      fontFamily: 'Ubuntu-Regular',
+    },
+    resContainer:{
+      height: 200,
+      width: 200
+    },
+    tagContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      margin: 10,
+    },
+    tag: {
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderColor: 'rgb(200,200,200)',
+      borderRadius: 15,
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingVertical: 5,
+      margin: 5,
+    },
+    selectedTag: {
+      backgroundColor: '#FFB300',
+      borderColor: 'white',
+      fontFamily: 'Ubuntu-Medium',
+    },
+    tagText: {
+      color: 'rgb(150,150,150)',
+      fontSize: 13,
+      fontFamily:'Ubuntu-Regular',
+    },
+    selectedTagText: {
+      color: 'white',
+    },
+    descriptionTag:{
+      color: 'rgb(100,100,100)',
+      fontFamily:'Ubuntu-Medium',
+      fontSize: 14,
+      marginBottom: 20,
+      marginLeft: 10
+    },
+    finalContainer:{
+      width: 200,
+      height: 200,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    finalText: {
+      fontFamily:'Ubuntu-Bold',
+      fontSize: 17,
+      textAlign:'center'
+    }
 })
 
 export default SignUpScreen;
