@@ -1,10 +1,45 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Feather, MaterialIcons} from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../Context/AuthContext';
 
-const DishItem = ({name, price, description, rate}) => {
+const DishItem = ({dishId, name, price, description, rating}) => {
+    const { user, setUser } = useContext(AuthContext);
+
+    const isFavourite = user?.favouriteDish.includes(dishId);
+    const [isPressed, setIsPressed] = useState(isFavourite);
+
     const [ratingVisible, setRatingVisible] = useState(false);
     const [selectedRating, setSelectedRating] = useState(null);
+
+    const toggleFavourite = async () => {
+        const action = isPressed ? 'remove' : 'add';
+    
+        try {
+          const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/dish`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ userId: user.id, dishId, action })
+          });
+    
+          if (!response.ok) {
+            throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
+          }
+    
+          const data = await response.json();
+          const updatedUser = { ...user, favouriteDish: data.favourite_dish };
+          setUser(updatedUser);
+          setIsPressed(!isPressed);
+        } catch (error) {
+          console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+        }
+      };
+    
 
     const toggleRatingVisibility = () => {
         setRatingVisible(!ratingVisible);
@@ -29,15 +64,19 @@ const DishItem = ({name, price, description, rate}) => {
         }
         return <View style={styles.starsContainer}>{stars}</View>;
     };
+
     return (
     <TouchableOpacity onPress={toggleRatingVisibility}>
     <View style={styles.dishContainer}>
         <View style={styles.dishTop}>
             <View style={styles.dishName}>
                 <Text style={styles.dishNameText}>{name}</Text>
-                <View style={styles.heartIcon}>
-                    <Feather name="heart" size={15} color="grey" />
-                </View>
+            <TouchableOpacity onPress={toggleFavourite} style={styles.heartIcon}>
+             <Ionicons 
+                name = {isPressed ? "heart":"heart-outline"} 
+                size={15} 
+                color={isPressed ? '#E65100':"grey" }/>
+          </TouchableOpacity>
             </View>
             <View style={styles.dishPrice}>
                 <Text style={styles.dishPriceText}>€ {price}</Text>
@@ -51,7 +90,7 @@ const DishItem = ({name, price, description, rate}) => {
         <View style={styles.dishBottom}>
             <View style={styles.dishRate}>
                 <MaterialIcons name="star" size={15} color="#FFB300" />
-                <Text style={styles.dishRateText}>{rate}</Text>
+                <Text style={styles.dishRateText}>{rating}</Text>
                 <Feather name="chevron-right" size={15} color="#FFB300" />
             </View>
         </View>
@@ -97,7 +136,10 @@ const styles = StyleSheet.create({
         paddingBottom:5,
     },
     heartIcon:{
-        paddingTop: 1
+        paddingTop: 1,
+        backgroundColor:'rgba(255, 255, 255, 0.40)',
+        padding: 2, 
+        borderRadius: 15
     },
     dishPriceText: {
         fontSize: 14,

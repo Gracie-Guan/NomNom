@@ -3,22 +3,31 @@ import React, { useEffect, useState } from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios';
 
-
-function ReviewBlock({reviews, filterId}){
+function ReviewBlock({reviews = [], filterId, userReviews}){
 
     const [reviewsWithUserData, setReviewsWithUserData] = useState([]);
 
+    // console.log("ReviewBlockk - reviews: ", reviews);
+
     useEffect(() => {
-        const fetchUserData = async () => {
+        // console.log('Reviews array:', reviews);
+        // console.log('User Reviews:', userReviews);
+
+        const fetchUserData = async (reviewsToProcess) => {
+            if (!reviewsToProcess || reviewsToProcess.length === 0) return;
+
             try {
                 const reviewsWithUsers = await Promise.all(
-                    reviews.map(async (review) => {
-                        const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
-                        return {
-                            ...review,
-                            userName: userResponse.data.name,
-                            avatar: userResponse.data.profile_image,
-                        };
+                    reviewsToProcess.map(async (review) => {
+                        if (!review.userName || !review.avatar) {
+                            const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
+                            return {
+                                ...review,
+                                userName: userResponse.data.name,
+                                avatar: userResponse.data.profile_image,
+                            };
+                        }
+                        return review;
                     })
                 );
                 setReviewsWithUserData(reviewsWithUsers);
@@ -26,9 +35,19 @@ function ReviewBlock({reviews, filterId}){
                 console.error('Error fetching user data:', error);
             }
         };
+    
+        if (userReviews && userReviews.length > 0) {
+            fetchUserData(userReviews);
+        } else if (reviews && reviews.length > 0) {
+            fetchUserData(reviews);
+        }
+    }, [reviews, userReviews]);
 
-        fetchUserData();
-    }, [reviews]);
+    
+
+    useEffect(() => {
+        // console.log("Reviewblockk - reviewsWithUserData: ", reviewsWithUserData);
+    })
 
     // const reviewData = [
     //     {
@@ -104,9 +123,15 @@ function ReviewBlock({reviews, filterId}){
 
     // console.log("review_info", review_info);
 
+    // const filteredData = reviews
+    // ? (filterId ? reviewsWithUserData.filter((review) => review.id === filterId) : reviewsWithUserData)
+    // : userReviews;
     const filteredData = filterId
     ? reviewsWithUserData.filter((review) => review.id === filterId)
     : reviewsWithUserData;
+
+    // console.log("ReviewBlockk - filteredData: ", filteredData);
+
     // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
     // let filteredData = reviewData;
@@ -140,13 +165,13 @@ function ReviewBlock({reviews, filterId}){
                    ))}
                </View>
            </View>
-           <View style={styles.tagBar}>
-               {review.features.map((tag,index)=> (
+           {/* <View style={styles.tagBar}>
+               {review.features.map((tag, index)=> (
                    <View key={index} style={styles.tag}>
                        <Text style={styles.tagText}>{tag}</Text>
                    </View>
                ))}
-           </View>
+           </View> */}
            <View style={styles.comment}>
                <Text style={styles.commentText}>
                    {review.text}

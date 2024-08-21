@@ -11,5 +11,6 @@ router.get('/restaurant/:restaurant_id', ReviewController.getReviewById);
 // router.get('/restaurants', RestaurantController.getRestaurantByName);
 
 router.post('/restaurant/:restaurant_id', validateToken, ReviewController.createReview);
+router.get('/user/:user_id', ReviewController.getReviewByUserId);
 
 module.exports = router;
