@@ -7,59 +7,17 @@ import ToggleButton from '../Components/ToggleButton';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from '../Context/AuthContext';
+import { RestaurantContext } from '../Context/RestaurantContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Swiper from 'react-native-deck-swiper';
 
 
 const Surprise = ({navigation}) => {
   const { user, setUser } = useContext(AuthContext); 
-  const [showRestaurant, setShowRestaurant] = useState(true);
   // const [randomRestaurant, setRandomRestaurant] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // const fetchRandomRestaurant = useCallback(async () => {
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-  //     const response = await axios.get('http://localhost:6868/restaurants');
-  //     const restaurants = response.data;
-  //     if (restaurants.length > 0) {
-  //       const randomIndex = Math.floor(Math.random() * restaurants.length);
-  //       setRandomRestaurant(restaurants[randomIndex]);
-  //     } else {
-  //       setError('No restaurants available');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching restaurants:', error);
-  //     setError('Error fetching restaurants');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchRandomRestaurant();
-  // }, [fetchRandomRestaurant]);
-
-  const fetchRestaurants = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get('http://localhost:6868/restaurants');
-      setRestaurants(response.data);
-    } catch (error) {
-      console.error('Error fetching restaurants:', error);
-      setError('Error fetching restaurants');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRestaurants();
-  }, [fetchRestaurants]);
+  const { restaurant, dishData, loading, error } = useContext(RestaurantContext);
+  const [showRestaurant, setShowRestaurant] = useState(true);
+  const [cardIndex, setCardIndex] = useState(0);
 
   const handleToggle = (isRestro) => {
     setShowRestaurant(isRestro);
@@ -69,53 +27,123 @@ const Surprise = ({navigation}) => {
     navigation.goBack();
   };
 
+  const handleRefresh = () => {
+    setCardIndex(0);
+  };
   // const handleRefresh = () => {
-  //   fetchRandomRestaurant();
+  //   if (showRestaurant) {
+  //     fetchRestaurants();
+  //   } else {
+  //     fetchDishes();
+  //   }
   // };
 
-  const handleRefresh = () => {
-    fetchRestaurants();
-  };
+  // const handleLike = async (item) => {
+  //   if (!user || !item) {
+  //     console.warn('User not logged in or no item available');
+  //     return;
+  //   }
   
-  //added like button
-  const handleLike = async (restaurant) => {
-    if (!user || !restaurant) {
-      console.warn('User not logged in or no restaurant available');
+  //   try {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (!token) {
+  //       console.error('Token is missing');
+  //       return;
+  //     }
+  
+  //     const isRestaurant = showRestaurant; // Determine if it's a restaurant or dish
+  //     const url = isRestaurant 
+  //       ? `http://localhost:6868/auth/user/${user.id}/favourites/restaurant`
+  //       : `http://localhost:6868/auth/user/${user.id}/favourites/dish`;
+  
+  //     const body = isRestaurant 
+  //       ? { userId: user.id, restaurantId: item._id, action: 'add' }
+  //       : { userId: user.id, dishId: item._id, action: 'add' };
+  
+  //     const response = await fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify(body),
+  //     });
+  
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(`Failed to add to favourites: ${errorData.message || 'Unknown error'}`);
+  //     }
+  
+  //     const data = await response.json();
+      
+  //     if (isRestaurant) {
+  //       const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+  //       setUser(updatedUser);
+  //       console.log(`Restaurant ${item.name} added to favourites`);
+  //     } else {
+  //       const updatedUser = { ...user, favouriteDish: data.favourite_dish };
+  //       setUser(updatedUser);
+  //       console.log(`Dish ${item.name} added to favourites`);
+  //     }
+  
+  //   } catch (error) {
+  //     console.error('Error adding to favourites:', error);
+  //   }
+  // };
+
+  const handleLike = async (item) => {
+    if (!user || !item) {
+      console.warn('User not logged in or no item available');
       return;
     }
-
+  
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
         console.error('Token is missing');
         return;
       }
-
-      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
+  
+      const isRestaurant = showRestaurant;
+      const url = isRestaurant 
+        ? `http://localhost:6868/auth/user/${user.id}/favourites/restaurant`
+        : `http://localhost:6868/auth/user/${user.id}/favourites/dish`;
+  
+      const body = isRestaurant 
+        ? { userId: user.id, restaurantId: item._id, action: 'add' }
+        : { userId: user.id, dishId: item._id, action: 'add' };
+  
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId: user.id, restaurantId: restaurant._id, action: 'add' }),
+        body: JSON.stringify(body),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`Failed to add to favourites: ${errorData.message || 'Unknown error'}`);
       }
-
+  
       const data = await response.json();
-      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
-      setUser(updatedUser);
-
-      console.log(`Restaurant ${restaurant.name} added to favourites`);
       
-
+      if (isRestaurant) {
+        const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+        setUser(updatedUser);
+        console.log(`Restaurant ${item.name} added to favourites`);
+      } else {
+        const updatedUser = { ...user, favouriteDish: data.favourite_dish };
+        setUser(updatedUser);
+        console.log(`Dish ${item.name} added to favourites`);
+      }
+  
     } catch (error) {
       console.error('Error adding to favourites:', error);
     }
   };
+
 
   if (loading) {
     return (
@@ -165,19 +193,19 @@ const Surprise = ({navigation}) => {
             swipeBackCard
           </Swiper> */}
 
-          {showRestaurant && restaurants.length > 0 ? (
+          {showRestaurant && restaurant.length > 0 ? (
           <Swiper
-              cards={restaurants}
+              cards={restaurant}
               renderCard={(restaurant) => (
                 <RestaurantCard restaurant={restaurant} layout="surprise" />
               )}
-              onSwipedRight={(cardIndex) => handleLike(restaurants[cardIndex])}
-              onSwipedLeft={(cardIndex) => {
-                if (cardIndex === restaurants.length - 1) {
+              cardIndex={cardIndex}
+              onSwipedRight={(cardIndex) => handleLike(restaurant[cardIndex])}
+              onSwipedLeft={(cardIndex)=> {
+                if (cardIndex === restaurant.length - 1) {
                   handleRefresh();
                 }
               }} 
-              cardIndex={0}
               backgroundColor={'#FFB300'}
               stackSize={3}
               stackSeparation={15}
@@ -194,11 +222,33 @@ const Surprise = ({navigation}) => {
             //     <View style={styles.stackcard2}></View>
             // </View>
           ) : (
-            <View layout='cardStack'>
-              <DishCard layout='surprise' />
-              <View style={styles.stackcard1}></View>
-              <View style={styles.stackcard2}></View>
-            </View>
+            // <View layout='cardStack'>
+
+            //   <DishCard layout='surprise' />
+            //   <View style={styles.stackcard1}></View>
+            //   <View style={styles.stackcard2}></View>
+            // </View>
+            <Swiper
+            cards={dishData}
+            renderCard={(dish) => (
+              <DishCard dish={dish} layout="surprise" restaurant={dish.restaurant}/>
+            )}
+            cardIndex={cardIndex}
+            onSwipedRight={(cardIndex) => handleLike(dishData[cardIndex])}
+            onSwipedLeft={(cardIndex)=> {
+                if (cardIndex === dishData.length - 1) {
+                  handleRefresh();
+                }
+            }} 
+            backgroundColor={'#FFB300'}
+            stackSize={3}
+            stackSeparation={15}
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            swipeBackCard
+            cardStyle={{ justifyContent: 'center', alignItems: 'center', left: 3, top: -80 }} 
+          />
+
           )}
         </View>
 
