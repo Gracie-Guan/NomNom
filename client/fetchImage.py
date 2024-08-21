@@ -79,9 +79,6 @@ def fetch_image():
 
             print(response.text)
 
-            with open("/Users/kieutrangnguyenvu/Downloads/ocr/menu-json/" + filename.split(".")[0] + "_02.json", "w") as fw:
-                fw.write(response.text.strip("```json\n").strip("```"))
-
             counter += 1
 
         else:
@@ -117,9 +114,6 @@ def extract_text(source, filename):
     # response.resolve()
 
     # response = second_response.text[:-2] + "}" + second_response.text[-2:]
-
-    with open("/Users/kieutrangnguyenvu/Downloads/ocr/menu-json/" + filename.split("/")[-1].split(".")[0] + "_02.json", "w") as fw:
-        fw.write(response.strip("```json\n").strip("```"))
 
     return response.strip("```json\n").strip("```")
 

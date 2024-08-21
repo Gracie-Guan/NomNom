@@ -10,6 +10,7 @@ export const RestaurantProvider = ({ children }) => {
 
     const [dishData, setDishData] = useState([]);
     const [topDishes, setTopDishes] = useState([]);
+    const [menuRestroMap, setMap] = useState([])
 
     const fetchRestaurants = async () => {
         setLoading(true);
@@ -25,12 +26,15 @@ export const RestaurantProvider = ({ children }) => {
             const menuResponse = await fetch("http://localhost:6868/menus");
             const menuData = await menuResponse.json();
 
-            setDishData(dishesData);
-
             const menuToRestaurantMap = menuData.reduce((map, menu) => {
                 map[menu._id] = menu.restaurant_id;
                 return map;
             }, {});
+
+            setMap(menuToRestaurantMap);
+
+            console.log("RestaurantContext - menuToRestaurantMap: ", menuToRestaurantMap);
+
             const topDishes = dishesData
                 .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
                 .slice(0, 10)
@@ -39,7 +43,19 @@ export const RestaurantProvider = ({ children }) => {
                     const restaurant = data.find(r => r._id === restaurantId);
                     return { ...dish, restaurant };
                 });
+
             setTopDishes(topDishes);
+
+            const allDishes = dishesData
+            .map(dish => {
+                const restaurantId = menuToRestaurantMap[dish.menu_id];
+                const restaurant = data.find(r => r._id === restaurantId);
+                return { ...dish, restaurant };
+            });
+
+            setDishData(allDishes);
+
+            // console.log("RestaurantContext - topDishes: ", topDishes);
             // const allDishes = dishesResponse.data
             // .map(dish => {
             // const restaurantId = menuToRestaurantMap[dish.menu_id];
@@ -65,7 +81,7 @@ export const RestaurantProvider = ({ children }) => {
         restaurant,
         loading,
         error,
-        dishData, topDishes
+        dishData, topDishes, menuRestroMap
     }
 
     // const fetchRestaurant = useCallback(async (restaurantId) => {

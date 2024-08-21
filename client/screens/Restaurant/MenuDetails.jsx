@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import DishItem from '../../Components/DishItems';
 
 export default function MenuDetails({ menuItems, restaurant_id }) {
-console.log("MenuDetails - menuItems: ", menuItems);
+// console.log("MenuDetails - menuItems: ", menuItems);
 const [selectedCategory, setSelectedCategory] = useState(null);
 
-console.log("selectedCategory: ", selectedCategory);
+// console.log("selectedCategory: ", selectedCategory);
 
 const getPrice = (priceObj) => {
 if (Object.prototype.toString.call(priceObj) === "[object Number]") {

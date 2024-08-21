@@ -19,21 +19,21 @@ const [data, setData] = useState([]);
 const [fullData, setFullData] = useState([]);
 const { restaurant } = useContext(SingleRestaurantContext);
 
-console.log("filtered data: ", data);
-console.log("full data: ", fullData);
+// console.log("filtered data: ", data);
+// console.log("full data: ", fullData);
 
 const handleSearch = () => {
-console.log("menu info - handleSearch no. 1 - handle search...");
+// console.log("menu info - handleSearch no. 1 - handle search...");
 // console.log("type of query is string? 1: ", typeof query !== "string")
-console.log("type of query is not string? 2: ", typeof query !== "string")
-console.log("type of query is object? 2: ", typeof query === "object")
+// console.log("type of query is not string? 2: ", typeof query !== "string")
+// console.log("type of query is object? 2: ", typeof query === "object")
 if (typeof query !== "string") {
 setQuery('');
 console.log("Set query to be: ", query);
 }
 
 try {
-console.log("menu info - handleSearch no. 2 - query: ", query);
+// console.log("menu info - handleSearch no. 2 - query: ", query);
 
 // console.log("menu info - handleSearch no. 3 - query.type: ", query.type);
 
@@ -41,7 +41,7 @@ console.log("menu info - handleSearch no. 2 - query: ", query);
 // setQuery('');
 // } else {
 const formattedQuery = query.toLowerCase();
-console.log("MenuInfo - handleSearch no. 4 - formattedQuery: ", formattedQuery);
+// console.log("MenuInfo - handleSearch no. 4 - formattedQuery: ", formattedQuery);
 const filteredData = filter(fullData, (dish) => {
 return contains(dish, formattedQuery);
 });

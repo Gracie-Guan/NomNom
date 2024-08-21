@@ -48,7 +48,7 @@ const fileKey = `${folderName}/${fileName}`; // This specifies the folder and fi
 
 const imagePath = `https://${bucketName}.s3.amazonaws.com/${fileKey}`;
 
-console.log("step one before: ", stepOneDone)
+// console.log("step one before: ", stepOneDone)
 
 const pickImage = async () => {
 setStepOne(false);
@@ -73,10 +73,10 @@ const fileData = await fetch(filePath).then(response =>
 response.blob(),
 );
 await uploadFiletoS3(bucketName, fileKey, fileData);
-console.log("File UPLOAD YEEEAH:", fileKey);
+// console.log("File UPLOAD YEEEAH:", fileKey);
 setModalVisible(true);
 setStepOne(true);
-console.log("step one after: ", stepOneDone)
+// console.log("step one after: ", stepOneDone)
 } catch (uploadError) {
 console.error("Error uploading file:", uploadError);
 Alert.alert('Error', "File upload failed");

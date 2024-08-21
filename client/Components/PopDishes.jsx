@@ -21,7 +21,7 @@ return;
 
 try {
 const restaurantId = restaurant._id;
-console.log("restaurantId: ", restaurantId);
+// console.log("restaurantId: ", restaurantId);
 
 // Fetch the menu using the restaurantId
 const menuResponse = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurantId}`);
@@ -30,7 +30,7 @@ if (menus.length === 0) {
 throw new Error('No menus found for the specified restaurant ID.');
 }
 const menuId = menus[0].menu_id;
-console.log("menuId: ", menuId);
+// console.log("menuId: ", menuId);
 // Fetch the dishes using the menuId
 const dishesResponse = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
 const dishes = dishesResponse.data.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating)).slice(0, 4);

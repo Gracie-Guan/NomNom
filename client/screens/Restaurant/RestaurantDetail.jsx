@@ -7,9 +7,9 @@ import { SingleRestaurantContext } from '../../Context/SingleRestaurantContext.j
 
 
 const RestaurantDetails = ({ route, navigation }) => {
-console.log("Route params:", route.params);
+// console.log("Route params:", route.params);
 const restaurantId = route.params?.restaurantId;
-console.log("Fetched restaurantId:", restaurantId);
+// console.log("Fetched restaurantId:", restaurantId);
 
 const { fetchRestaurant, restaurant, loading, error } = useContext(SingleRestaurantContext);
 const handleBack = () => {
@@ -18,7 +18,7 @@ navigation.goBack();
 
 
 useEffect(() => {
-console.log("Fetched restaurantId:", restaurantId);
+// console.log("Fetched restaurantId:", restaurantId);
 if (restaurantId) {
 fetchRestaurant(restaurantId);
 }
