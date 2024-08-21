@@ -10,14 +10,15 @@ function ReviewBlock({reviews = [], filterId, userReviews}){
     // console.log("ReviewBlockk - reviews: ", reviews);
 
     useEffect(() => {
-        console.log('Reviews array:', reviews);
+        // console.log('Reviews array:', reviews);
+        // console.log('User Reviews:', userReviews);
 
-        const fetchUserData = async () => {
-            if (!reviews || reviews.length === 0) return;
+        const fetchUserData = async (reviewsToProcess) => {
+            if (!reviewsToProcess || reviewsToProcess.length === 0) return;
 
             try {
                 const reviewsWithUsers = await Promise.all(
-                    reviews.map(async (review) => {
+                    reviewsToProcess.map(async (review) => {
                         if (!review.userName || !review.avatar) {
                             const userResponse = await axios.get(`http://localhost:6868/auth/user/${review.user_id}`);
                             return {
@@ -34,11 +35,11 @@ function ReviewBlock({reviews = [], filterId, userReviews}){
                 console.error('Error fetching user data:', error);
             }
         };
-
-        if (reviews) {
-            fetchUserData(reviews);
-        } else if (userReviews) {
+    
+        if (userReviews && userReviews.length > 0) {
             fetchUserData(userReviews);
+        } else if (reviews && reviews.length > 0) {
+            fetchUserData(reviews);
         }
     }, [reviews, userReviews]);
 

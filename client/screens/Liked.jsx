@@ -6,35 +6,38 @@ import DishCard from '../Components/DishCards';
 import Feather from '@expo/vector-icons/Feather';
 import { AuthContext } from '../Context/AuthContext';
 import axios from 'axios';
+import { RestaurantContext } from '../Context/RestaurantContext';
 
 
 const Liked = ({ navigation }) => {
-  const [showRestaurants, setShowRestaurants] = useState(true);
-  const [restaurants, setRestaurants] = useState([]);
-  const [dishes, setDishes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [showRestaurants, setShowRestaurants] = useState(true);
+  // const [restaurants, setRestaurants] = useState([]);
+  // const [dishes, setDishes] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const { user, setUser } = useContext(AuthContext);
   // console.log('User favourite restaurants:', user.favouriteRestaurant);
+  const { restaurant, dishData } = useContext(RestaurantContext);
+  const [showRestaurants, setShowRestaurants] = useState(true);
 
 
-  useEffect(() => {
-    const fetchRestaurantsAndDishes = async () => {
-      try {
-        const restaurantsResponse = await axios.get('http://localhost:6868/restaurants');
-        setRestaurants(restaurantsResponse.data);
+  // useEffect(() => {
+  //   const fetchRestaurantsAndDishes = async () => {
+  //     try {
+  //       const restaurantsResponse = await axios.get('http://localhost:6868/restaurants');
+  //       setRestaurants(restaurantsResponse.data);
 
-        const dishesResponse = await axios.get('http://localhost:6868/dishes');
-        setDishes(dishesResponse.data);
+  //       const dishesResponse = await axios.get('http://localhost:6868/dishes');
+  //       setDishes(dishesResponse.data);
 
-      } catch (err) {
-        console.error("Error fetching restaurants:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //     } catch (err) {
+  //       console.error("Error fetching restaurants:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchRestaurantsAndDishes();
-  }, []);
+  //   fetchRestaurantsAndDishes();
+  // }, []);
 
   const handleToggle = (isRestro) => {
     setShowRestaurants(isRestro);
@@ -44,12 +47,30 @@ const Liked = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const handleRemoveRestaurant = (restaurantId) => {
-    setRestaurants((prevRestaurants) => 
-      prevRestaurants.filter((restaurant) => restaurant._id !== restaurantId)
-    );
+  // const handleRemoveRestaurant = (restaurantId) => {
+  //   setRestaurants((prevRestaurants) => 
+  //     prevRestaurants.filter((restaurant) => restaurant._id !== restaurantId)
+  //   );
 
-    // Also update the user context to reflect the removal
+  //   // Also update the user context to reflect the removal
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     favouriteRestaurant: prevUser.favouriteRestaurant.filter(id => id !== restaurantId),
+  //   }));
+  // };
+
+  // const handleRemoveDish = (dishId) => {
+  //   setDishes((prevDishes) =>
+  //     prevDishes.filter((dish) => dish._id !== dishId)
+  //   );
+
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     favouriteDish: prevUser.favouriteDish.filter(id => id !== dishId),
+  //   }));
+  // };
+  
+  const handleRemoveRestaurant = (restaurantId) => {
     setUser((prevUser) => ({
       ...prevUser,
       favouriteRestaurant: prevUser.favouriteRestaurant.filter(id => id !== restaurantId),
@@ -57,35 +78,37 @@ const Liked = ({ navigation }) => {
   };
 
   const handleRemoveDish = (dishId) => {
-    setDishes((prevDishes) =>
-      prevDishes.filter((dish) => dish._id !== dishId)
-    );
-
     setUser((prevUser) => ({
       ...prevUser,
       favouriteDish: prevUser.favouriteDish.filter(id => id !== dishId),
     }));
   };
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
-
   // const filteredRestaurants = restaurants.filter(restaurant => 
   //   user.favouriteRestaurant.includes(restaurant._id)
   // );
 
-const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
+// const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
+//   const favouriteDishSet = new Set(user.favouriteDish);
+
+//   const filteredRestaurants = restaurants.filter(restaurant => 
+//     favouriteRestaurantSet.has(restaurant._id)
+//   );
+
+//   const filteredDishes = dishes.filter(dish => 
+//     favouriteDishSet.has(dish._id)
+//   );
+
+  const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
   const favouriteDishSet = new Set(user.favouriteDish);
 
-  const filteredRestaurants = restaurants.filter(restaurant => 
-    favouriteRestaurantSet.has(restaurant._id)
+  const filteredRestaurants = restaurant.filter(r => 
+    favouriteRestaurantSet.has(r._id)
   );
 
-  const filteredDishes = dishes.filter(dish => 
+  const filteredDishes = dishData.filter(dish => 
     favouriteDishSet.has(dish._id)
   );
-
 
   return (
     <SafeAreaView style={styles.container}>

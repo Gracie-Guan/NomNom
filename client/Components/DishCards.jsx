@@ -11,11 +11,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
-const DishCard = ({ dish, restaurant, layout = 'default' }) => {
+const DishCard = ({ dish, restaurant, layout = 'default', onRemove }) => {
     // Use provided data or placeholders
+    const { user, setUser } = useContext(AuthContext);
 
     console.log("DishCards - restaurant: ", restaurant)
 
+    const dishId = dish?._id || " ";
     const name = dish?.name || "Fiction Chips";
     const restName = restaurant?.name || "The Buttery";
     const rating = dish?.rating || "4.99";
@@ -25,13 +27,14 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
     const price = dish?.price || "20";
     const image = dish?.image || 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
-    const [isPressed, setIsPressed] = useState(false);
+    const isFavourite = user?.favouriteDish.includes(dishId);
+    const [isPressed, setIsPressed] = useState(isFavourite);
 
     const navigation = useNavigation();
 
     const handlePressToRestro = useCallback(() => {
-        console.log("BOOOOOOOH: ", restaurant);
-        // console.log("Navigating with restaurantId:", restaurant._id);
+        // console.log("BOOOOOOOH: ", restaurant);
+        console.log("Navigating with restaurantId:", restaurant._id);
         if (restaurant && restaurant._id) {
             navigation.navigate('RestaurantDetail', {
                 screen: 'RestaurantTabs',
@@ -118,7 +121,7 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
 
 
                             <View style={styles.homeContainer}>
-                                <View style={styles.flexRow}>
+                                <View style={styles.flexRow}>  
                                     <Feather name="map-pin" size={16} color="#E65100" />
                                     <Text style={styles.smallText}>{address}</Text>
                                 </View>

@@ -58,24 +58,29 @@ export default function MenuDetails({ menuItems, restaurant_id }) {
                 {selectedCategory === null ? categories.map((category) => (
                     <View key={category}>
                         <Text style={styles.categoryTitle}>{category}</Text>
-                        {categoryMap[category].map((item) => (
+                        {categoryMap[category].map((item) => {
+                            console.log('Dish Item:', item);
+                            return (
                             <DishItem
                                 key={item._id}
+                                dishId={item._id} 
                                 name={item.name}
                                 price={getPrice(item.price)}
                                 description={item.description}
-                                rate={item.rate}
+                                rating={item.rating}
                             />
-                        ))}
+                        );
+                        })}
                     </View>
                 ))
                     : filteredMenuItems.map((item) => (
                         <DishItem
                             key={item._id}
+                            dishId={item._id} 
                             name={item.name}
                             price={getPrice(item.price)}
                             description={item.description}
-                            rate={item.rate}
+                            rating={item.rating}
                         />
                     ))}
             </ScrollView>
