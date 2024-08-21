@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const ToggleButton = ({ style = 'pill', onToggle }) => {
-  const [isRestro, setIsRestro] = useState(true);
+  const [isRestro, setIsRestro] = useState(false);
 
   const toggleView = () => {
     setIsRestro(!isRestro);
