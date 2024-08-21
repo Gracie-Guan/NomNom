@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         position: 'relative',
+        marginBottom: 10
     },
 
     homeImage: {
