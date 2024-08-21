@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RestaurantContext } from '../Context/RestaurantContext';
 import { AuthContext } from '../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { calculateAveragePrice } from '../utils/AvgPrice';
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
@@ -15,8 +16,10 @@ Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 const RestaurantCard = ({ restaurant, layout = 'default', onRemove }) => {
     const { user, setUser } = useContext(AuthContext);
+    const [averagePrice, setAveragePrice] = useState(null);
 
     const id = restaurant?._id || " ";
+  
     const name = restaurant?.name || "Fiction Bistro";
     const rating = restaurant?.rating || "4.99";
     const address = restaurant?.address_obj?.street1 || "Walden Lake, D19";
@@ -32,6 +35,23 @@ const RestaurantCard = ({ restaurant, layout = 'default', onRemove }) => {
     // console.log("layout: ", layout);
 
     const [isPressed, setIsPressed] = useState(false);
+  
+    useEffect(() => {
+    const fetchAveragePrice = async () => {
+      if (restaurant && restaurant._id) {
+        const price = await calculateAveragePrice(restaurant._id);
+        setAveragePrice(price);
+      } else {
+        console.error('Invalid restaurant object:', restaurant);
+      }
+    };
+
+    fetchAveragePrice();
+  }, [restaurant]);
+
+  if (!restaurant) {
+    return <Text>Loading restaurant information...</Text>;
+  }
 
     const navigation = useNavigation();
 
@@ -239,6 +259,7 @@ const RestaurantCard = ({ restaurant, layout = 'default', onRemove }) => {
 
     return <View style={styles.container}>{renderContent()}</View>;
 };
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

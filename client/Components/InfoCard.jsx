@@ -5,15 +5,29 @@ import { RestaurantContext } from '../Context/RestaurantContext';
 import { AuthContext } from '../Context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SingleRestaurantContext } from '../Context/SingleRestaurantContext';
+import { calculateAveragePrice } from '../utils/AvgPrice';
 
 
 const InfoCard = ({ }) => {
 
   const { restaurant, loading, error } = useContext(SingleRestaurantContext);
   const { user, setUser } = useContext(AuthContext);
-
+  const [averagePrice, setAveragePrice] = useState(null);
   const [isPressed, setIsPressed] = useState(false);
 
+  useEffect(() => {
+    const fetchAveragePrice = async () => {
+      if (restaurant && restaurant._id) {
+        const price = await calculateAveragePrice(restaurant._id);
+        setAveragePrice(price);
+      } else {
+        console.error('Invalid restaurant object:', restaurant);
+      }
+    };
+
+    fetchAveragePrice();
+  }, [restaurant]);
+  
   useEffect(() => {
     if (user && restaurant) {
       setIsPressed(user.favouriteRestaurant.includes(restaurant._id));
@@ -58,7 +72,7 @@ const InfoCard = ({ }) => {
     }
   };
 
-  if (loading) {
+    if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -66,14 +80,10 @@ const InfoCard = ({ }) => {
     );
   }
 
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+  if (!restaurant) {
+    return <Text>Loading restaurant information...</Text>;
   }
+  
 
   if (error) {
     return (
@@ -120,35 +130,34 @@ const InfoCard = ({ }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.detailsContainer}>
-        <Text style={styles.detailsText}>{restaurant.name}</Text>
-        <View style={styles.ratingContainer}>
-          <View style={styles.rating}>
-            <MaterialIcons name='star' color={'#FFA900'} size={20} />
-            <Text style={styles.ratingText}>{restaurant.rating}</Text>
-          </View>
-          <View style={styles.reviewNumber}>
-            <Text style={styles.reviewNumberText}>
-              {Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count, 10), 0)}
-            </Text>
-            <Text style={styles.reviewNumberText}>reviews</Text>
-          </View>
-        </View>
-        <View style={styles.addressContainer}>
-          <View style={styles.address}>
-            <Text style={styles.addressText}>{`${street1}, ${city}, ${state}, ${country} ${postalcode}`}</Text>
-          </View>
-          <View style={styles.distance}>
-            {/* <Text style={styles.distanceText}>{restaurant.distance}km away | </Text> */}
-            <Text style={styles.distanceText}>2.4km away|</Text>
-            <Text style={styles.priceText}>{restaurant.price_level}</Text>
-          </View>
-          <View style={styles.type}>
-            <Text style={styles.typeText}> {restaurant.cuisine && restaurant.cuisine.length > 0 ? restaurant.cuisine[0].localized_name : 'Cuisine not available'}</Text>
-            <View style={styles.openButton}>
-              <Text style={styles.openType}>open</Text>
-            </View>
-          </View>
+<View style={styles.detailsContainer}>
+  <Text style={styles.detailsText}>{restaurant.name}</Text>
+  <View style={styles.ratingContainer}>
+  <View style={styles.rating}>
+    <MaterialIcons name='star' color={'#FFA900'} size={20} />
+    <Text style={styles.ratingText}>{restaurant.rating}</Text>
+  </View>
+  <View style={styles.reviewNumber}>
+    <Text style={styles.reviewNumberText}>
+    {Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count, 10), 0)}
+  </Text>
+    <Text style={styles.reviewNumberText}>reviews</Text>
+  </View>
+</View>
+<View style={styles.addressContainer}>
+  <View style={styles.address}>
+     <Text style={styles.addressText}>{`${street1}, ${city}, ${state}, ${country} ${postalcode}`}</Text>
+  </View>
+  <View style={styles.distance}>
+    <Text style={styles.distanceText}>2.4km away | </Text> 
+    <Text style={styles.priceText}> Avg. Main €{averagePrice} </Text>
+  </View>
+  <View style={styles.type}>
+      <Text style={styles.typeText}> {restaurant.cuisine && restaurant.cuisine.length > 0 ? restaurant.cuisine[0].localized_name : 'Cuisine not available'}</Text>
+    <View style={styles.openButton}>
+      <Text style={styles.openType}>open</Text>
+     </View>
+   </View>
           <View style={styles.twoButton}>
             <TouchableOpacity style={styles.map} onPress={() => {
               const url = `https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}`;
@@ -171,7 +180,6 @@ const InfoCard = ({ }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "green"
   },
   imageContainer: {
     position: 'relative',
@@ -271,14 +279,14 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#000'
-  },
-  type: {
-    flexDirection: 'row',
-    marginTop: 5
-  },
-  typeText: {
+    fontFamily: 'Ubuntu-Regular',
+    color:'#9e9e9e',
+   },
+   type: {
+     flexDirection: 'row',
+     marginTop: 5
+   },
+   typeText: {
     fontSize: 14,
     fontWeight: '500',
     color: '#9E9E9E'

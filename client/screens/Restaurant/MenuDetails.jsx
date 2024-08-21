@@ -132,25 +132,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
     },
-    categoryTagText: {
-        color: '#707070',
-        fontSize: 12,
-        fontFamily: 'Ubuntu-Bold',
-    },
-    selectedCategoryTagText: {
-        color: '#000000',
-    },
-    menuContainer: {
-        flex: 1,
-    },
-    categoryTitle: {
-        fontSize: 16,
-        fontFamily: 'Ubuntu-Bold',
-        marginBottom: 15,
-        marginLeft: 15,
-        color: '#000'
-    },
-
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+  },
+  categoryTagText: {
+    color: '#707070',
+    fontSize: 12,
+    fontFamily: 'Ubuntu-Regular',
+  },
+  selectedCategoryTagText: {
+    color: '#000000',
+  },
+  menuContainer: {
+    flex: 1,
+  },
+  categoryTitle: {
+    fontSize: 16,
+    fontFamily: 'Ubuntu-Bold',
+    marginBottom: 15,
+    marginLeft: 15,
+    color: '#000'
+  },
     uploadBox: {
         flexDirection: 'row',
         justifyContent: 'space-between',

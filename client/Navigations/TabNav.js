@@ -20,6 +20,7 @@ import LogoutPage from '../screens/LogoutPage';
 import ProfileCard from '../Components/ProfileCard';
 import SearchList from '../screens/SearchList';
 import EndComments from '../screens/EndComments';
+import Password from '../screens/Password';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,6 +85,7 @@ function ProfileStack(){
       <Stack.Screen name='Signup' component={SignUpScreen} />
       <Stack.Screen name='Logout' component={LogoutPage} />
       <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
+      <Stack.Screen name='Password' component={Password}/>
     </Stack.Navigator>
   )
 }

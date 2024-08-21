@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, SafeAreaView, ImageBackground, Image, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import { AuthContext } from '../Context/AuthContext'; 
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -17,16 +18,20 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate('Home');
   };
 
+  const handleForget = () => {
+    navigation.navigate('Password');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
-      <ImageBackground source={{uri:'https://www.zmo.ai/wp-content/uploads/2023/09/yellow-background-with-dynamic-abstract-shapes-eps-10-vector.jpg'}} style={styles.background}>
+      <ImageBackground source={require('../assets/geometric-background.jpg')} style={styles.background}>
         <TouchableOpacity style={styles.skip}>
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
         <View style={styles.topSection}>
-          <Image source={require('../assets/logo.jpg')} style={styles.logo}/>
+          <Image source={require('../assets/nomnom_logo.png')} style={styles.logo}/>
         </View>
 
         <View style={styles.loginCard}>
@@ -39,9 +44,9 @@ const LoginScreen = ({ navigation }) => {
 
             <View style={styles.middleSecond}>
                 <View style={styles.forgetWord}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleForget}>
                     <Text style={styles.password}>
-                    Forget your password ?
+                        Forget your password ?
                     </Text>
                 </TouchableOpacity>
                 </View>

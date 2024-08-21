@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Platform, Linking, SafeAreaView } from 'react-native';
+import { View, Image, StyleSheet, Dimensions, Text, TouchableOpacity, Platform, Linking, SafeAreaView, Animated } from 'react-native';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { UserLocation } from '../Context/UserLocation';
 import RestaurantCard from '../Components/RestroCards';
@@ -8,8 +8,10 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { calculateDistance, addDistanceToRestaurants } from '../utils/distance';
 import SearchTop from '../Components/SearchTop';
 import FilterBar from '../Components/FilterBar';
+import { calculateAveragePrice } from '../utils/AvgPrice';
+import { getFlagImage } from '../utils/flags';
 
-export default function GoogleMapsView() {
+export default function GoogleMapsView({ navigation, route }) {
   const [mapRegion, setMapRegion] = useState(null);
   const { location } = useContext(UserLocation);
   const [selectedRestro, setSelectedRestro] = useState(null);
@@ -17,14 +19,23 @@ export default function GoogleMapsView() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [buttonPosition] = useState(new Animated.Value(20)); 
+
+  useEffect(() => {
+    Animated.timing(buttonPosition, {
+      toValue: selectedRestro ? 180 : 20,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [selectedRestro]);
 
   useEffect(() => {
     if (location) {
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.04,
-        longitudeDelta: 0.04,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
       });
     }
   }, [location]);
@@ -34,18 +45,28 @@ export default function GoogleMapsView() {
       try {
         const response = await axios.get('http://localhost:6868/restaurants');
         const restaurantsWithDistance = addDistanceToRestaurants(response.data, location);
-        // console.log('Fetched restaurants:', response.data);
-        setRestaurants(restaurantsWithDistance);
-
-        const processedRestaurants = response.data.map(restaurant => {
-          // console.log('Processing restaurant:', restaurant.name);
-          // console.log('Latitude:',restaurant.latitude, 'Longitude', restaurant.longitude);
-          return {
-            ...restaurant,
-            latitude: restaurant.latitude || 53.3498,
-            longitude: restaurant.longitude || -6.2603,
+        
+        const restaurantsWithPricesAndTopDish = await Promise.all(restaurantsWithDistance.map(async (restaurant) => {
+          const averagePrice = await calculateAveragePrice(restaurant._id);
+          const menuResponse = await axios.get(`http://localhost:6868/menus/restaurantId/${restaurant._id}`);
+          const menus = menuResponse.data;
+          
+          let topDish = null;
+          if (menus.length > 0) {
+            const menuId = menus[0].menu_id;
+            const dishesResponse = await axios.get(`http://localhost:6868/dishes/menuId/${menuId}`);
+            const dishes = dishesResponse.data;
+            if (dishes.length > 0) {
+              topDish = dishes.reduce((prev, current) => 
+                (parseFloat(prev.rating) > parseFloat(current.rating)) ? prev : current
+              );
+            }
           }
-        })
+          
+          return { ...restaurant, averagePrice, topDish: topDish ? topDish.name : 'Not available' };
+        }));
+
+        setRestaurants(restaurantsWithPricesAndTopDish);
       } catch (error) {
         setError('Error fetching restaurant data');
         console.error('Error fetching restaurants:', error);
@@ -56,9 +77,34 @@ export default function GoogleMapsView() {
     fetchRestaurants();
   }, [location]);
 
-  const handleMarkerPress = (restaurant) => {
-    // console.log('Selected restaurant rating:', restaurant.name, restaurant.rating);
+  const CustomMarker = ({ cuisine, averagePrice, rating, isSelected }) => {
+    const flagImage = getFlagImage(cuisine);
+    return (
+      <View style={styles.markerContainer}>
+        <Image
+          source={flagImage}
+          style={styles.flagImage}
+        />
+        <View style={[
+            styles.markerSubContainer,
+            isSelected ? styles.selectedMarker : null
+          ]}>
+            <Text style={styles.markerText}>€{averagePrice} ⭐️ {rating}</Text>
+          </View>
+      </View>
+
+    );
+  };
+
+  const handleMarkerPress = (event, restaurant) => {
+    event.stopPropagation(); 
     setSelectedRestro(restaurant);
+  };
+
+  const handleMapPress = (event) => {
+    if (event.nativeEvent.action !== 'marker-press') {
+      setSelectedRestro(null);
+    }
   };
 
   const toUserLocation = () => {
@@ -92,49 +138,59 @@ export default function GoogleMapsView() {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.searchBlock}>        
-          <SearchTop  />
-          <FilterBar  />
-        </View>
-      
-        <MapView 
-          style={styles.map} 
-          showsUserLocation={true}
-          region={mapRegion}
-        >
-
+      <View style={styles.searchBlock}>        
+        <SearchTop  />
+        <FilterBar  />
+      </View>
+    
+      <MapView 
+        style={styles.map} 
+        showsUserLocation={true}
+        region={mapRegion}
+        ref={mapRef}
+        onPress={handleMapPress}
+      >
         {restaurants.map((restaurant) => (
           <Marker
             key={restaurant._id}
             coordinate={{
-              latitude: restaurant.latitude,
-              longitude: restaurant.longitude
+              latitude: parseFloat(restaurant.latitude),
+              longitude: parseFloat(restaurant.longitude)
             }}
-            onPress={() => handleMarkerPress(restaurant)}
+            onPress={(event) => handleMarkerPress(event,restaurant)}
           >
-            <Callout>
-              <Text>{restaurant.name}</Text>
+            <CustomMarker
+              rating={restaurant.rating} 
+              cuisine={restaurant.cuisine}
+              averagePrice={restaurant.averagePrice || 'N/A'} 
+              isSelected={selectedRestro && selectedRestro._id === restaurant._id}
+            />
+            <Callout tooltip>
+              <View style={styles.calloutContainer}>
+                <Text style={styles.calloutTitle}>{restaurant.name}</Text>
+                <Text style={styles.calloutText}>Top Dish: {restaurant.topDish}</Text>
+              </View>
             </Callout>
           </Marker>
         ))}
-        </MapView>
-        
-        <TouchableOpacity style={styles.goToUser} onPress={toUserLocation}>
-           <Ionicons name="locate" size={24} color="#9e9e9e" />
+      </MapView>
+      
+      <Animated.View style={[styles.controlButtons, { bottom: buttonPosition }]}>
+        <TouchableOpacity style={styles.controlButton} onPress={toUserLocation}>
+          <Ionicons name="locate" size={24} color="#9e9e9e" />
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navToRestro} onPress={navToRestaurant}>
-           <Ionicons name="navigate-outline" size={24} color="#9e9e9e" />
+        <TouchableOpacity style={styles.controlButton} onPress={navToRestaurant}>
+          <Ionicons name="navigate-outline" size={24} color="#9e9e9e" />
         </TouchableOpacity>
+      </Animated.View>
 
-        {selectedRestro && (
-          <View style={styles.card}>
-            <RestaurantCard 
-              layout='list' 
-              restaurant={selectedRestro} />
-          </View>
-        )}
-
+      {selectedRestro && (
+        <View style={styles.card}>
+          <RestaurantCard 
+            layout='list'
+            restaurant={selectedRestro} />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -150,6 +206,27 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff',
   },
 
+  calloutContainer:{
+    width: 180,
+    borderRadius:10,
+    padding:10,
+    backgroundColor:'#E65100',
+    marginBottom:-10,
+  },
+
+  calloutTitle:{
+    fontFamily:'Ubuntu-Medium',
+    fontSize:16,
+    marginBottom:5,
+    color: '#fff',
+  },
+
+  calloutText:{
+    fontFamily:'Ubuntu-Regular',
+    fontSize:14,
+    color: '#fff',
+  },
+
   card:{
     position:'absolute',
     bottom:20,
@@ -159,7 +236,7 @@ const styles = StyleSheet.create({
 
   cardTitle:{
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily:'Ubuntu-Bold',
     marginBottom:5,
   },
 
@@ -176,6 +253,34 @@ const styles = StyleSheet.create({
     gap:6,
   },
 
+  controlButtons: {
+    position: 'absolute',
+    right: 16,
+    flexDirection: 'column',
+  },
+
+  controlButton: {
+    backgroundColor: '#fff',
+    borderRadius: 30,
+    padding: 10,
+    marginBottom: 10,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+
+  flagImage: {
+    width: 36,
+    height: 36,
+    elevation: 1,
+    shadowColor: "#FFB300",
+    shadowOffset: { width: 2, height: 3 },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
+  },
+
   goToUser:{
     position:'absolute',
     right:16,
@@ -187,7 +292,7 @@ const styles = StyleSheet.create({
   },
 
   navToRestro:{
-    position:'absolute',
+    // position:'absolute',
     right:16,
     bottom:'27%',
     padding: 10,
@@ -195,4 +300,44 @@ const styles = StyleSheet.create({
     elevation:5,
     backgroundColor:"#fff",
   },
+
+  markerSubContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    height: 20,
+    paddingHorizontal:6,
+    minWidth: 70,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#FFB300',
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.85,
+        shadowRadius: 1,
+      },
+      android: {
+        elevation: 4,
+      },
+    })
+  },
+
+  markerContainer: {
+    flexDirection:'row',
+    padding: 8,
+    alignItems:'center',
+  },
+
+  selectedMarker: {
+    shadowColor: '#E65100',
+  },
+
+  markerText: {
+    color: '#221C19',
+    fontFamily:'Ubuntu-Regular',
+    fontSize: 12,
+  },
+
+  calloutBox:{
+    alignItems: 'center',
+    justifyItems: 'center',
+  }
 });
