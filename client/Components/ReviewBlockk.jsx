@@ -3,15 +3,18 @@ import React, { useEffect, useState } from 'react'
 import {Feather, MaterialIcons} from '@expo/vector-icons'
 import axios from 'axios';
 
-
-function ReviewBlock({reviews, filterId, userReviews}){
+function ReviewBlock({reviews = [], filterId, userReviews}){
 
     const [reviewsWithUserData, setReviewsWithUserData] = useState([]);
+
+    // console.log("ReviewBlockk - reviews: ", reviews);
 
     useEffect(() => {
         console.log('Reviews array:', reviews);
 
         const fetchUserData = async () => {
+            if (!reviews || reviews.length === 0) return;
+
             try {
                 const reviewsWithUsers = await Promise.all(
                     reviews.map(async (review) => {
@@ -40,6 +43,10 @@ function ReviewBlock({reviews, filterId, userReviews}){
     }, [reviews, userReviews]);
 
     
+
+    useEffect(() => {
+        // console.log("Reviewblockk - reviewsWithUserData: ", reviewsWithUserData);
+    })
 
     // const reviewData = [
     //     {
@@ -115,9 +122,15 @@ function ReviewBlock({reviews, filterId, userReviews}){
 
     // console.log("review_info", review_info);
 
-    const filteredData = reviews
-    ? (filterId ? reviewsWithUserData.filter((review) => review.id === filterId) : reviewsWithUserData)
-    : userReviews;
+    // const filteredData = reviews
+    // ? (filterId ? reviewsWithUserData.filter((review) => review.id === filterId) : reviewsWithUserData)
+    // : userReviews;
+    const filteredData = filterId
+    ? reviewsWithUserData.filter((review) => review.id === filterId)
+    : reviewsWithUserData;
+
+    // console.log("ReviewBlockk - filteredData: ", filteredData);
+
     // const filteredReviews = review_info.filter(review => review.restaurant_id === restaurant_info);
 
     // let filteredData = reviewData;
@@ -151,13 +164,13 @@ function ReviewBlock({reviews, filterId, userReviews}){
                    ))}
                </View>
            </View>
-           <View style={styles.tagBar}>
-               {review.features.map((tag,index)=> (
+           {/* <View style={styles.tagBar}>
+               {review.features.map((tag, index)=> (
                    <View key={index} style={styles.tag}>
                        <Text style={styles.tagText}>{tag}</Text>
                    </View>
                ))}
-           </View>
+           </View> */}
            <View style={styles.comment}>
                <Text style={styles.commentText}>
                    {review.text}

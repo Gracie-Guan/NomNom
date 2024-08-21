@@ -23,7 +23,7 @@ function SearchBar({ restaurantId }) {
 
     const handleSearch = () => {
       const formattedQuery = query.toLowerCase();
-      console.log(formattedQuery);
+      // console.log(formattedQuery);
       const filteredData = filter(fullData, (dish) => {
         return contains(dish, formattedQuery);
       });
