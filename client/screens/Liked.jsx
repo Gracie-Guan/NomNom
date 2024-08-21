@@ -127,6 +127,7 @@ const favouriteRestaurantSet = new Set(user.favouriteRestaurant);
                   dish={dish}
                   layout="default" 
                   onRemove={handleRemoveDish}
+                  restaurant={dish.restaurant}
                 />
               ))
             ) : (

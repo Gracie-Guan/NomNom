@@ -34,7 +34,13 @@ function SearchList({ navigation, route }) {
         );
         // }
         // Return true if either the name or any cuisine item matches the search query
-        return nameMatch || cuisineMatch;
+
+        if (type === "restro") {
+            return nameMatch || cuisineMatch;
+        } else {
+            const descriptMatch = r.description.toLowerCase().includes(searchQuery.toLowerCase());
+            return nameMatch || cuisineMatch || descriptMatch;
+        }
     });
 
     console.log("SearchList - results: ", results);

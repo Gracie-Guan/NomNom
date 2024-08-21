@@ -13,17 +13,17 @@ Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 
-const RestaurantCard = ({ restaurant, layout = 'default' , onRemove }) => {
-  const { user, setUser } = useContext(AuthContext); 
+const RestaurantCard = ({ restaurant, layout = 'default', onRemove }) => {
+    const { user, setUser } = useContext(AuthContext);
 
-  const id = restaurant?._id || " ";
-  const name = restaurant?.name || "Fiction Bistro";
-  const rating = restaurant?.rating || "4.99";
-  const address = restaurant?.address_obj?.street1 || "Walden Lake, D19";
-  const cuisine = restaurant?.cuisine?.map(c => c.localized_name).slice(0,3).join(', ') || "Irish";
-  const distance = restaurant?.distance || "3.5 km";
-  const price = restaurant?.price_level || "€200";
-  const image = restaurant?.image?.[0]?.url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    const id = restaurant?._id || " ";
+    const name = restaurant?.name || "Fiction Bistro";
+    const rating = restaurant?.rating || "4.99";
+    const address = restaurant?.address_obj?.street1 || "Walden Lake, D19";
+    const cuisine = restaurant?.cuisine?.map(c => c.localized_name).slice(0, 3).join(', ') || "Irish";
+    const distance = restaurant?.distance || "3.5 km";
+    const price = restaurant?.price_level || "€200";
+    const image = restaurant?.image?.[0]?.url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
     const totalReviews = restaurant?.review_rating_count
         ? Object.values(restaurant.review_rating_count).reduce((sum, count) => sum + parseInt(count), 0)
@@ -47,8 +47,8 @@ const RestaurantCard = ({ restaurant, layout = 'default' , onRemove }) => {
         }
     }, [navigation, restaurant]);
 
-  // const isFavourite = user?.favouriteRestaurant.includes(id);
-  // const [isPressed, setIsPressed] = useState(isFavourite);
+    // const isFavourite = user?.favouriteRestaurant.includes(id);
+    // const [isPressed, setIsPressed] = useState(isFavourite);
 
     const handleToMenu = useCallback(() => {
         // console.log("Navigating to menu with restaurantId:", restaurant._id);
@@ -62,81 +62,82 @@ const RestaurantCard = ({ restaurant, layout = 'default' , onRemove }) => {
         }
     }, [navigation, restaurant]);
 
-  useEffect(() => {
-    if (user && user.favouriteRestaurant) {
-      setIsPressed(user.favouriteRestaurant.includes(id));
-    }
-  }, [user, id]);
+    useEffect(() => {
+        if (user && user.favouriteRestaurant) {
+            setIsPressed(user.favouriteRestaurant.includes(id));
+        }
+    }, [user, id]);
 
-  const toggleFavourite = async () => {
-    const action = isPressed ? 'remove' : 'add';
-    console.log(`Action: ${action}, UserId: ${user.id}, RestaurantId: ${id}`);
+    const toggleFavourite = async () => {
+        const action = isPressed ? 'remove' : 'add';
+        console.log(`Action: ${action}, UserId: ${user.id}, RestaurantId: ${id}`);
 
-    try {
-      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ userId: user.id, restaurantId: id, action })
-      });
+        try {
+            const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ userId: user.id, restaurantId: id, action })
+            });
 
-      console.log('Response status:', response.status);
+            console.log('Response status:', response.status);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites: ${errorData.message || 'Unknown error'}`);
-      }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites: ${errorData.message || 'Unknown error'}`);
+            }
 
-      const data = await response.json();
-      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
-      setUser(updatedUser);
-      setIsPressed(!isPressed);
+            const data = await response.json();
+            const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+            setUser(updatedUser);
+            setIsPressed(!isPressed);
 
-      // If the restaurant is being removed, call the onRemove callback to update the parent state
-    if (action === 'remove' && layout === 'default' && onRemove) {
-      onRemove(id);
-    }
-    } catch (error) {
-      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
-    }
-  };
+            // If the restaurant is being removed, call the onRemove callback to update the parent state
+            if (action === 'remove' && layout === 'default' && onRemove) {
+                onRemove(id);
+            }
+        } catch (error) {
+            console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+        }
+    };
 
-  const renderContent = () => {
-    switch (layout) {
-      // for home page and liked
-      case 'default':
-        return (
-          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} onPress={handlePressToRestro} >
-            <Image source={{ uri: image }} style={styles.homeImage} />
+    const renderContent = () => {
+        switch (layout) {
+            // for home page and liked
+            case 'default':
+                return (
+                    <TouchableOpacity style={[styles.homeCard, styles.shadowSubtle]} onPress={handlePressToRestro} >
+                        <Image source={{ uri: image }} style={styles.homeImage} />
 
-            
-              <View style={styles.homeRatingContainer}>
-                  <Ionicons name="star" size={20} color="#FFB300" />
-                  <Text style={styles.ratingText}>{rating}</Text>
-              </View>
-              
-              
-              <TouchableOpacity
-                  onPress={toggleFavourite}
-                  activeOpacity={1}
-                  style = {styles.likeButton}>
-                  <Ionicons 
-                    name = {isPressed ? "heart":"heart-outline"} 
-                    size={24} 
-                    color={isPressed ? '#E65100':"#fff" }/>
-              </TouchableOpacity>
-                       
-            <View style={styles.homeInfo}>
-              <View style={styles.homeKeyInfo}>              
-                <Text style={styles.restaurantName}>{name}</Text>
-                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
-                  <Feather name="pocket" size={16} color="#fff" />
-                  <Text style={styles.menuButtonText}>Menu</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.homeContainer}>
+
+                        <View style={styles.homeRatingContainer}>
+                            <Ionicons name="star" size={20} color="#FFB300" />
+                            <Text style={styles.ratingText}>{rating}</Text>
+                        </View>
+
+
+                        <TouchableOpacity
+                            onPress={toggleFavourite}
+                            activeOpacity={1}
+                            style={styles.likeButton}>
+                            <Ionicons
+                                name={isPressed ? "heart" : "heart-outline"}
+                                size={24}
+                                color={isPressed ? '#E65100' : "#fff"} />
+                        </TouchableOpacity>
+
+                        <View style={styles.homeInfo}>
+                            <View style={styles.homeKeyInfo}>
+                                <Text style={styles.restaurantName}>{name}</Text>
+                                <TouchableOpacity style={styles.menuButton} onPress={handleToMenu}>
+                                    <Feather name="pocket" size={16} color="#fff" />
+                                    <Text style={styles.menuButtonText}>Menu</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.homeContainer}>
                                 <View style={styles.flexRow}>
                                     <Feather name="map-pin" size={16} color="#E65100" />
                                     <Text style={styles.smallText}>{address}</Text>

@@ -77,6 +77,8 @@ export const RestaurantProvider = ({ children }) => {
         }
     }, [])
 
+    // console.log("RestaurantContext - topDishes: ", topDishes[0].restaurant)
+
     const value = {
         restaurant,
         loading,

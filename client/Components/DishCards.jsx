@@ -13,6 +13,9 @@ Text.defaultProps.style = { fontFamily: 'Ubuntu-Regular' };
 
 const DishCard = ({ dish, restaurant, layout = 'default' }) => {
     // Use provided data or placeholders
+
+    console.log("DishCards - restaurant: ", restaurant)
+
     const name = dish?.name || "Fiction Chips";
     const restName = restaurant?.name || "The Buttery";
     const rating = dish?.rating || "4.99";
@@ -50,68 +53,77 @@ const DishCard = ({ dish, restaurant, layout = 'default' }) => {
             console.error('Invalid restaurant data');
         }
     }, [navigation, restaurant]);
-    
+
     const toggleFavourite = async () => {
-    const action = isPressed ? 'remove' : 'add';
+        const action = isPressed ? 'remove' : 'add';
 
-    try {
-      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/dish`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ userId: user.id, dishId, action })
-      });
+        try {
+            const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/dish`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ userId: user.id, dishId, action })
+            });
 
-      if (!response.ok) {
-        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
-      }
+            if (!response.ok) {
+                throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites`);
+            }
 
-      const data = await response.json();
-      const updatedUser = { ...user, favouriteDish: data.favourite_dish };
-      setUser(updatedUser);
-      setIsPressed(!isPressed);
+            const data = await response.json();
+            const updatedUser = { ...user, favouriteDish: data.favourite_dish };
+            setUser(updatedUser);
+            setIsPressed(!isPressed);
 
-      if (action === 'remove' && onRemove) {
-        onRemove(dishId);
-      }
-    } catch (error) {
-      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
-    }
-  };
+            if (action === 'remove' && onRemove) {
+                onRemove(dishId);
+            }
+        } catch (error) {
+            console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+        }
+    };
 
-  const renderContent = () => {
-    switch (layout) {
-      // for home page and liked
-      case 'default':
-        return (
-          <TouchableOpacity style={[styles.homeCard,styles.shadowSubtle]} onPress={handlePressToRestro}>
-            <Image source={{ uri: image }} style={styles.homeImage} />
-          
-              <View style={styles.homePriceContainer}>
-                <Feather name="pocket" size={16} color="#fff" />
-                <Text style={styles.priceText}>&euro;{price}</Text>
-              </View>
-              
-              <TouchableOpacity
-                  onPress={toggleFavourite}
-                  activeOpacity={1}
-                  style = {styles.likeButton}>
-                  <Ionicons 
-                    name = {isPressed ? "heart":"heart-outline"} 
-                    size={24} 
-                    color={isPressed ? '#E65100':"#fff" }/>
-              </TouchableOpacity>
-                       
-            <View style={styles.homeInfo}>
-              <View style={styles.homeKeyInfo}>              
-                <Text style={styles.dishName}>{name}</Text>
-                <View style={styles.menuButton}>
-                  <Ionicons name="star" size={20} color="#FFB300" />
-                  <Text style={styles.ratingText}>{rating}</Text>
-                </View>
-              </View>
+    const renderContent = () => {
+        switch (layout) {
+            // for home page and liked
+            case 'default':
+                return (
+                    <TouchableOpacity style={[styles.homeCard, styles.shadowSubtle]} onPress={handlePressToRestro}>
+                        <Image source={{ uri: image }} style={styles.homeImage} />
+
+                        <View style={styles.homePriceContainer}>
+                            <Feather name="pocket" size={16} color="#fff" />
+                            <Text style={styles.priceText}>&euro;{price}</Text>
+                        </View>
+
+                        <TouchableOpacity
+                            onPress={toggleFavourite}
+                            activeOpacity={1}
+                            style={styles.likeButton}>
+                            <Ionicons
+                                name={isPressed ? "heart" : "heart-outline"}
+                                size={24}
+                                color={isPressed ? '#E65100' : "#fff"} />
+                        </TouchableOpacity>
+
+                        <View style={styles.homeInfo}>
+                            <View style={styles.homeKeyInfo}>
+                                <Text style={styles.dishName}>{name}</Text>
+                                <View style={styles.menuButton}>
+                                    <Ionicons name="star" size={20} color="#FFB300" />
+                                    <Text style={styles.ratingText}>{rating}</Text>
+                                </View>
+                            </View>
+
+
+                            <View style={styles.homeContainer}>
+                                <View style={styles.flexRow}>
+                                    <Feather name="map-pin" size={16} color="#E65100" />
+                                    <Text style={styles.smallText}>{address}</Text>
+                                </View>
+                                <Text style={styles.smallText}>{distance}</Text>
+                            </View>
 
                             <View style={styles.homeContainer}>
                                 <View style={styles.flexRow}>

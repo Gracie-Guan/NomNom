@@ -21,8 +21,8 @@ const Home = ({ navigation }) => {
     // const [search, setSearch] = useState('');
     const { restaurant, dishData, topDishes, menuRestroMap } = useContext(RestaurantContext);
 
-    console.log("Home - topDishes: ", topDishes[0])
-    console.log("Home - dishData: ", dishData[0])
+    // console.log("Home - topDishes: ", topDishes[0])
+    // console.log("Home - dishData: ", dishData[0])
     const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
     const [showRestaurant, setShowRestaurant] = useState(true);
