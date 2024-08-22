@@ -96,7 +96,6 @@ const DishCard = ({ dish, restaurant, layout = 'default', onRemove }) => {
                         <Image source={{ uri: image }} style={styles.homeImage} />
 
                         <View style={styles.homePriceContainer}>
-                            <Feather name="pocket" size={16} color="#fff" />
                             <Text style={styles.priceText}>&euro;{price}</Text>
                         </View>
 
@@ -280,9 +279,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Ubuntu-Bold',
         wordWrap: 'break-word',
     },
-
     shadowSubtle: shadowSubtle,
-
 
     //default
     homeCard: {
@@ -292,8 +289,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         position: 'relative',
-        marginBottom: 10
-
+        marginBottom: 15,
     },
 
     homeImage: {
@@ -314,8 +310,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         left: 10,
-        flexDirection: 'row',
-        width: 70,
+        // flexDirection: 'row',
+        paddingHorizontal:5,
         backgroundColor: '#fff',
         borderRadius: 20,
         zIndex: 1,
