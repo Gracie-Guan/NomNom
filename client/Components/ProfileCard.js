@@ -54,7 +54,7 @@ const ProfileCard = ({navigation}) => {
         )}
         <View style={styles.profileBottomContainer}>
             <View>
-                <Image source={{uri:'https://images.unsplash.com/photo-1705147293093-5b6d9265726c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}} 
+                <Image source={require('../assets/avatar.jpg')}
                 style={styles.profileImage}/>
                 <Image
                 source={{ uri: 'https://cdn.countryflags.com/thumbs/ireland/flag-round-250.png' }}
