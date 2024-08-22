@@ -210,21 +210,23 @@ const styles = StyleSheet.create({
     width: 180,
     borderRadius:10,
     padding:10,
-    backgroundColor:'#E65100',
+    backgroundColor:'#fff',
     marginBottom:-10,
+    borderColor: '#FFB300',
+    borderWidth:2,
   },
 
   calloutTitle:{
     fontFamily:'Ubuntu-Medium',
     fontSize:16,
     marginBottom:5,
-    color: '#fff',
+    color: '#000',
   },
 
   calloutText:{
     fontFamily:'Ubuntu-Regular',
-    fontSize:14,
-    color: '#fff',
+    fontSize:12,
+    color: '#000',
   },
 
   card:{
@@ -272,7 +274,6 @@ const styles = StyleSheet.create({
   },
 
   flagImage: {
-    width: 36,
     height: 36,
     elevation: 1,
     shadowColor: "#FFB300",
@@ -304,20 +305,12 @@ const styles = StyleSheet.create({
   markerSubContainer: {
     backgroundColor: '#fff',
     borderRadius: 20,
-    height: 20,
+    height: 24,
     paddingHorizontal:6,
     minWidth: 70,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#FFB300',
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.85,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 4,
-      },
-    })
+    borderColor:'#FFB300',
+    borderRightWidth:2,
+    borderBottomWidth:2,
   },
 
   markerContainer: {
@@ -327,7 +320,7 @@ const styles = StyleSheet.create({
   },
 
   selectedMarker: {
-    shadowColor: '#E65100',
+    backgroundColor: '#FFB300',
   },
 
   markerText: {

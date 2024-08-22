@@ -16,7 +16,7 @@ const Surprise = ({navigation}) => {
   const { user, setUser } = useContext(AuthContext); 
   // const [randomRestaurant, setRandomRestaurant] = useState(null);
   const { restaurant, dishData, loading, error } = useContext(RestaurantContext);
-  const [showRestaurant, setShowRestaurant] = useState(true);
+  const [showRestaurant, setShowRestaurant] = useState(false);
   const [cardIndex, setCardIndex] = useState(0);
 
   const handleToggle = (isRestro) => {
@@ -169,7 +169,7 @@ const Surprise = ({navigation}) => {
             <Feather name="arrow-left" size={24} color="#221C19" />
             <Text style={styles.normalText}>Back</Text>
           </TouchableOpacity>
-          <ToggleButton style="icon-based" onToggle={handleToggle} />
+          <ToggleButton style="icon-based" onToggle={handleToggle} initialState={!showRestaurant}/>
         </View>
 
         <View style={styles.cardContainer}>

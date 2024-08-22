@@ -17,7 +17,7 @@ const Liked = ({ navigation }) => {
   const { user, setUser } = useContext(AuthContext);
   // console.log('User favourite restaurants:', user.favouriteRestaurant);
   const { restaurant, dishData } = useContext(RestaurantContext);
-  const [showRestaurants, setShowRestaurants] = useState(true);
+  const [showRestaurants, setShowRestaurants] = useState(false);
 
 
   // useEffect(() => {
@@ -142,7 +142,7 @@ const Liked = ({ navigation }) => {
          </View>
 
         ) : (
-          <View>
+          <View style='singleCard'>
             {filteredDishes.length > 0 ? (
               filteredDishes.map((dish) => (
                 <DishCard 
@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     alignItems: 'center',
-    paddingHorizontal: 20,
   },
 });
 

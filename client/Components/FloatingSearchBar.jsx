@@ -102,16 +102,12 @@ height: '100%'
 // marginBottom: 0
 // }
 searchContainer: {
-// position: 'absolute',
-// bottom: 32, // Position at the bottom of the screen
-left: 0, // Stretch the container to the left edge
-right: 0, // Stretch the container to the right edge
+left: 5, 
+right: 5, 
 flexDirection: 'row',
 alignItems: 'center',
-backgroundColor: '#FFB300',
 padding: 8,
-// marginBottom: 0, // No margin at the bottom
-// borderRadius: 20,
+marginTop:5,
 zIndex: 1000, // Ensure it appears on top of other content
 // paddingLeft: 10,
 // paddingRight: 10

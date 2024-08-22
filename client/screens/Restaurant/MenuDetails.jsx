@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
     },
+
   categoryTagText: {
     color: '#707070',
     fontSize: 12,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
         color: '221C19',
         fontFamily: 'Ubuntu-Medium',
         fontSize: 14,
-    }
+    },
 });
 
 export const title = 'Menu';

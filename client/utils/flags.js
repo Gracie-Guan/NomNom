@@ -8,6 +8,7 @@ export const getFlagImage = (cuisine) => {
     japanese: require('../assets/flags/japanese.png'),
     lebanese: require('../assets/flags/lebanese.png'),
     irish: require('../assets/flags/irish.png'),
+    mexican:require('../assets/flags/mexican.png')
   };
   if (Array.isArray(cuisine) && cuisine.length > 0) {
     const primaryCuisine = cuisine[0].name || cuisine[0];

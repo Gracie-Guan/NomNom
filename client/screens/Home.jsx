@@ -25,14 +25,19 @@ const Home = ({ navigation }) => {
     // console.log("Home - dishData: ", dishData[0])
     const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
-    const [showRestaurant, setShowRestaurant] = useState(true);
+    const [showRestaurant, setShowRestaurant] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const handleToggle = (isRestro) => {
         setShowRestaurant(isRestro);
-        console.log(isRestro ? 'Showing Restaurants' : 'Showing Dishes');
-        // console.log("Home - handleToggle - showRestaurant: ", showRestaurant);
-    };
+        console.log(isRestro ? 'Showing Dishes' : 'Showing Restaurants');
+      };
+
+    //   const restaurantData = [
+    //     { _id: 1, name: 'Restaurant A', rating: 4.5 },
+    //     { _id: 2, name: 'Restaurant B', rating: 4.7 },
+    //     { _id: 3, name: 'Restaurant C', rating: 4.6 },
+    // ];
 
     // console.log("Home - topDishes - Home:", topDishes);
 
@@ -57,7 +62,7 @@ const Home = ({ navigation }) => {
                             </View>
                             <Text style={{ marginLeft: 25 }}>Dublin</Text>
                         </View>
-                        <ToggleButton style="icon-based" onToggle={handleToggle} />
+                        <ToggleButton style="icon-based" onToggle={handleToggle} initialState={!showRestaurant}/>
                     </View>
                     <View style={styles.searchContainer}>
                         <SearchTop search={searchQuery} onChangeText={setSearchQuery} fullData={showRestaurant ? restaurant : dishData} type={showRestaurant ? 'restro' : 'dish'} />
