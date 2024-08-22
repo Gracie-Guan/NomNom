@@ -46,8 +46,6 @@ export const RestaurantProvider = ({ children }) => {
 
             setTopDishes(topDishes);
 
-            // console.log("RestaurantContext - topDishes: ", topDishes[0]);
-
             const allDishes = dishesData
             .map(dish => {
                 const restaurantId = menuToRestaurantMap[dish.menu_id];
