@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingHorizontal: 15,
         borderRadius: 20,
-        backgroundColor: '#FFCDB2'
+        backgroundColor: '#FFCDB2',
     },
 
     promptBox: {

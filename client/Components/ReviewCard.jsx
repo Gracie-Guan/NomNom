@@ -6,46 +6,46 @@ import { AuthContext } from '../Context/AuthContext';
 
 const tags = ['Fresh', 'BBQ', 'Date', 'Family', 'Spicy', 'Vibe']
 
-const ReviewCard = () => {
-    const { user } = useContext(AuthContext);
-    const [reviews, setReviews] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const ReviewCard = (restaurant) => {
+  const [reviews, setReviews] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchUserReviews = async () => {
-          setLoading(true);
-          try {
-            const response = await axios.get(`http://localhost:6868/reviews/user/${user.id}`);
-            console.log('Fetched reviews:', response.data); 
-            setReviews(response.data);
-          } catch (error) {
-            setError('Error fetching user reviews');
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        if (user?.id) {
-          fetchUserReviews();
-        }
-      }, [user?.id]);
-    
-      if (loading) {
-        return (
-          <View style={[styles.loadingContainer, {justifyContent: 'center', alignItems: 'center'}]}>
-            <ActivityIndicator size="large" color="#FFC93C" />
-          </View>
-        );
+  useEffect(() => {
+    console.log('Restaurant ID:', restaurant?.id);
+    const fetchRestaurantReviews = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:6868/reviews/restaurant/${restaurant.id}`);
+        console.log('Fetched reviews:', response.data); 
+        setReviews(response.data);
+      } catch (error) {
+        setError('Error fetching restaurant reviews');
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (restaurant?.id) {
+      fetchRestaurantReviews();
+    }
+  }, [restaurant?.id]);
     
-      if (error) {
-        return (
-          <View style={styles.errorContainer}>
-            <Text>{error}</Text>
-          </View>
-        );
-      }
+  if (loading) {
+    return (
+      <View style={[styles.loadingContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#FFC93C" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
       
   return (
     <View style={styles.reviewSection}>

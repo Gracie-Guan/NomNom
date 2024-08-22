@@ -38,7 +38,7 @@ const VibeCard = ({navigation}) => {
     ]
 
     const handleSearch = () =>{
-        navigation.navigate('SearchList')
+        navigation.navigate('SearchListDefault')
     };
 
     return(
