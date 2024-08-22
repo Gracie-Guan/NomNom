@@ -42,7 +42,17 @@ def fetch_image():
         image = Image.open(io.BytesIO(image_data))
         
         # Extract
-        text = extract_text(image, image_key)
+        text, text_02, text_03 = extract_text(image, image_key)
+        
+        # Return multiple pieces of information as JSON
+        response_data = {
+            "extracted_text": text,
+            "extracted_text_02": text_02,
+            "extracted_text_03": text_03,
+
+        }
+        
+        return jsonify(response_data)
 
         # return jsonify({'text': text})
         return text
@@ -99,7 +109,7 @@ def extract_text(source, filename):
 
     # response = model.generate_content(["Extract the text information and put it into a simple structured JSON table with following structure: " + ' "categories": [ {"name": "Starters", "dishes": [ { "name": "string", "description": "string", "price": "number", "note": "string" }, { "name": "string", "description": "string" (if legible), "price": "number", "note": "string" } ] }, { "name": "Main Dishes", "dishes": [ { "name": "string", "description": "string", "price": "number" }, { "name": "string", "description": "string", "price": "number" }]}]. The default for "note" is empty, if there is information about add-ons or similar things, then insert "Add-ons available." ' , img], stream=True)
 
-    first_response = model.generate_content(["Extract the text information and put it into a simple but valid structured JSON table with following structure: " + format + '. The default for "note" is empty, if there is information about add-ons or similar things, consider inserting "Add-ons available." ' , source], stream=True)
+    first_response = model.generate_content(["Extract the text information and put it into a simple but valid structured JSON table with following structure: " + format + '. Please always include "categories". The default for "note" is empty. If there is information about things you can add extra to your dish or add-ons in general or toppings or similar things that do not have a price, ignore it. Do not allow "build your own meal, dish, food" things. ' , source], stream=True)
 
     first_response.resolve()
 
@@ -107,7 +117,12 @@ def extract_text(source, filename):
 
     # print(response.text)
 
-    response = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]} }]}'
+    # response = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]} }]}'
+    response = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]}]}]}'
+
+    response_02 = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]} }]}' 
+
+    response_03 = '"}'.join(first_response.text.split('"}')[:-1]) + '"}]}]}]}'
 
     # print(response)
 
@@ -115,7 +130,7 @@ def extract_text(source, filename):
 
     # response = second_response.text[:-2] + "}" + second_response.text[-2:]
 
-    return response.strip("```json\n").strip("```")
+    return (response.strip("```json\n").strip("```"), response_02.strip("```json\n").strip("```"), response_03.strip("```json\n").strip("```"))
 
 if __name__ == '__main__':
     app.run(debug=True)

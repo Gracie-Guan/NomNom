@@ -11,7 +11,6 @@ function ReviewBlock({reviews = [], filterId, userReviews}){
 
     useEffect(() => {
         // console.log('Reviews array:', reviews);
-        // console.log('User Reviews:', userReviews);
 
         const fetchUserData = async (reviewsToProcess) => {
             if (!reviewsToProcess || reviewsToProcess.length === 0) return;

@@ -33,7 +33,7 @@ export const RestaurantProvider = ({ children }) => {
 
             setMap(menuToRestaurantMap);
 
-            console.log("RestaurantContext - menuToRestaurantMap: ", menuToRestaurantMap);
+            // console.log("RestaurantContext - menuToRestaurantMap: ", menuToRestaurantMap);
 
             const topDishes = dishesData
                 .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
@@ -45,6 +45,8 @@ export const RestaurantProvider = ({ children }) => {
                 });
 
             setTopDishes(topDishes);
+
+            // console.log("RestaurantContext - topDishes: ", topDishes[0]);
 
             const allDishes = dishesData
             .map(dish => {

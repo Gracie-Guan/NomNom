@@ -15,7 +15,7 @@ const DishCard = ({ dish, restaurant, layout = 'default', onRemove }) => {
     // Use provided data or placeholders
     const { user, setUser } = useContext(AuthContext);
 
-    console.log("DishCards - restaurant: ", restaurant)
+    // console.log("DishCards - restaurant: ", restaurant)
 
     const dishId = dish?._id || " ";
     const name = dish?.name || "Fiction Chips";
@@ -34,7 +34,7 @@ const DishCard = ({ dish, restaurant, layout = 'default', onRemove }) => {
 
     const handlePressToRestro = useCallback(() => {
         // console.log("BOOOOOOOH: ", restaurant);
-        console.log("Navigating with restaurantId:", restaurant._id);
+        // console.log("Navigating with restaurantId:", restaurant._id);
         if (restaurant && restaurant._id) {
             navigation.navigate('RestaurantDetail', {
                 screen: 'RestaurantTabs',
