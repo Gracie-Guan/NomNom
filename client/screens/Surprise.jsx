@@ -9,7 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 const Surprise = ({navigation}) => {
-  const [showRestaurant, setShowRestaurant] = useState(true);
+  const [showRestaurant, setShowRestaurant] = useState(false);
   const [randomRestaurant, setRandomRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -74,7 +74,7 @@ const Surprise = ({navigation}) => {
             <Feather name="arrow-left" size={24} color="#221C19" />
             <Text style={styles.normalText}>Back</Text>
           </TouchableOpacity>
-          <ToggleButton style="icon-based" onToggle={handleToggle} />
+          <ToggleButton style="icon-based" onToggle={handleToggle} initialState={!showRestaurant}/>
         </View>
         <View style={styles.cardContainer}>
           {showRestaurant ? (

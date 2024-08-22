@@ -20,7 +20,7 @@ const Home = ({navigation}) => {
       setSearch(searchText);
     };
 
-    const [showRestaurant, setShowRestaurant] = useState(true);
+    const [showRestaurant, setShowRestaurant] = useState(false);
     const [loading, setLoading] = useState(true);
     const [restaurantData, setRestaurantData] = useState([]);
     const [topDishes, setTopDishes] = useState([]);
@@ -63,7 +63,7 @@ const Home = ({navigation}) => {
 
     const handleToggle = (isRestro) => {
         setShowRestaurant(isRestro);
-        console.log(isRestro ? 'Showing Restaurants' : 'Showing Dishes');
+        console.log(isRestro ? 'Showing Dishes' : 'Showing Restaurants');
       };
 
     //   const restaurantData = [
@@ -99,7 +99,7 @@ const Home = ({navigation}) => {
                         </View>
                         <Text style={{marginLeft: 25}}>Dublin</Text>
                     </View>
-                    <ToggleButton style="icon-based" onToggle={handleToggle} />
+                    <ToggleButton style="icon-based" onToggle={handleToggle} initialState={!showRestaurant}/>
                 </View>
                 <View style={styles.searchContainer}>
                     <SearchTop search={search} onChangeText={onChangeText}/>
