@@ -40,7 +40,7 @@ const CuisineBar = ({navigation}) => {
     ]
 
     const handleSearch = () =>{
-        navigation.navigate('SearchList')
+        navigation.navigate('SearchListDefault')
     };
 
     return(

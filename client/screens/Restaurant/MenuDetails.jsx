@@ -132,9 +132,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 2,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 2,
-  },
   categoryTagText: {
     color: '#707070',
     fontSize: 12,
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingHorizontal: 15,
         borderRadius: 20,
-        backgroundColor: '#FFCDB2'
+        backgroundColor: '#FFCDB2',
     },
 
     promptBox: {

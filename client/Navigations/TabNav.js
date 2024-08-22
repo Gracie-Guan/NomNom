@@ -19,6 +19,7 @@ import CommentsPage from '../screens/CommentsPage';
 import LogoutPage from '../screens/LogoutPage';
 import ProfileCard from '../Components/ProfileCard';
 import SearchList from '../screens/SearchList';
+import SearchListDefault from '../screens/SearchListDefault';
 import EndComments from '../screens/EndComments';
 import Password from '../screens/Password';
 
@@ -45,6 +46,7 @@ function HomeStack() {
       <Stack.Screen name="HomeMain" component={Home} />
       <Stack.Screen name="RestaurantDetail" component={RestaurantDetailStack} />
       <Stack.Screen name="SearchList" component={SearchList}  />
+      <Stack.Screen name="SearchListDefault" component={SearchListDefault}  />
     </Stack.Navigator>
   );
 }
