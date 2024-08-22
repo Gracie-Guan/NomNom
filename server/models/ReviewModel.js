@@ -54,6 +54,15 @@ class ReviewModel {
         }
     }
 
+    static async getReviewByUserId(userId){
+        try {
+            const reviews = await Review.find({ user_id: userId }).select('_id user_id rating restaurant_id text review_date features photos helpful rating_details ');
+            return Array.isArray(reviews) ? reviews : [reviews];
+        } catch (error) {
+            throw new Error('Reviews not found for the specified user');
+        }
+    }
+
 
 }
 

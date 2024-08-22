@@ -1,13 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, ScrollView, StyleSheet,Image, TouchableOpacity, ActivityIndicator} from 'react-native';
-import {MaterialIcons, Feather} from '@expo/vector-icons'
+import { View, Text, ScrollView, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { RestaurantContext } from '../Context/RestaurantContext';
+import { AuthContext } from '../Context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SingleRestaurantContext } from '../Context/SingleRestaurantContext';
 import { calculateAveragePrice } from '../utils/AvgPrice';
+
 
 const InfoCard = ({ }) => {
 
-  const { restaurant, loading, error } = useContext(RestaurantContext);
+  const { restaurant, loading, error } = useContext(SingleRestaurantContext);
+  const { user, setUser } = useContext(AuthContext);
   const [averagePrice, setAveragePrice] = useState(null);
+  const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     const fetchAveragePrice = async () => {
@@ -21,19 +27,63 @@ const InfoCard = ({ }) => {
 
     fetchAveragePrice();
   }, [restaurant]);
+  
+  useEffect(() => {
+    if (user && restaurant) {
+      setIsPressed(user.favouriteRestaurant.includes(restaurant._id));
+    }
+  }, [user, restaurant]);
 
-  if (!restaurant) {
-    return <Text>Loading restaurant information...</Text>;
-  }
-  
-  
-  if (loading) {
+  const toggleFavourite = async () => {
+    if (!user || !restaurant) {
+      console.warn('User not logged in or no restaurant available');
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+
+      const action = isPressed ? 'remove' : 'add';
+      const response = await fetch(`http://localhost:6868/auth/user/${user.id}/favourites/restaurant`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId: user.id, restaurantId: restaurant._id, action }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to ${action === 'add' ? 'add to' : 'remove from'} favourites: ${errorData.message || 'Unknown error'}`);
+      }
+
+      const data = await response.json();
+      const updatedUser = { ...user, favouriteRestaurant: data.favourite_restaurant };
+      setUser(updatedUser);
+      setIsPressed(!isPressed);
+
+    } catch (error) {
+      console.error(`Error ${action === 'add' ? 'adding to' : 'removing from'} favourites:`, error);
+    }
+  };
+
+    if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
+
+  if (!restaurant) {
+    return <Text>Loading restaurant information...</Text>;
+  }
+  
 
   if (error) {
     return (
@@ -53,13 +103,28 @@ const InfoCard = ({ }) => {
 
   const { street1, city, state, country, postalcode } = restaurant.address_obj;
 
-  return(
-<View style={styles.container}>
+  return (
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: restaurant.image[0].url }} style={styles.topImage} />
-        <TouchableOpacity style={styles.heartContainer}>
+        {/* <TouchableOpacity style={styles.heartContainer}>
           <Feather name="heart" size={20} color="#fff" style={styles.heartIcon} />
+        </TouchableOpacity> */}
+
+
+        <TouchableOpacity
+          style={styles.heartContainer}
+          onPress={toggleFavourite}
+          activeOpacity={1}
+        >
+          <Feather
+            name="heart"
+            size={20}
+            color={isPressed ? '#E65100' : '#fff'}
+            style={styles.heartIcon}
+          />
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.uploadContainer}>
           <Feather name="upload" size={20} color="#fff" style={styles.uploadIcon} />
         </TouchableOpacity>
@@ -91,24 +156,24 @@ const InfoCard = ({ }) => {
       <Text style={styles.typeText}> {restaurant.cuisine && restaurant.cuisine.length > 0 ? restaurant.cuisine[0].localized_name : 'Cuisine not available'}</Text>
     <View style={styles.openButton}>
       <Text style={styles.openType}>open</Text>
+     </View>
+   </View>
+          <View style={styles.twoButton}>
+            <TouchableOpacity style={styles.map} onPress={() => {
+              const url = `https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}`;
+              Linking.openURL(url);
+            }}>
+              <Feather name='compass' color={'#FFA900'} size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.phone} onPress={() => {
+              Linking.openURL(`tel:${restaurant.phone}`);
+            }}>
+              <Feather name='phone-call' color={'#FFA900'} size={20} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </View>
-  </View>
-  <View style={styles.twoButton}>
-    <TouchableOpacity style={styles.map} onPress={() => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}`;
-    Linking.openURL(url);
-  }}>
-      <Feather name='compass' color={'#FFA900'} size={20} />
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.phone} onPress={() => {
-    Linking.openURL(`tel:${restaurant.phone}`);
-  }}>
-      <Feather name='phone-call' color={'#FFA900'} size={20} />
-    </TouchableOpacity>
-  </View>
-</View>
-</View>
-</View>
   );
 };
 
@@ -139,11 +204,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
   },
-  
   detailsContainer: {
-    position:'absolute',
+    position: 'absolute',
     top: 230,
-    left:0,
+    left: 0,
     right: 0,
     zIndex: 1,
     backgroundColor: 'white',
@@ -156,8 +220,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  ratingContainer:{
-    position:'absolute',
+  ratingContainer: {
+    position: 'absolute',
     top: -50,
     right: 10,
     margin: 10,
@@ -167,15 +231,15 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   rating: {
-   height: 40,
-   backgroundColor: 'white',
-   borderTopLeftRadius: 20,
-   borderTopRightRadius: 20,
-   flexDirection: 'row',
-   justifyContent:'center',
-   alignItems: 'center',
-   paddingTop: 10,
-   paddingRight: 5
+    height: 40,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingRight: 5
   },
   ratingText: {
     fontSize: 18,
@@ -186,34 +250,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFA900',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 5
-   },
-   reviewNumberText:{
+  },
+  reviewNumberText: {
     color: 'white',
     fontSize: 12,
     fontWeight: 'bold'
-   },
-   addressContainer: {
+  },
+  addressContainer: {
     marginTop: 20,
     backgroundColor: 'white'
-   },
-   addressText: {
+  },
+  addressText: {
     fontSize: 14,
     fontWeight: '500',
-    color:'#9E9E9E'
-   },
-   distance: {
+    color: '#9E9E9E'
+  },
+  distance: {
     flexDirection: 'row',
     marginTop: 5
-   },
-   distanceText: {
+  },
+  distanceText: {
     fontSize: 14,
     fontWeight: '500',
-    color:'#9E9E9E'
-   },
-   priceText: {
+    color: '#9E9E9E'
+  },
+  priceText: {
     fontSize: 14,
     fontFamily: 'Ubuntu-Regular',
     color:'#9e9e9e',
@@ -225,51 +289,51 @@ const styles = StyleSheet.create({
    typeText: {
     fontSize: 14,
     fontWeight: '500',
-    color:'#9E9E9E'
-   },
-   openType: {
+    color: '#9E9E9E'
+  },
+  openType: {
     fontSize: 14,
     fontWeight: '500',
-    color:'#000'
-   },
-   openButton: {
+    color: '#000'
+  },
+  openButton: {
     marginLeft: 10,
     backgroundColor: '#7DEF37',
     paddingHorizontal: 10,
     borderRadius: 10
-   },
-   twoButton: {
+  },
+  twoButton: {
     marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
-   },
-   map: {
+  },
+  map: {
     backgroundColor: 'white',
     paddingVertical: 5,
     paddingHorizontal: 75,
     borderRadius: 15,
     borderRadius: 15,
     shadowColor: 'rgb(100, 100, 100)',
-    shadowOffset : {
-        width: 1,
-        height: 1
+    shadowOffset: {
+      width: 1,
+      height: 1
     },
     shadowOpacity: 0.5,
     shadowRadius: 2,
-   },
-   phone: {
+  },
+  phone: {
     backgroundColor: 'white',
     paddingVertical: 5,
     paddingHorizontal: 75,
     borderRadius: 15,
     shadowColor: 'rgb(100, 100, 100)',
-    shadowOffset : {
-        width: 1,
-        height: 1
+    shadowOffset: {
+      width: 1,
+      height: 1
     },
     shadowOpacity: 0.5,
     shadowRadius: 2,
-   },
+  },
 });
 
 export default InfoCard
