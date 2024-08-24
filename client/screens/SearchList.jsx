@@ -39,9 +39,6 @@ function SearchList({ navigation, route }) {
             return nameMatch || cuisineMatch;
         } else {
             const descriptMatch = r.description.toLowerCase().includes(searchQuery.toLowerCase());
-
-            // const categotMatch = r.categories.toLowerCase().includes(searchQuery.toLowerCase());
-
             return nameMatch || cuisineMatch || descriptMatch;
         }
     });
